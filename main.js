@@ -32,14 +32,10 @@ if(/^[0-9A-F]{6}$/i.test(urlParams.getAll('c'))){ //if c parameter valid hex col
 
 //3D setup
 const scene = new THREE.Scene();
-
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#cv1'),
 });
-
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -53,7 +49,6 @@ const geometry = new THREE.BoxGeometry(10,10,10);
 const material = new THREE.MeshPhongMaterial({color: cubeColour});
 const cube1 = new THREE.Mesh(geometry, material);
 cube1.position.set(0,5,0)
-
 scene.add(cube1);
 
 const light = new THREE.DirectionalLight(0xFFFFFF, 1);
@@ -62,9 +57,7 @@ light.target.position.set(0, 0, 0);
 scene.add(light);
 scene.add(light.target);
 
-
 const planeSize = 400;
-     
 const loader = new THREE.TextureLoader();
 const texture = loader.load('resources/images/checker.png');
 texture.wrapS = THREE.RepeatWrapping;
@@ -78,9 +71,9 @@ const planeMat = new THREE.MeshPhongMaterial({
   map: texture,
   side: THREE.DoubleSide,
 });
-const mesh = new THREE.Mesh(planeGeo, planeMat);
-mesh.rotation.x = Math.PI * -.5;
-scene.add(mesh);
+const tableTop = new THREE.Mesh(planeGeo, planeMat);
+tableTop.rotation.x = Math.PI * -.5;
+scene.add(tableTop);
 
 function animate(){
   requestAnimationFrame(animate);
