@@ -62,12 +62,3 @@ document.getElementById("colourButton").onclick = newColour;
 
 
 animate();
-
-//npm init vite
-//cd into your project
-//npm install
-//npm install three
-
-
-
-//npm run dev
