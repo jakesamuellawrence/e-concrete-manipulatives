@@ -4,7 +4,7 @@ import * as THREE from 'three';
 
 const scene = new THREE.Scene();
 
-const camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 
 const renderer = new THREE.WebGLRenderer({
@@ -15,16 +15,19 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-camera.position.setZ(100);
+camera.position.setZ(50);
 camera.position.setY(5);
-camera.position.setX(100);
+camera.position.setX(50);
 camera.setRotationFromAxisAngle(new THREE.Vector3( 0, 1, 0 ), Math.PI/4)
 
 const geometry = new THREE.BoxGeometry(10,10,10);
-const material = new THREE.MeshBasicMaterial({color: 0xFF0066, wireframe: true});
+const material = new THREE.MeshPhongMaterial({color: 0xFF0066});
 const cube1 = new THREE.Mesh(geometry, material);
 
 scene.add(cube1);
+
+const light = new THREE.HemisphereLight(0xB1E1FF, 0xB97A20, 0.75);
+scene.add(light);
 
 var goingUp = true;
 
