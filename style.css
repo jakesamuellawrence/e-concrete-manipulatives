@@ -3,3 +3,19 @@ canvas {
   top: 10vh;
   left: 0;
 }
+
+
+/* nav table */
+.nav{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.nav_item{
+  float: left;
+  display: block;
+  padding: 14px 16px;
+  text-decoration: none;
+}
