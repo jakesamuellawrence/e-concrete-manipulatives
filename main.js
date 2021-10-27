@@ -2,6 +2,10 @@ import './style.css';
 
 import * as THREE from 'three';
 
+import {
+  DragControls
+} from 'three/examples/jsm/controls/DragControls.js'
+
 
 //setup
 var baseURL = window.location.origin;
@@ -74,6 +78,23 @@ const planeMat = new THREE.MeshPhongMaterial({
 const tableTop = new THREE.Mesh(planeGeo, planeMat);
 tableTop.rotation.x = Math.PI * -.5;
 scene.add(tableTop);
+
+
+const controls = new DragControls([cube1], camera, renderer.domElement);
+
+controls.addEventListener('dragstart', function ( event ) {
+	
+} );
+
+controls.addEventListener('drag', function ( event ) {
+	
+} );
+
+controls.addEventListener('dragend', function ( event ) {
+	
+} );
+
+
 
 function animate(){
   requestAnimationFrame(animate);
