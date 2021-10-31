@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import {
   DragControls
 } from 'three/examples/jsm/controls/DragControls.js'
+import { Test } from './StickSpawner';
 
 
 //setup
@@ -21,7 +22,6 @@ function colourUpdate(event){
 colourPicker = document.querySelector("#colourPicker");
 colourPicker.addEventListener("input", colourUpdate, false);
 colourPicker.select();
-  
 
 //URL Parsing
 const queryString = window.location.search;
@@ -31,8 +31,9 @@ if(/^[0-9A-F]{6}$/i.test(urlParams.getAll('c'))){ //if c parameter valid hex col
   document.getElementById("colourPicker").value = cubeColour;
 }
 
-
-
+// Objects test
+const messager = new Test("testy boi again");
+messager.sayMessage();
 
 //3D setup
 const scene = new THREE.Scene();
