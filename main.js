@@ -18,7 +18,7 @@ var colourPicker;
 
 function colourUpdate(event){
   cubeColour = event.target.value;
-  cube1.material.color.set(event.target.value);
+  stickSpawner.stickParameters.color = cubeColour;
 }
 
 colourPicker = document.querySelector("#colourPicker");
@@ -86,12 +86,9 @@ controls.addEventListener('dragend', function ( event ) {
   
 } );
 
-const stickSpawner = new StickSpawner(scene, new Vector3(0, 0.2, 0));
-for (let i = 0; i < 5; i++) {
-  stickSpawner.position.setX(stickSpawner.position.x + 0.5);
-  const stick = stickSpawner.spawn();
-  draggableList.push(stick);
-}
+const stickSpawner = new StickSpawner(scene, new Vector3(-5, 0.2, 0));
+stickSpawner.stickParameters.color = cubeColour;
+spawnStick();
 
 function animate(){
   requestAnimationFrame(animate);
@@ -103,5 +100,13 @@ function constructLink(){
 }
 
 document.getElementById("getLink").onclick = constructLink;
+
+document.getElementById("newStick").onclick = spawnStick;
+
+function spawnStick() {
+  stickSpawner.position.setX(stickSpawner.position.x + 0.5);
+  const stick = stickSpawner.spawn();
+  draggableList.push(stick);
+}
 
 animate();
