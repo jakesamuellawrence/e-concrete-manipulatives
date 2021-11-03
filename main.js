@@ -4,7 +4,10 @@ import * as THREE from 'three';
 
 import {
   DragControls
-} from 'three/examples/jsm/controls/DragControls.js'
+} from 'three/examples/jsm/controls/DragControls.js';
+
+import {StickSpawner} from './StickSpawner';
+import { Vector3 } from 'three';
 
 
 //setup
@@ -15,13 +18,12 @@ var colourPicker;
 
 function colourUpdate(event){
   cubeColour = event.target.value;
-  cube1.material.color.set(event.target.value);
+  stickSpawner.stickParameters.color = cubeColour;
 }
 
 colourPicker = document.querySelector("#colourPicker");
 colourPicker.addEventListener("input", colourUpdate, false);
 colourPicker.select();
-  
 
 //URL Parsing
 const queryString = window.location.search;
@@ -30,9 +32,6 @@ if(/^[0-9A-F]{6}$/i.test(urlParams.getAll('c'))){ //if c parameter valid hex col
   cubeColour = "#" + urlParams.getAll('c');
   document.getElementById("colourPicker").value = cubeColour;
 }
-
-
-
 
 //3D setup
 const scene = new THREE.Scene();
@@ -44,20 +43,13 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-camera.position.setZ(50);
-camera.position.setY(5);
-camera.position.setX(50);
-camera.setRotationFromAxisAngle(new THREE.Vector3( 0, 1, 0 ), Math.PI/4)
-
-const geometry = new THREE.BoxGeometry(10,10,10);
-const material = new THREE.MeshPhongMaterial({color: cubeColour});
-const cube1 = new THREE.Mesh(geometry, material);
-cube1.position.set(0,5,0)
-scene.add(cube1);
+camera.position.set(0, 5, 3);
+camera.lookAt(new Vector3(0, 0, 0));
 
 const light = new THREE.DirectionalLight(0xFFFFFF, 1);
-light.position.set(100, 100, 200);
+light.position.set(0, 2, 4);
 light.target.position.set(0, 0, 0);
+light.lookAt(light.target.position);
 scene.add(light);
 scene.add(light.target);
 
@@ -79,39 +71,29 @@ const tableTop = new THREE.Mesh(planeGeo, planeMat);
 tableTop.rotation.x = Math.PI * -.5;
 scene.add(tableTop);
 
-
-const controls = new DragControls([cube1], camera, renderer.domElement);
+const draggableList = [];
+const controls = new DragControls(draggableList, camera, renderer.domElement);
 
 controls.addEventListener('dragstart', function ( event ) {
-	
+  
 } );
 
 controls.addEventListener('drag', function ( event ) {
-	
+  
 } );
 
 controls.addEventListener('dragend', function ( event ) {
-	
+  
 } );
 
-
+const stickSpawner = new StickSpawner(scene, new Vector3(-5, 0.2, 0));
+stickSpawner.stickParameters.color = cubeColour;
+spawnStick();
 
 function animate(){
   requestAnimationFrame(animate);
-
-  document.getElementById("coords").innerHTML = "[" + cube1.position.x.toFixed(2) + ", " + cube1.position.y.toFixed(2) + ", " + cube1.position.z.toFixed(2) + "]";
-  document.getElementById("rotation-x").innerHTML = cube1.rotation.x.toFixed(2);
-  document.getElementById("rotation-y").innerHTML = cube1.rotation.y.toFixed(2);
-  document.getElementById("rotation-z").innerHTML = cube1.rotation.z.toFixed(2);
   renderer.render(scene, camera);
 }
-
-
-document.getElementById("upButton").onclick = function(){cube1.position.y += 0.4;};
-document.getElementById("downButton").onclick = function(){cube1.position.y -= 0.4;};
-document.getElementById("leftButton").onclick = function(){cube1.position.x -= 0.4;};
-document.getElementById("rightButton").onclick = function(){cube1.position.x += 0.4;};
-
 
 function constructLink(){
   alert("Use this URL to keep your settings:\n" + baseURL + "?c=" +cubeColour.replace("#",''));
@@ -119,5 +101,12 @@ function constructLink(){
 
 document.getElementById("getLink").onclick = constructLink;
 
+document.getElementById("newStick").onclick = spawnStick;
+
+function spawnStick() {
+  stickSpawner.position.setX(stickSpawner.position.x + 0.5);
+  const stick = stickSpawner.spawn();
+  draggableList.push(stick);
+}
 
 animate();
