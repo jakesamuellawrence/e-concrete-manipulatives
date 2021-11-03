@@ -10,7 +10,7 @@ import {
 //setup
 var baseURL = window.location.origin;
 
-var cubeColour = "#FF0066";
+var cubeColour = "#964B00";
 var colourPicker;
 
 function colourUpdate(event){
@@ -36,11 +36,12 @@ if(/^[0-9A-F]{6}$/i.test(urlParams.getAll('c'))){ //if c parameter valid hex col
 
 //3D setup
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#cv1'),
 });
 
+renderer.setClearColor("#66aff5", 1);
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -61,39 +62,24 @@ light.target.position.set(0, 0, 0);
 scene.add(light);
 scene.add(light.target);
 
-const planeSize = 400;
-const loader = new THREE.TextureLoader();
-const texture = loader.load('resources/images/checker.png');
-texture.wrapS = THREE.RepeatWrapping;
-texture.wrapT = THREE.RepeatWrapping;
-texture.magFilter = THREE.NearestFilter;
-const repeats = planeSize / 2;
-texture.repeat.set(repeats, repeats);
+const planeSize = 2000;
 
 const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
 const planeMat = new THREE.MeshPhongMaterial({
-  map: texture,
+  color: "#4FA64F",
   side: THREE.DoubleSide,
 });
 const tableTop = new THREE.Mesh(planeGeo, planeMat);
-tableTop.rotation.x = Math.PI * -.5;
+tableTop.rotation.x = -Math.PI / 2;
 scene.add(tableTop);
-
 
 const controls = new DragControls([cube1], camera, renderer.domElement);
 
-controls.addEventListener('dragstart', function ( event ) {
-	
-} );
-
-controls.addEventListener('drag', function ( event ) {
-	
-} );
-
-controls.addEventListener('dragend', function ( event ) {
-	
-} );
-
+controls.addEventListener( 'drag', function ( event ) {
+  if (cube1.position.y <= 5 ) {
+    cube1.position.y = 5;
+  } 
+});
 
 
 function animate(){
@@ -108,7 +94,14 @@ function animate(){
 
 
 document.getElementById("upButton").onclick = function(){cube1.position.y += 0.4;};
-document.getElementById("downButton").onclick = function(){cube1.position.y -= 0.4;};
+document.getElementById("downButton").onclick = function(){
+  if (cube1.position.y <= 5 ) {
+    cube1.position.y = 5;
+  } 
+  else {
+    cube1.position.y -= 0.4;
+  }
+};
 document.getElementById("leftButton").onclick = function(){cube1.position.x -= 0.4;};
 document.getElementById("rightButton").onclick = function(){cube1.position.x += 0.4;};
 
