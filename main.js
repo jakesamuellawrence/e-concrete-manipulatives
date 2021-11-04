@@ -44,25 +44,33 @@ renderer.setClearColor("#66aff5", 1);
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-camera.position.set(0, 5, 3);
+camera.position.set(0, 8, 4);
 camera.lookAt(new Vector3(0, 0, 0));
 
-const light = new THREE.DirectionalLight(0xFFFFFF, 1);
-light.position.set(0, 2, 4);
+const light = new THREE.DirectionalLight(0xFFFFFF, 0.75);
+light.position.set(0, 8, 0);
 light.target.position.set(0, 0, 0);
 light.lookAt(light.target.position);
 scene.add(light);
 scene.add(light.target);
 
-const planeSize = 2000;
+const planeSize = 400;
+const textureLoader = new THREE.TextureLoader();
+// texture from: https://3djungle.net/textures/smooth/870/
+const texture = textureLoader.load('resources/images/wood_texture.jpg'); 
+texture.wrapS = THREE.RepeatWrapping;
+texture.wrapT = THREE.RepeatWrapping;
+const repeats = planeSize / 2;
+texture.repeat.set(repeats, repeats);
 
 const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
 const planeMat = new THREE.MeshPhongMaterial({
-  color: "#4FA64F",
+  map: texture,
   side: THREE.DoubleSide,
 });
 const tableTop = new THREE.Mesh(planeGeo, planeMat);
 tableTop.rotation.x = -Math.PI / 2;
+tableTop.rotation.z = -Math.PI / 2;
 scene.add(tableTop);
 
 const draggableList = [];
@@ -88,6 +96,13 @@ function constructLink(){
 document.getElementById("getLink").onclick = constructLink;
 
 document.getElementById("newStick").onclick = spawnStick;
+
+document.getElementById("horizontal").onchange = function() {
+  stickSpawner.stickParameters.defaultRotation = new Vector3(Math.PI/2, 0, 0);
+};
+document.getElementById("upright").onchange = function() {
+  stickSpawner.stickParameters.defaultRotation = new Vector3(0, 0, 0);
+}
 
 function spawnStick() {
   stickSpawner.position.setX(stickSpawner.position.x + 0.5);
