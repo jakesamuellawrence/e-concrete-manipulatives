@@ -10,32 +10,16 @@
   <body>
     <ul class="nav">
       <li class="nav_item">Cube Colour:<br><input type="color" value="#FF0066" id="colourPicker"></li>
-      <li class="nav_item"><div id="coords">[0,0,0]</div></li>
-      <li class="nav_item"><div id="rotation-x">0</div></li>
-      <li class="nav_item"><div id="rotation-y">0</div></li>
-      <li class="nav_item"><div id="rotation-z">0</div></li>
       
-      <li class="nav_item">
-        <table>
-          <tr>
-            <td></td>
-            <td><button id="upButton">↑</button></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td><button id="leftButton">←</button></td>
-            <td></td>
-            <td><button id="rightButton">→</button></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td><button id="downButton">↓</button></td>
-            <td></td>
-          </tr>
-        </table>
-      </li>
       <li class="nav_item"><button id="getLink">Get Link</button></li>
       <li class="nav_item"><button id="newStick">New Stick </button></li>
+
+      Stick Orientation:
+      <input type="radio" id="horizontal" name="stickOrientation" value="horizontal">
+      <label for="horizontal">Horizontal</label>
+      <input type="radio" id="upright" name="stickOrientation" value="upright">
+      <label for="upright">Upright</label>
+
     </ul>
       <canvas id="cv1"></canvas>
       <script type="module" src="/main.js"></script>
