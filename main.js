@@ -8,6 +8,7 @@ import {
 
 import {StickSpawner} from './StickSpawner';
 import { Vector3 } from 'three';
+import { RelativeDragControls } from './RelativeDragControls';
 
 
 //setup
@@ -74,6 +75,7 @@ tableTop.rotation.z = -Math.PI / 2;
 scene.add(tableTop);
 
 const draggableList = [];
+const test = new RelativeDragControls(draggableList, camera, null, renderer.domElement);
 const controls = new DragControls(draggableList, camera, renderer.domElement);
 controls.addEventListener( 'drag', function ( event ) {
   
