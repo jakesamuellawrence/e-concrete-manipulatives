@@ -1,4 +1,4 @@
-import { InstancedInterleavedBuffer, Plane, Raycaster, RectAreaLight, Vector2, Vector3 } from "three";
+import { Camera, InstancedInterleavedBuffer, Object3D, Plane, Raycaster, RectAreaLight, Vector2, Vector3 } from "three";
 
 export class RelativeDragControls {
 
@@ -15,6 +15,12 @@ export class RelativeDragControls {
         up: null,
     };
 
+    /**
+     * @param {Object3D[]} draggables the list of objects that can be dragged
+     * @param {Camera} camera the camera used to cast rays from in order to detect objects
+     * @param {Plane} movementPlane the {@link Plane} that dragging movement should be done along
+     * @param {HTMLCanvasElement} domElement the dom element of the renderer
+     */
     constructor(draggables, camera, movementPlane, domElement) {
         this.#draggables = draggables;
         this.#camera = camera;
@@ -46,12 +52,22 @@ export class RelativeDragControls {
     /**
      * Sets the plane that movement should be relative to
      * 
-     * @param plane the plane that movement should be relative to
+     * @param {Plane} plane the plane that movement should be relative to
      */
     dragRelativeTo(plane) {
         this.#movementPlane = plane;
     }
 
+    /**
+     * If an object is being held, raycast from the mouse position to the 
+     * movement plane in order to determine the new position for the held object
+     * 
+     * If an no object is being held, raycast to see if any of the objects in draggables
+     * are under the mouse. If so, hover them. Otherwise, unhover whatever is currently
+     * hovered, if anything.
+     * 
+     * Called whenever the mouse moves
+     */
     #onMouseMove(event){
         const rendererRect = this.#domElement.getBoundingClientRect();
         const pointerRelativeX = (event.clientX - rendererRect.left) / rendererRect.width * 2 - 1;
@@ -77,12 +93,23 @@ export class RelativeDragControls {
         }
     }
 
+    /**
+     * If an object is currently hoevered, hold it.
+     * 
+     * Called whenver any pointer device is pressed
+     */
     #onMouseDown(event){
         if (this.#hoveredObject) {
             this.#heldObject = this.#hoveredObject;
             this.onDragStart(this.#heldObject);
         }
     }
+
+    /**
+     * If an object is currently being held, stop holding it.
+     * 
+     * Called whenever any pointer device is released
+     */
     #onMouseUp(event){
         if (this.#heldObject) {
             this.onDragEnd(this.#heldObject);
@@ -90,10 +117,39 @@ export class RelativeDragControls {
         }
     }
 
+    /**
+     * Called when the pointer is moved over a draggable object
+     * 
+     * @param {Object3D} object 
+     */
     onHover(object){}
+
+    /**
+     * Called when the pointer moves off of a draggable object
+     * 
+     * @param {Object3D} object 
+     */
     onUnhover(object){}
+
+    /**
+     * Called when an object starts being dragged
+     * 
+     * @param {Object3D} object
+     */
     onDragStart(object){}
+
+    /**
+     * Called for every pointermove event while an object is being dragged
+     * 
+     * @param {Object3D} object 
+     */
     onDragUpdate(object){}
+
+    /**
+     * Called when an object is released
+     * 
+     * @param {Object3D} object 
+     */
     onDragEnd(object){}
 
 }
