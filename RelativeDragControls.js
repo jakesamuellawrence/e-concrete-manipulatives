@@ -8,6 +8,7 @@ export class RelativeDragControls {
     #domElement;
     #hoveredObject = null;
     #heldObject = null;
+    #holdOffset = new Vector3();
 
     #boundMouseEvents = {
         move: null,
@@ -59,6 +60,21 @@ export class RelativeDragControls {
     }
 
     /**
+     * gets the bounding box of the renderer and uses that to calculate the normalised
+     * mouse coordinates, both in range [-1, 1] with (0, 0) being the centre of the renderer
+     * 
+     * @param event the event containing the raw mouse position
+     * @returns an object with fields x and y corresponding to the x and y positions of the mouse
+     */
+    #getRelativeMousePosition(event) {
+        const rendererRect = this.#domElement.getBoundingClientRect();
+        const pointerRelativeX = (event.clientX - rendererRect.left) / rendererRect.width * 2 - 1;
+        const pointerRelativeY = - (event.clientY - rendererRect.top) / rendererRect.height * 2 + 1;
+        return {x: pointerRelativeX, y: pointerRelativeY};
+    }
+
+
+    /**
      * If an object is being held, raycast from the mouse position to the 
      * movement plane in order to determine the new position for the held object
      * 
@@ -69,17 +85,16 @@ export class RelativeDragControls {
      * Called whenever the mouse moves
      */
     #onMouseMove(event){
-        const rendererRect = this.#domElement.getBoundingClientRect();
-        const pointerRelativeX = (event.clientX - rendererRect.left) / rendererRect.width * 2 - 1;
-        const pointerRelativeY = - (event.clientY - rendererRect.top) / rendererRect.height * 2 + 1;
+        const mousePos = this.#getRelativeMousePosition(event);
 
         const raycaster = new Raycaster();
-        raycaster.setFromCamera({x: pointerRelativeX, y:pointerRelativeY}, this.#camera);
+        raycaster.setFromCamera(mousePos, this.#camera);
         
         if (this.#heldObject) {
+            console.log(this.#holdOffset);
             const intersection = new Vector3();
             raycaster.ray.intersectPlane(this.#movementPlane, intersection);
-            this.#heldObject.position.copy(intersection);
+            this.#heldObject.position.copy(intersection.add(this.#holdOffset));
             this.onDragUpdate(this.#heldObject);
         } else {
             const intersections = raycaster.intersectObjects(this.#draggables);
@@ -95,11 +110,21 @@ export class RelativeDragControls {
 
     /**
      * If an object is currently hoevered, hold it.
+     * Calcualte the vector between the centre of the object and 
+     * the mouse position on the object so that this offset can be 
+     * maintained when dragging. 
      * 
      * Called whenver any pointer device is pressed
      */
     #onMouseDown(event){
         if (this.#hoveredObject) {
+            const mousePos = this.#getRelativeMousePosition(event);
+            const raycaster = new Raycaster();
+            raycaster.setFromCamera(mousePos, this.#camera);
+            const intersection = new Vector3();
+            raycaster.ray.intersectPlane(this.#movementPlane, intersection);
+            this.#holdOffset = this.#hoveredObject.position.clone().sub(intersection);
+
             this.#heldObject = this.#hoveredObject;
             this.onDragStart(this.#heldObject);
         }
