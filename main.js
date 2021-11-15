@@ -80,26 +80,12 @@ const stickSpawner = new StickSpawner(scene, new Vector3(-5, 0.2, 0));
 const draggableList = [];
 const movementPlane = new Plane(new Vector3(0, 1, 0), -stickSpawner.stickParameters.radius);
 const controls = new RelativeDragControls(draggableList, camera, movementPlane, renderer.domElement);
-// controls.onHover = function(object) {
-//   console.log("Began hovering:");
-//   console.log(object);
-// }
-// controls.onUnhover = function(object) {
-//   console.log("Stopped hovering:")
-//   console.log(object);
-// }
-// controls.onDragStart = function(object) {
-//   console.log("Started dragging:");
-//   console.log(object)
-// }
-// controls.onDragUpdate = function(object) {
-//   console.log("Still dragging:"); 
-//   console.log(object);
-// }
-// controls.onDragEnd = function(object) {
-//   console.log("Stopped dragging:");
-//   console.log(object);
-// }
+controls.onHover = function(object) {
+  object.material.emissive.set(0x222222);
+}
+controls.onUnhover = function(object) {
+  object.material.emissive.set(0x000000);
+}
 
 stickSpawner.stickParameters.color = cubeColour;
 spawnStick();

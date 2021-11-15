@@ -91,7 +91,6 @@ export class RelativeDragControls {
         raycaster.setFromCamera(mousePos, this.#camera);
         
         if (this.#heldObject) {
-            console.log(this.#holdOffset);
             const intersection = new Vector3();
             raycaster.ray.intersectPlane(this.#movementPlane, intersection);
             this.#heldObject.position.copy(intersection.add(this.#holdOffset));
