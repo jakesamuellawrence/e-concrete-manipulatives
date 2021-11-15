@@ -7,7 +7,7 @@ import {
 } from 'three/examples/jsm/controls/DragControls.js';
 
 import {StickSpawner} from './StickSpawner';
-import { Vector3 } from 'three';
+import { Plane, PlaneBufferGeometry, Vector3 } from 'three';
 import { RelativeDragControls } from './RelativeDragControls';
 
 
@@ -74,14 +74,13 @@ tableTop.rotation.x = -Math.PI / 2;
 tableTop.rotation.z = -Math.PI / 2;
 scene.add(tableTop);
 
-const draggableList = [];
-const test = new RelativeDragControls(draggableList, camera, null, renderer.domElement);
-const controls = new DragControls(draggableList, camera, renderer.domElement);
-controls.addEventListener( 'drag', function ( event ) {
-  
-});
 
 const stickSpawner = new StickSpawner(scene, new Vector3(-5, 0.2, 0));
+
+const draggableList = [];
+const movementPlane = new Plane(new Vector3(0, 1, 0), -stickSpawner.stickParameters.radius);
+const controls = new RelativeDragControls(draggableList, camera, movementPlane, renderer.domElement);
+
 stickSpawner.stickParameters.color = cubeColour;
 spawnStick();
 
