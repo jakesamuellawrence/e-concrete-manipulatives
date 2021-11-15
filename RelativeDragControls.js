@@ -64,25 +64,36 @@ export class RelativeDragControls {
             const intersection = new Vector3();
             raycaster.ray.intersectPlane(this.#movementPlane, intersection);
             this.#heldObject.position.copy(intersection);
+            this.onDragUpdate(this.#heldObject);
         } else {
             const intersections = raycaster.intersectObjects(this.#draggables);
-            if (intersections[0]) {
+            if (intersections[0] && intersections[0].object != this.#hoveredObject) {
                 this.#hoveredObject = intersections[0].object;
-            } else {
+                this.onHover(this.#hoveredObject);
+            } else if (this.#hoveredObject && intersections.length == 0) {
+                this.onUnhover(this.#hoveredObject);
                 this.#hoveredObject = null;
             }
         }
     }
 
     #onMouseDown(event){
-        console.log("mouse down!");
         if (this.#hoveredObject) {
             this.#heldObject = this.#hoveredObject;
+            this.onDragStart(this.#heldObject);
         }
     }
     #onMouseUp(event){
-        console.log("mouse up!");
-        this.#heldObject = null;
+        if (this.#heldObject) {
+            this.onDragEnd(this.#heldObject);
+            this.#heldObject = null;
+        }
     }
+
+    onHover(object){}
+    onUnhover(object){}
+    onDragStart(object){}
+    onDragUpdate(object){}
+    onDragEnd(object){}
 
 }
