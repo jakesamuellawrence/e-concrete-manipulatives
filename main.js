@@ -1,113 +1,110 @@
 import './style.css';
-
 import * as THREE from 'three';
-
-import {
-  DragControls
-} from 'three/examples/jsm/controls/DragControls.js';
-
 import {StickSpawner} from './StickSpawner';
-import { Vector3 } from 'three';
+import {constructLink, changeDimension, setup} from './utils';
 
-
-//setup
-var baseURL = window.location.origin;
-
-var cubeColour = "#964B00";
-var colourPicker;
+//setting up colour
+let objectColour = "#8f5d46";
 
 function colourUpdate(event){
-  cubeColour = event.target.value;
-  stickSpawner.stickParameters.color = cubeColour;
+  objectColour = event.target.value;
+  stickSpawner.stickParameters.color = objectColour;
 }
 
-colourPicker = document.querySelector("#colourPicker");
+let colourPicker = document.querySelector("#colourPicker");
 colourPicker.addEventListener("input", colourUpdate, false);
 colourPicker.select();
 
 //URL Parsing
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
+const urlParams = new URLSearchParams(window.location.search);
 if(/^[0-9A-F]{6}$/i.test(urlParams.getAll('c'))){ //if c parameter valid hex colour
-  cubeColour = "#" + urlParams.getAll('c');
-  document.getElementById("colourPicker").value = cubeColour;
+  objectColour = "#" + urlParams.getAll('c');
+  document.getElementById("colourPicker").value = objectColour;
 }
 
 //3D setup
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.OrthographicCamera();
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#cv1'),
+  antialias: true,
 });
 
-renderer.setClearColor("#66aff5", 1);
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
-
-camera.position.set(0, 8, 4);
-camera.lookAt(new Vector3(0, 0, 0));
-
-const light = new THREE.DirectionalLight(0xFFFFFF, 0.75);
-light.position.set(0, 8, 0);
-light.target.position.set(0, 0, 0);
-light.lookAt(light.target.position);
-scene.add(light);
-scene.add(light.target);
-
-const planeSize = 400;
-const textureLoader = new THREE.TextureLoader();
-// texture from: https://3djungle.net/textures/smooth/870/
-const texture = textureLoader.load('resources/images/wood_texture.jpg'); 
-texture.wrapS = THREE.RepeatWrapping;
-texture.wrapT = THREE.RepeatWrapping;
-const repeats = planeSize / 2;
-texture.repeat.set(repeats, repeats);
-
-const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
-const planeMat = new THREE.MeshPhongMaterial({
-  map: texture,
-  side: THREE.DoubleSide,
-});
-const tableTop = new THREE.Mesh(planeGeo, planeMat);
-tableTop.rotation.x = -Math.PI / 2;
-tableTop.rotation.z = -Math.PI / 2;
-scene.add(tableTop);
+setup(scene, camera, renderer);
 
 const draggableList = [];
-const controls = new DragControls(draggableList, camera, renderer.domElement);
-controls.addEventListener( 'drag', function ( event ) {
-  
-});
 
-const stickSpawner = new StickSpawner(scene, new Vector3(-5, 0.2, 0));
-stickSpawner.stickParameters.color = cubeColour;
+const stickSpawner = new StickSpawner(scene, new THREE.Vector3(-5, 0.2, 0));
+stickSpawner.stickParameters.color = objectColour;
+stickSpawner.position.setX(stickSpawner.position.x + 4);
 spawnStick();
 
 function animate(){
-  requestAnimationFrame(animate);
+  dragObject();
   renderer.render(scene, camera);
+  requestAnimationFrame(animate);
 }
 
-
-function constructLink(){
-  alert("Use this URL to keep your settings:\n" + baseURL + "?c=" +cubeColour.replace("#",''));
-}
-
-document.getElementById("getLink").onclick = constructLink;
-
+// Make the buttons do their jobs
+document.getElementById("getLink").addEventListener('click', function(){constructLink(objectColour);})
 document.getElementById("newStick").onclick = spawnStick;
+document.getElementById("addxDimension").onclick = function(){changeDimension("x", 1, camera, console);}
+document.getElementById("minusxDimension").onclick = function(){changeDimension("x", -1, camera, console);}
+document.getElementById("addyDimension").onclick = function(){changeDimension("y", 1, camera, console);}
+document.getElementById("minusyDimension").onclick = function(){changeDimension("y", -1, camera, console);}
+document.getElementById("addzDimension").onclick = function(){changeDimension("z", 1, camera, console);}
+document.getElementById("minuszDimension").onclick = function(){changeDimension("z", -1, camera, console);}
 
-document.getElementById("horizontal").onchange = function() {
-  stickSpawner.stickParameters.defaultRotation = new Vector3(Math.PI/2, 0, 0);
-};
-document.getElementById("upright").onchange = function() {
-  stickSpawner.stickParameters.defaultRotation = new Vector3(0, 0, 0);
-}
 
 function spawnStick() {
-  stickSpawner.position.setX(stickSpawner.position.x + 0.5);
+  stickSpawner.position.setX(stickSpawner.position.x + 0.2);
   const stick = stickSpawner.spawn();
   draggableList.push(stick);
 }
+
+//XZ dragging
+const raycaster = new THREE.Raycaster();
+const clickMouse = new THREE.Vector2();
+const moveMouse = new THREE.Vector2();
+let draggable = null;
+
+window.addEventListener('click', event => {
+  if (draggable){
+    draggable = null;
+    return;
+  }
+  clickMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  clickMouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(clickMouse, camera);
+  raycaster.linePrecision = 0.1;
+  const found = raycaster.intersectObjects(draggableList, true);
+  if (found.length > 0 && found[0].object.userData.draggable){
+    draggable = found[0].object;
+  }
+});
+
+window.addEventListener('mousemove', event => {
+  moveMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  moveMouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+})
+
+function dragObject (){
+  if(draggable != null){
+    raycaster.setFromCamera(moveMouse, camera);
+    raycaster.linePrecision = 0.1;
+    const found = raycaster.intersectObjects(scene.children);
+    if (found.length > 0){
+      for (let o of found){
+        if(!o.object.userData.tableTop){
+          continue;
+        }
+        draggable.position.x = o.point.x;
+        draggable.position.z = o.point.z;
+      }
+    }
+  }
+}
+
 
 animate();

@@ -4,8 +4,8 @@ export class StickSpawner {
     position;
     stickParameters = {
         color: 0xffff00,
-        radius: 0.1,
-        height: 2,
+        radius: 0.04,
+        height: 0.4,
         radialSegments: 64,
         defaultRotation: new Vector3(Math.PI/2, 0, 0),
     }
@@ -38,6 +38,7 @@ export class StickSpawner {
             this.stickParameters.defaultRotation.y, 
             this.stickParameters.defaultRotation.z
         ));
+        stick.userData.draggable = true;
         this.#scene.add(stick);
         return stick;
     }
