@@ -62,7 +62,8 @@ function spawnStick() {
   draggableList.push(stick);
 }
 
-//XZ dragging
+// XZ dragging
+// Takes hints from https://github.com/tamani-coding/threejs-raycasting
 const raycaster = new THREE.Raycaster();
 const clickMouse = new THREE.Vector2();
 const moveMouse = new THREE.Vector2();
