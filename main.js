@@ -2,6 +2,12 @@ import './style.css';
 import * as THREE from 'three';
 import {StickSpawner} from './StickSpawner';
 import {constructLink, changeDimension, setup} from './utils';
+import { Plane, PlaneBufferGeometry, Vector3 } from 'three';
+import { RelativeDragControls } from './RelativeDragControls';
+
+
+//setup
+var baseURL = window.location.origin;
 
 //setting up colour
 let objectColour = "#8f5d46";
@@ -32,17 +38,26 @@ const renderer = new THREE.WebGLRenderer({
 
 setup(scene, camera, renderer);
 
-const draggableList = [];
 
-const stickSpawner = new StickSpawner(scene, new THREE.Vector3(-5, 0.2, 0));
+const stickSpawner = new StickSpawner(scene, new Vector3(-1, 0.2, 0));
+
+const draggableList = [];
+const movementPlane = new Plane(new Vector3(0, 1, 0), -stickSpawner.stickParameters.radius);
+const controls = new RelativeDragControls(draggableList, camera, movementPlane, renderer.domElement);
+controls.onHover = function(object) {
+  object.material.emissive.set(0x222222);
+}
+controls.onUnhover = function(object) {
+  object.material.emissive.set(0x000000);
+}
+
 stickSpawner.stickParameters.color = objectColour;
-stickSpawner.position.setX(stickSpawner.position.x + 4);
 spawnStick();
 
 function animate(){
-  dragObject();
-  renderer.render(scene, camera);
   requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+  
 }
 
 // Make the buttons do their jobs
@@ -62,50 +77,6 @@ function spawnStick() {
   draggableList.push(stick);
 }
 
-// XZ dragging
-// Takes hints from https://github.com/tamani-coding/threejs-raycasting
-const raycaster = new THREE.Raycaster();
-const clickMouse = new THREE.Vector2();
-const moveMouse = new THREE.Vector2();
-let draggable = null;
-
-window.addEventListener('click', event => {
-  if (draggable){
-    draggable = null;
-    return;
-  }
-  clickMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  clickMouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-
-  raycaster.setFromCamera(clickMouse, camera);
-  raycaster.linePrecision = 0.1;
-  const found = raycaster.intersectObjects(draggableList, true);
-  if (found.length > 0 && found[0].object.userData.draggable){
-    draggable = found[0].object;
-  }
-});
-
-window.addEventListener('mousemove', event => {
-  moveMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  moveMouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-})
-
-function dragObject (){
-  if(draggable != null){
-    raycaster.setFromCamera(moveMouse, camera);
-    raycaster.linePrecision = 0.1;
-    const found = raycaster.intersectObjects(scene.children);
-    if (found.length > 0){
-      for (let o of found){
-        if(!o.object.userData.tableTop){
-          continue;
-        }
-        draggable.position.x = o.point.x;
-        draggable.position.z = o.point.z;
-      }
-    }
-  }
-}
 
 
 animate();
