@@ -8,6 +8,7 @@
     "serve": "vite --host"
   },
   "devDependencies": {
+    "surge": "^0.23.0",
     "vite": "^2.6.4"
   },
   "dependencies": {
