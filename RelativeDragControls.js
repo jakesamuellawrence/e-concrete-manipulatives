@@ -98,6 +98,9 @@ export class RelativeDragControls {
         } else {
             const intersections = raycaster.intersectObjects(this.#draggables);
             if (intersections[0] && intersections[0].object != this.#hoveredObject) {
+                if (this.#hoveredObject != null) {
+                    this.onUnhover(this.#hoveredObject);
+                }
                 this.#hoveredObject = intersections[0].object;
                 this.onHover(this.#hoveredObject);
             } else if (this.#hoveredObject && intersections.length == 0) {
