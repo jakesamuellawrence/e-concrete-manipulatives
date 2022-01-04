@@ -1,9 +1,9 @@
 import './style.css';
 import * as THREE from 'three';
-import {StickSpawner} from './StickSpawner';
-import {constructLink, changeDimension, setup} from './utils';
+import {StickSpawner} from './js/StickSpawner';
+import {constructLink, changeDimension, setup} from './js/utils';
 import { Plane, PlaneBufferGeometry, Vector3 } from 'three';
-import { RelativeDragControls } from './RelativeDragControls';
+import { RelativeDragControls } from './js/RelativeDragControls';
 
 
 //setup
