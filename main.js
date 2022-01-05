@@ -5,7 +5,6 @@ import {constructLink, changeDimension, setup} from './js/utils';
 import { Plane, PlaneBufferGeometry, Vector3 } from 'three';
 import { RelativeDragControls } from './js/RelativeDragControls';
 
-
 //setup
 var baseURL = window.location.origin;
 
