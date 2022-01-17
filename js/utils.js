@@ -7,7 +7,7 @@ import floorTextureURL from "../resources/images/grass_texture.png";
      * @param {string} objectColour The hex string representing the set colour
      */
 export function constructLink(objectColour){
-    alert("Use this URL to keep your settings:\n" + window.location.origin + "?c=" +objectColour.replace("#",''));
+    return window.location.origin + "?c=" +objectColour.replace("#",'');
 }
 
 export function setup(scene, camera, renderer){

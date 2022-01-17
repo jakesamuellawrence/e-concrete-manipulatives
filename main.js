@@ -60,14 +60,16 @@ function animate(){
 }
 
 // Make the buttons do their jobs
-document.getElementById("getLink").addEventListener('click', function(){constructLink(objectColour);})
+document.getElementById("getLink").addEventListener('click', function(){
+  alert("Use this URL to keep your settings:\n" + constructLink(objectColour));
+});
 document.getElementById("newStick").onclick = spawnStick;
-document.getElementById("addxDimension").onclick = function(){changeDimension("x", 1, camera, console);}
-document.getElementById("minusxDimension").onclick = function(){changeDimension("x", -1, camera, console);}
-document.getElementById("addyDimension").onclick = function(){changeDimension("y", 1, camera, console);}
-document.getElementById("minusyDimension").onclick = function(){changeDimension("y", -1, camera, console);}
-document.getElementById("addzDimension").onclick = function(){changeDimension("z", 1, camera, console);}
-document.getElementById("minuszDimension").onclick = function(){changeDimension("z", -1, camera, console);}
+document.getElementById("addxDimension").onclick = function(){changeDimension("x", 1, camera, console);};
+document.getElementById("minusxDimension").onclick = function(){changeDimension("x", -1, camera, console);};
+document.getElementById("addyDimension").onclick = function(){changeDimension("y", 1, camera, console);};
+document.getElementById("minusyDimension").onclick = function(){changeDimension("y", -1, camera, console);};
+document.getElementById("addzDimension").onclick = function(){changeDimension("z", 1, camera, console);};
+document.getElementById("minuszDimension").onclick = function(){changeDimension("z", -1, camera, console);};
 
 
 function spawnStick() {
