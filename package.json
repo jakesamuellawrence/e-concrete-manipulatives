@@ -12,6 +12,7 @@
     "vite": "^2.6.4"
   },
   "dependencies": {
+    "number-to-words": "^1.2.4",
     "three": "^0.133.1"
   }
 }
