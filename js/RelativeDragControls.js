@@ -135,11 +135,7 @@ export class RelativeDragControls {
                     const intersection = new Vector3();
                     raycaster.ray.intersectPlane(this.#movementPlane, intersection);
                     this.#holdOffset = this.#hoveredObject.position.clone().sub(intersection);
-
                     this.#heldObject = this.#hoveredObject;
-
-                    console.log(this.#movementPlane);
-
                     this.onDragStart(this.#heldObject);
                 }
             }.bind(this),

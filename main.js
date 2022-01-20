@@ -6,6 +6,9 @@ import { Plane, PlaneBufferGeometry, Vector3 } from 'three';
 import { RelativeDragControls } from './js/RelativeDragControls';
 import { Object3D, Group } from 'three';
 import * as converter from 'number-to-words';
+import { SelectionControls } from './js/selectionControls';
+import { EffectComposer, OutlinePass, RenderPass } from 'three-outlinepass';
+import { Vector2 } from 'three';
 
 //setup
 var baseURL = window.location.origin;
@@ -44,41 +47,51 @@ setup(scene, camera, renderer);
 
 const stickSpawner = new StickSpawner(scene, new Vector3(-0.5, 0.2, 0.7));
 
+const composer = new EffectComposer(renderer);
+const renderPass = new RenderPass(scene, camera);
+const outlinedSticks = []
+const outlinePass = new OutlinePass(new Vector2(window.innerWidth, window.innerHeight), scene, camera, outlinedSticks);
+outlinePass.renderToScreen = true;
+composer.addPass(renderPass);
+composer.addPass(outlinePass);
+
 const draggableList = [];
 const movementPlane = new Plane(new Vector3(0, 1, 0), -stickSpawner.stickParameters.radius);
-const controls = new RelativeDragControls(draggableList, camera, movementPlane, renderer.domElement);
-controls.onHover = function(object) {
+const dragControls = new RelativeDragControls(draggableList, camera, movementPlane, renderer.domElement);
+dragControls.onHover = function(object) {
   // object.material.emissive.set(0x222222);
   setEmissiveAllChildren(object, 0x222222);
   document.body.style.cursor = "pointer";
 }
-controls.onUnhover = function(object) {
+dragControls.onUnhover = function(object) {
   // object.material.emissive.set(0x000000);
   setEmissiveAllChildren(object, 0x000000);
   document.body.style.cursor = "default";
 }
-controls.onDragStart = function(object){
+dragControls.onDragStart = function(object){
   // setEmissiveAllChildren(object, 0xFFBF00);
   document.body.style.cursor = "grabbing";
 }
-controls.onDragEnd = function(object) {
+dragControls.onDragEnd = function(object) {
   document.body.style.cursor = "pointer";
 }
 
-
+const selectableList = []
+const selectControls = new SelectionControls(selectableList, camera, renderer.domElement);
+selectControls.onSelect = function(object) {
+  outlinedSticks.push(object);
+};
+selectControls.onDeselect = function(object) {
+  outlinedSticks.splice(outlinedSticks.indexOf(object), 1);
+};
 
 stickSpawner.stickParameters.color = objectColour;
 let stick = spawnStick();
-let stick2 = spawnStick();
-let bundle = new Group();
-bundle.attach(stick);
-bundle.attach(stick2);
-scene.add(bundle);
 
 function animate(){
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
-  
+  composer.render(scene, camera);
 }
 
 // Make the buttons do their jobs
@@ -112,6 +125,7 @@ function spawnStick() {
   stickSpawner.position.setX(stickSpawner.position.x + 0.2);
   const stick = stickSpawner.spawn();
   draggableList.push(stick);
+  selectableList.push(stick);
   
   if(draggableList.length == 1){
     document.getElementById("areInTotal").innerText = "There is";
