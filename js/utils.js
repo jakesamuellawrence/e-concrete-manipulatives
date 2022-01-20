@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Object3D } from 'three';
-import floorTextureURL from "../resources/images/grass_texture.png";
+import darkShrubTexture from "../resources/images/bg_shrub_dark.svg";
 
 /**
      * Constructs a link to preserve settings
@@ -12,56 +12,55 @@ export function constructLink(objectColour){
 }
 
 export function setup(scene, camera, renderer){
-    renderer.setClearColor("#66aff5", 1);
+    renderer.setClearColor("#97E4D8", 1);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    camera.position.set(21, 12, 12);
+    camera.position.set(20, 10, 10);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     const light = new THREE.DirectionalLight(0xFFFFFF, 0.75);
-    light.position.set(0, 8, 4);
+    light.position.set(20, 10, 10);
     light.target.position.set(0, 0, 0);
     light.lookAt(light.target.position);
     scene.add(light);
     scene.add(light.target);
 
-    const planeSize = 400;
+    const planeSize = 3;
     const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load(floorTextureURL); 
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    const repeats = planeSize / 2;
-    texture.repeat.set(repeats, repeats);
+    //texture.wrapS = THREE.RepeatWrapping;
+    //texture.wrapT = THREE.RepeatWrapping;
+    //const repeats = planeSize / 2;
+    //texture.repeat.set(repeats, repeats);
 
-    const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
-    const planeMat = new THREE.MeshPhongMaterial({
-    map: texture,
-    side: THREE.DoubleSide,
-    });
-    const tableTop = new THREE.Mesh(planeGeo, planeMat);
-    tableTop.rotation.x = -Math.PI / 2;
-    tableTop.rotation.z = -Math.PI / 2;
-    tableTop.userData.draggable = false;
-    tableTop.userData.tableTop = true;
-    scene.add(tableTop);
-}
+    //const planeGeo = new THREE.PlaneGeometry(4, 2.5);
+    const planeGeo = new THREE.CircleGeometry(2.5, 64); //radius, segments. more segments give a cleaner curve but theoretically worse performance
+    const planeMat = new THREE.MeshBasicMaterial({color: 0x26A44C});
+    const ground = new THREE.Mesh(planeGeo, planeMat);
+    ground.rotation.x = -Math.PI / 2;
+    ground.rotation.z = -Math.PI * 1.14;
+    ground.position.x = 1.25;
+    ground.position.z = ground.position.x/2; //This is because camera position is also a 2:1 ratio
+    ground.userData.draggable = false;
+    ground.userData.tableTop = true;
+    scene.add(ground);
+    
 
-//Functions below this line are for dev/debug, and should not be required in production
+    const darkBushMap = textureLoader.load(darkShrubTexture);
+    const darkShrubMaterial = new THREE.SpriteMaterial( { map: darkBushMap } );
 
-export function changeDimension(dimension, amount, camera, console){
-    if (dimension == "x"){
-        camera.position.setX(camera.position.x + amount);
-        console.log('x: %d',camera.position.x);
-    }else if (dimension == "y"){
-        camera.position.setY(camera.position.y + amount);
-        console.log('y: %d',camera.position.y);
-    }else if (dimension == "z"){
-        camera.position.setZ(camera.position.z + amount);
-        console.log('z: %d',camera.position.z);
-    }
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
-    camera.updateProjectionMatrix();
+    const bushSprite1 = new THREE.Sprite(darkShrubMaterial);
+    bushSprite1.center.set(0.5,0)
+    bushSprite1.scale.set(0.6,0.5,0.6);
+    bushSprite1.position.set(-1.6,-0.25,0);
+    scene.add(bushSprite1);
+
+    const bushSprite2 = new THREE.Sprite(darkShrubMaterial);
+    bushSprite2.center.set(0.5,0)
+    bushSprite2.scale.set(0.6,0.5,0.6);
+    bushSprite2.position.set(-0.6,-0.08,-1.2);
+    scene.add(bushSprite2);
+
 }
 
 /**
@@ -81,6 +80,9 @@ export function changeDimension(dimension, amount, camera, console){
     return object
 };
 
+/**
+ * Sets the highlight colour of all the children of the given object
+ */
 export function setEmissiveAllChildren(root, value) {
     if (root.material != null) {
         root.material.emissive.set(value);
@@ -90,4 +92,21 @@ export function setEmissiveAllChildren(root, value) {
             setEmissiveAllChildren(child, value);
         }
     }
+}
+
+//Functions below this line are for dev/debug, and should not be required in production
+
+export function changeDimension(dimension, amount, camera, console){
+    if (dimension == "x"){
+        camera.position.setX(camera.position.x + amount);
+        console.log('x: %d',camera.position.x);
+    }else if (dimension == "y"){
+        camera.position.setY(camera.position.y + amount);
+        console.log('y: %d',camera.position.y);
+    }else if (dimension == "z"){
+        camera.position.setZ(camera.position.z + amount);
+        console.log('z: %d',camera.position.z);
+    }
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+    camera.updateProjectionMatrix();
 }
