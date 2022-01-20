@@ -1,4 +1,5 @@
 import { Camera, InstancedInterleavedBuffer, Object3D, Plane, Raycaster, RectAreaLight, Vector2, Vector3 } from "three";
+import {getLargestGroup} from "./utils";
 
 export class RelativeDragControls {
 
@@ -97,13 +98,16 @@ export class RelativeDragControls {
             this.onDragUpdate(this.#heldObject);
         } else {
             const intersections = raycaster.intersectObjects(this.#draggables);
-            if (intersections[0] && intersections[0].object != this.#hoveredObject) {
+            let intersectedObject = null;
+            if (intersections.length != 0) intersectedObject = getLargestGroup(intersections[0].object)
+
+            if (intersectedObject && intersectedObject != this.#hoveredObject) {
                 if (this.#hoveredObject != null) {
                     this.onUnhover(this.#hoveredObject);
                 }
-                this.#hoveredObject = intersections[0].object;
+                this.#hoveredObject = intersectedObject;
                 this.onHover(this.#hoveredObject);
-            } else if (this.#hoveredObject && intersections.length == 0) {
+            } else if (this.#hoveredObject && intersectedObject == null) {
                 this.onUnhover(this.#hoveredObject);
                 this.#hoveredObject = null;
             }

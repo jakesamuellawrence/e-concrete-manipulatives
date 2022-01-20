@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { Object3D } from 'three';
 import floorTextureURL from "../resources/images/grass_texture.png";
 
 /**
@@ -61,4 +62,32 @@ export function changeDimension(dimension, amount, camera, console){
     }
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     camera.updateProjectionMatrix();
+}
+
+/**
+ * Follows the trail of parents until it finds the largest non-scene
+ * group that the given object is a child of
+ * 
+ * @param {Object3D} object the object to find the group of
+ * @returns the largest non-scene object that the given object is a child of
+ */
+ export function getLargestGroup(object) {
+    if (object == null) return null;
+    while (object.parent != null &&
+           (object.parent.type == "Object3D" ||
+            object.parent.type == "Group")) {
+        object = object.parent;
+    }
+    return object
+};
+
+export function setEmissiveAllChildren(root, value) {
+    if (root.material != null) {
+        root.material.emissive.set(value);
+    }
+    if (root.children) {
+        for (let child of root.children) {
+            setEmissiveAllChildren(child, value);
+        }
+    }
 }

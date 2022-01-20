@@ -1,9 +1,11 @@
 import './style.css';
 import * as THREE from 'three';
 import {StickSpawner} from './js/StickSpawner';
-import {constructLink, changeDimension, setup} from './js/utils';
+import {constructLink, changeDimension, setup, setEmissiveAllChildren} from './js/utils';
 import { Plane, PlaneBufferGeometry, Vector3 } from 'three';
 import { RelativeDragControls } from './js/RelativeDragControls';
+import { Object3D } from 'three';
+import { Group } from 'three';
 
 //setup
 var baseURL = window.location.origin;
@@ -44,14 +46,21 @@ const draggableList = [];
 const movementPlane = new Plane(new Vector3(0, 1, 0), -stickSpawner.stickParameters.radius);
 const controls = new RelativeDragControls(draggableList, camera, movementPlane, renderer.domElement);
 controls.onHover = function(object) {
-  object.material.emissive.set(0x222222);
+  // object.material.emissive.set(0x222222);
+  setEmissiveAllChildren(object, 0x222222)
 }
 controls.onUnhover = function(object) {
-  object.material.emissive.set(0x000000);
+  // object.material.emissive.set(0x000000);
+  setEmissiveAllChildren(object, 0x000000)
 }
 
 stickSpawner.stickParameters.color = objectColour;
-spawnStick();
+let stick = spawnStick();
+let stick2 = spawnStick();
+let bundle = new Group();
+bundle.attach(stick);
+bundle.attach(stick2);
+scene.add(bundle);
 
 function animate(){
   requestAnimationFrame(animate);
@@ -74,6 +83,7 @@ function spawnStick() {
   stickSpawner.position.setX(stickSpawner.position.x + 0.2);
   const stick = stickSpawner.spawn();
   draggableList.push(stick);
+  return stick;
 }
 
 
