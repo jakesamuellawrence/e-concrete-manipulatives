@@ -3,10 +3,10 @@ import { Object3D } from 'three';
 import darkShrubTexture from "../resources/images/bg_shrub_dark.svg";
 
 /**
-     * Constructs a link to preserve settings
-     * 
-     * @param {string} objectColour The hex string representing the set colour
-     */
+ * Constructs a link to preserve settings
+ * 
+ * @param {string} objectColour The hex string representing the set colour
+ */
 export function constructLink(objectColour){
     alert("Use this URL to keep your settings:\n" + window.location.origin + "?c=" +objectColour.replace("#",''));
 }

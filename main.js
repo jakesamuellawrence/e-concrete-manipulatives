@@ -49,11 +49,20 @@ const movementPlane = new Plane(new Vector3(0, 1, 0), -stickSpawner.stickParamet
 const controls = new RelativeDragControls(draggableList, camera, movementPlane, renderer.domElement);
 controls.onHover = function(object) {
   // object.material.emissive.set(0x222222);
-  setEmissiveAllChildren(object, 0x222222)
+  setEmissiveAllChildren(object, 0x222222);
+  document.body.style.cursor = "pointer";
 }
 controls.onUnhover = function(object) {
   // object.material.emissive.set(0x000000);
-  setEmissiveAllChildren(object, 0x000000)
+  setEmissiveAllChildren(object, 0x000000);
+  document.body.style.cursor = "default";
+}
+controls.onDragStart = function(object){
+  // setEmissiveAllChildren(object, 0xFFBF00);
+  document.body.style.cursor = "grabbing";
+}
+controls.onDragEnd = function(object) {
+  document.body.style.cursor = "pointer";
 }
 
 
@@ -112,7 +121,7 @@ function spawnStick() {
     document.getElementById("sticksInTotal").innerText = "sticks in total";
   }
   document.getElementById("numberInTotal").innerText = converter.toWords(draggableList.length);
-  
+
   return stick;
 }
 

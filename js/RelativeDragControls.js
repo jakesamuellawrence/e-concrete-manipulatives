@@ -10,6 +10,8 @@ export class RelativeDragControls {
     #hoveredObject = null;
     #heldObject = null;
     #holdOffset = new Vector3();
+    #mouseIsDown = false;
+    #holdTime = 250;
 
     #boundMouseEvents = {
         move: null,
@@ -123,16 +125,25 @@ export class RelativeDragControls {
      * Called whenver any pointer device is pressed
      */
     #onMouseDown(event){
+        this.#mouseIsDown = true;
         if (this.#hoveredObject) {
-            const mousePos = this.#getRelativeMousePosition(event);
-            const raycaster = new Raycaster();
-            raycaster.setFromCamera(mousePos, this.#camera);
-            const intersection = new Vector3();
-            raycaster.ray.intersectPlane(this.#movementPlane, intersection);
-            this.#holdOffset = this.#hoveredObject.position.clone().sub(intersection);
+            setTimeout(function() {
+                if (this.#hoveredObject && this.#mouseIsDown) {
+                    const mousePos = this.#getRelativeMousePosition(event);
+                    const raycaster = new Raycaster();
+                    raycaster.setFromCamera(mousePos, this.#camera);
+                    const intersection = new Vector3();
+                    raycaster.ray.intersectPlane(this.#movementPlane, intersection);
+                    this.#holdOffset = this.#hoveredObject.position.clone().sub(intersection);
 
-            this.#heldObject = this.#hoveredObject;
-            this.onDragStart(this.#heldObject);
+                    this.#heldObject = this.#hoveredObject;
+
+                    console.log(this.#movementPlane);
+
+                    this.onDragStart(this.#heldObject);
+                }
+            }.bind(this),
+            this.#holdTime);
         }
     }
 
@@ -142,6 +153,7 @@ export class RelativeDragControls {
      * Called whenever any pointer device is released
      */
     #onMouseUp(event){
+        this.#mouseIsDown = false;
         if (this.#heldObject) {
             this.onDragEnd(this.#heldObject);
             this.#heldObject = null;
