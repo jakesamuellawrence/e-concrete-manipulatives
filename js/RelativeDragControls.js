@@ -117,7 +117,10 @@ export class RelativeDragControls {
     }
 
     /**
-     * If an object is currently hoevered, hold it.
+     * Start a timer and once that timer has finished check if the
+     * mouse is still held. If so:
+     * 
+     * If an object is currently hovered, hold it.
      * Calcualte the vector between the centre of the object and 
      * the mouse position on the object so that this offset can be 
      * maintained when dragging. 
@@ -144,6 +147,8 @@ export class RelativeDragControls {
     }
 
     /**
+     * Record that the mouse was unpressed
+     * 
      * If an object is currently being held, stop holding it.
      * 
      * Called whenever any pointer device is released

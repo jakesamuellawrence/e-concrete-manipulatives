@@ -1,4 +1,6 @@
 import { Raycaster } from "three";
+import { Camera } from "three";
+import { Object3D } from "three";
 import { Vector3 } from "three";
 import { getLargestGroup } from "./utils";
 
@@ -17,6 +19,12 @@ export class SelectionControls {
         up: null
     }
 
+    /**
+     * 
+     * @param {Object3D[]} selectables the list of objects that can be selected and deselected
+     * @param {Camera} camera camera used to cast rays in order to detect which object was clicked on
+     * @param {HTMLCanvasElement} domeElement the canvas element of the renderer
+     */
     constructor(selectables, camera, domeElement) {
         this.#selectables = selectables;
         this.#camera = camera
@@ -54,10 +62,22 @@ export class SelectionControls {
         return {x: pointerRelativeX, y: pointerRelativeY};
     }
 
+    /**
+     * Set the time the mouse was pressed
+     * 
+     * called whenever the mouse is pressed
+     */
     #onMouseDown(event) {
         this.#mouseDownTime = event.timeStamp;
     }
 
+    /**
+     * If the mouse was only pressed for a short amount of time,
+     * cast a ray to detect what was clicked on. If it was a 
+     * selectable object, get the largest bundle that object belongs
+     * to and add it to the currently selected list, and call the
+     * relevant callback.
+     */
     #onMouseUp(event) {
         if (event.timeStamp - this.#mouseDownTime <= this.#maxClickTime) {
             const mousePos = this.#getRelativeMousePosition(event);
@@ -82,7 +102,18 @@ export class SelectionControls {
         }
     }
 
+    /**
+     * Called when an unselected object is selected
+     * 
+     * @param {Object3D} object the object that's been selected
+     */
     onSelect(object){}
+
+    /**
+     * Called when a selected object is unselected
+     * 
+     * @param {Object3D} object the object that's been unselected
+     */
     onDeselect(object){}
 
 }

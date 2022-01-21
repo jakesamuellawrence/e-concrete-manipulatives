@@ -51,17 +51,14 @@ const draggableList = [];
 const movementPlane = new Plane(new Vector3(0, 1, 0), -stickSpawner.stickParameters.radius);
 const dragControls = new RelativeDragControls(draggableList, camera, movementPlane, renderer.domElement);
 dragControls.onHover = function(object) {
-  // object.material.emissive.set(0x222222);
   setEmissiveAllChildren(object, 0x222222);
   document.body.style.cursor = "pointer";
 }
 dragControls.onUnhover = function(object) {
-  // object.material.emissive.set(0x000000);
   setEmissiveAllChildren(object, 0x000000);
   document.body.style.cursor = "default";
 }
 dragControls.onDragStart = function(object){
-  // setEmissiveAllChildren(object, 0xFFBF00);
   document.body.style.cursor = "grabbing";
 }
 dragControls.onDragEnd = function(object) {
@@ -70,11 +67,7 @@ dragControls.onDragEnd = function(object) {
 
 const composer = new EffectComposer(renderer);
 const renderPass = new RenderPass(scene, camera);
-// const outlinePass = new OutlinePass(new Vector2(window.innerWidth, window.innerHeight), scene, camera);
-// outlinePass.selectedObjects = selectControls.currentlySelected;
-// outlinePass.renderToScreen = true;
 composer.addPass(renderPass);
-// composer.addPass(outlinePass);
 
 const selectControls = new SelectionControls(draggableList, camera, renderer.domElement);
 selectControls.onSelect = function(object) {
