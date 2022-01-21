@@ -47,14 +47,6 @@ setup(scene, camera, renderer);
 
 const stickSpawner = new StickSpawner(scene, new Vector3(-0.5, 0.2, 0.7));
 
-const composer = new EffectComposer(renderer);
-const renderPass = new RenderPass(scene, camera);
-const outlinedSticks = []
-const outlinePass = new OutlinePass(new Vector2(window.innerWidth, window.innerHeight), scene, camera, outlinedSticks);
-outlinePass.renderToScreen = true;
-composer.addPass(renderPass);
-composer.addPass(outlinePass);
-
 const draggableList = [];
 const movementPlane = new Plane(new Vector3(0, 1, 0), -stickSpawner.stickParameters.radius);
 const dragControls = new RelativeDragControls(draggableList, camera, movementPlane, renderer.domElement);
@@ -76,14 +68,29 @@ dragControls.onDragEnd = function(object) {
   document.body.style.cursor = "pointer";
 }
 
-const selectableList = []
-const selectControls = new SelectionControls(selectableList, camera, renderer.domElement);
+const composer = new EffectComposer(renderer);
+const renderPass = new RenderPass(scene, camera);
+// const outlinePass = new OutlinePass(new Vector2(window.innerWidth, window.innerHeight), scene, camera);
+// outlinePass.selectedObjects = selectControls.currentlySelected;
+// outlinePass.renderToScreen = true;
+composer.addPass(renderPass);
+// composer.addPass(outlinePass);
+
+const selectControls = new SelectionControls(draggableList, camera, renderer.domElement);
 selectControls.onSelect = function(object) {
-  outlinedSticks.push(object);
+  if (object.outlinePass) {
+    object.outlinePass.enabled = true;
+  } else {
+    const outlinePass = new OutlinePass(new Vector2(window.innerWidth, window.innerHeight), scene, camera, [object]);
+    outlinePass.renderToScreen = true;
+    composer.addPass(outlinePass);
+    object.outlinePass = outlinePass;
+  }
 };
 selectControls.onDeselect = function(object) {
-  outlinedSticks.splice(outlinedSticks.indexOf(object), 1);
+  object.outlinePass.enabled = false;
 };
+
 
 stickSpawner.stickParameters.color = objectColour;
 let stick = spawnStick();
@@ -125,7 +132,6 @@ function spawnStick() {
   stickSpawner.position.setX(stickSpawner.position.x + 0.2);
   const stick = stickSpawner.spawn();
   draggableList.push(stick);
-  selectableList.push(stick);
   
   if(draggableList.length == 1){
     document.getElementById("areInTotal").innerText = "There is";

@@ -4,8 +4,9 @@ import { getLargestGroup } from "./utils";
 
 export class SelectionControls {
 
+    currentlySelected = [];
+
     #selectables;
-    #currentlySelected = [];
     #domElement;
     #camera;
     #maxClickTime = 200;
@@ -68,13 +69,13 @@ export class SelectionControls {
             if (intersections.length != 0) intersectedObject = getLargestGroup(intersections[0].object);
 
             if (intersectedObject) {
-                let index = this.#currentlySelected.indexOf(intersectedObject);
+                let index = this.currentlySelected.indexOf(intersectedObject);
                 if (index != -1) {
-                    this.#currentlySelected.splice(index, 1);
+                    this.currentlySelected.splice(index, 1);
                     this.onDeselect(intersectedObject)
                 }
                 else {
-                    this.#currentlySelected.push(intersectedObject);
+                    this.currentlySelected.push(intersectedObject);
                     this.onSelect(intersectedObject);
                 }
             }
