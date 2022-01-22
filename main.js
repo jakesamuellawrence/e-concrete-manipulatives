@@ -81,7 +81,9 @@ selectControls.onSelect = function(object) {
   }
 };
 selectControls.onDeselect = function(object) {
-  object.outlinePass.enabled = false;
+  if (object.outlinePass) {
+    object.outlinePass.enabled = false;
+  }
 };
 
 
@@ -106,6 +108,33 @@ document.getElementById("addyDimension").onclick = function(){changeDimension("y
 document.getElementById("minusyDimension").onclick = function(){changeDimension("y", -1, camera, console);}
 document.getElementById("addzDimension").onclick = function(){changeDimension("z", 1, camera, console);}
 document.getElementById("minuszDimension").onclick = function(){changeDimension("z", -1, camera, console);}
+
+document.getElementById("bundleButton").onclick = function() {
+  if (selectControls.currentlySelected.length == 0) {
+    return window.alert("Nothing is selected. Please click on some sticks to select them.");
+  }
+  let allSameOrder = selectControls.currentlySelected.every((object) => object.order == selectControls.currentlySelected[0].order);
+  if (!allSameOrder) {
+    return window.alert("You cannot bundle different types of things.");
+  }
+  if (selectControls.currentlySelected.length > sticksInABundle) {
+    return window.alert("You have selected too many things.");
+  } else if (selectControls.currentlySelected.length < sticksInABundle) {
+    return window.alert("You have not selected enough things.");
+  }
+  bundle();
+}
+
+document.getElementById("removeButton").onclick = function() {
+  if (confirm("This will delete all selected sticks and bundles. Are you sure?")) {
+    for (let object of selectControls.currentlySelected){
+      scene.remove(object);
+    }
+    while (selectControls.currentlySelected.length > 0) {
+      selectControls.deselect(selectControls.currentlySelected);
+    }
+  }
+}
 
 function moreSticksInABundle() {
   if (sticksInABundle < 12){
@@ -142,6 +171,16 @@ function spawn10Sticks() {
   for (let i=0;i<10;i++){
     spawnStick();
   }
+}
+
+function bundle() {
+  let bundle = new Group();
+  bundle.order = selectControls.currentlySelected[0].order + 1;
+  while(selectControls.currentlySelected.length > 0) {
+    bundle.attach(selectControls.currentlySelected[0]);
+    selectControls.deselect(selectControls.currentlySelected[0])
+  }
+  scene.add(bundle);
 }
 
 

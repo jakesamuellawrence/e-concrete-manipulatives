@@ -91,15 +91,33 @@ export class SelectionControls {
             if (intersectedObject) {
                 let index = this.currentlySelected.indexOf(intersectedObject);
                 if (index != -1) {
-                    this.currentlySelected.splice(index, 1);
-                    this.onDeselect(intersectedObject)
+                    this.deselect(intersectedObject);
                 }
                 else {
-                    this.currentlySelected.push(intersectedObject);
-                    this.onSelect(intersectedObject);
+                    this.select(intersectedObject);
                 }
             }
         }
+    }
+
+    /**
+     * Adds the object to the list of selected objects and calls the onSelect callback
+     * 
+     * @param {Object3D} object The object to be selected
+     */
+    select(object) {
+        this.currentlySelected.push(object);
+        this.onSelect(object);
+    }
+
+    /**
+     * removes the object from the list of selected objects and calls the onDeselect callback
+     * 
+     * @param {Object3D} object The object to be deselected
+     */
+    deselect(object) {
+        this.currentlySelected.splice(this.currentlySelected.indexOf(object), 1);
+        this.onDeselect(object)
     }
 
     /**
