@@ -9,6 +9,7 @@ import * as converter from 'number-to-words';
 import { SelectionControls } from './js/selectionControls';
 import { EffectComposer, OutlinePass, RenderPass } from 'three-outlinepass';
 import { Vector2 } from 'three';
+import { centerLookup, positionLookup, radiusLookup } from './js/BundleLookup';
 
 //setup
 var baseURL = window.location.origin;
@@ -86,7 +87,6 @@ selectControls.onDeselect = function(object) {
   }
 };
 
-
 stickSpawner.stickParameters.color = objectColour;
 let stick = spawnStick();
 
@@ -154,6 +154,8 @@ function spawnStick() {
   stickSpawner.position.setX(stickSpawner.position.x + 0.2);
   const stick = stickSpawner.spawn();
   draggableList.push(stick);
+  stick.order = 0;
+  stick.radius = stickSpawner.stickParameters.radius;
   
   if(draggableList.length == 1){
     document.getElementById("areInTotal").innerText = "There is";
@@ -176,6 +178,30 @@ function spawn10Sticks() {
 function bundle() {
   let bundle = new Group();
   bundle.order = selectControls.currentlySelected[0].order + 1;
+  bundle.radius = radiusLookup[sticksInABundle](selectControls.currentlySelected[0].radius);
+  let bundleCenter = centerLookup[sticksInABundle](selectControls.currentlySelected[0].radius,
+                                                   selectControls.currentlySelected[0].position.x,
+                                                   selectControls.currentlySelected[0].position.y);
+  bundle.position.set(
+    bundleCenter.x,
+    bundleCenter.y,
+    selectControls.currentlySelected[0].position.z
+  )
+
+  const positions = positionLookup[sticksInABundle](selectControls.currentlySelected[0].radius,
+                                                    selectControls.currentlySelected[0].position.x,
+                                                    selectControls.currentlySelected[0].position.y);
+
+  console.log(positions);
+
+  for (let i = 1; i < selectControls.currentlySelected.length; i++) {
+    selectControls.currentlySelected[i].position.set(
+      positions[i-1].x,
+      positions[i-1].y,
+      selectControls.currentlySelected[0].position.z
+    );
+  }
+
   while(selectControls.currentlySelected.length > 0) {
     bundle.attach(selectControls.currentlySelected[0]);
     selectControls.deselect(selectControls.currentlySelected[0])

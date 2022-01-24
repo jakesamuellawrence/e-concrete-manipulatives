@@ -40,7 +40,6 @@ export class StickSpawner {
         ));
         stick.userData.draggable = true;
         this.#scene.add(stick);
-        stick.order = 0;
         return stick;
     }
 }
