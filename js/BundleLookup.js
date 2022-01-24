@@ -23,7 +23,7 @@ export let radiusLookup = {
 
 export let centerLookup = {
     4: (r, x_0, y_0) => {return {x: x_0 + r, y: y_0 + r}},
-    5: (r, x_0, y_0) => {return {x: start_x + r, y: y_0 + r / Math.tan(toRad(36))}}
+    5: (r, x_0, y_0) => {return {x: x_0 + r, y: y_0 + r / Math.tan(toRad(36))}}
 }
 
 function toRad(degrees) {

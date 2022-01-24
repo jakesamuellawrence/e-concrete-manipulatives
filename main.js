@@ -46,7 +46,7 @@ const renderer = new THREE.WebGLRenderer({
 setup(scene, camera, renderer);
 
 
-const stickSpawner = new StickSpawner(scene, new Vector3(-0.5, 0.2, 0.7));
+const stickSpawner = new StickSpawner(scene, new Vector3(0, 0.2, 0.7));
 
 const draggableList = [];
 const movementPlane = new Plane(new Vector3(0, 1, 0), -stickSpawner.stickParameters.radius);
@@ -151,11 +151,17 @@ function fewerSticksInABundle() {
 }
 
 function spawnStick() {
-  stickSpawner.position.setX(stickSpawner.position.x + 0.2);
   const stick = stickSpawner.spawn();
   draggableList.push(stick);
   stick.order = 0;
   stick.radius = stickSpawner.stickParameters.radius;
+
+  if (stickSpawner.position.x > 2) {
+    stickSpawner.position.setX(0);
+    stickSpawner.position.setZ(stickSpawner.position.z - 0.5);
+  } else {
+    stickSpawner.position.setX(stickSpawner.position.x + 0.2);
+  }
   
   if(draggableList.length == 1){
     document.getElementById("areInTotal").innerText = "There is";
