@@ -1,11 +1,12 @@
 import * as THREE from 'three';
+import { Object3D } from 'three';
 import darkShrubTexture from "../resources/images/bg_shrub_dark.svg";
 
 /**
-     * Constructs a link to preserve settings
-     * 
-     * @param {string} objectColour The hex string representing the set colour
-     */
+ * Constructs a link to preserve settings
+ * 
+ * @param {string} objectColour The hex string representing the set colour
+ */
 export function constructLink(objectColour){
     alert("Use this URL to keep your settings:\n" + window.location.origin + "?c=" +objectColour.replace("#",''));
 }
@@ -62,6 +63,37 @@ export function setup(scene, camera, renderer){
 
 }
 
+/**
+ * Follows the trail of parents until it finds the largest non-scene
+ * group that the given object is a child of
+ * 
+ * @param {Object3D} object the object to find the group of
+ * @returns the largest non-scene object that the given object is a child of
+ */
+ export function getLargestGroup(object) {
+    if (object == null) return null;
+    while (object.parent != null &&
+           (object.parent.type == "Object3D" ||
+            object.parent.type == "Group")) {
+        object = object.parent;
+    }
+    return object
+};
+
+/**
+ * Sets the highlight colour of all the children of the given object
+ */
+export function setEmissiveAllChildren(root, value) {
+    if (root.material != null) {
+        root.material.emissive.set(value);
+    }
+    if (root.children) {
+        for (let child of root.children) {
+            setEmissiveAllChildren(child, value);
+        }
+    }
+}
+
 //Functions below this line are for dev/debug, and should not be required in production
 
 export function changeDimension(dimension, amount, camera, console){
@@ -77,4 +109,14 @@ export function changeDimension(dimension, amount, camera, console){
     }
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     camera.updateProjectionMatrix();
+}
+
+export function removeObjects(object, scene, draggableList){
+    if (object.children.length > 0){
+        for (let child of object.children) {
+          removeObjects(child, scene, draggableList);
+        }
+    }else {
+        draggableList.splice(draggableList.indexOf(object), 1);
+      }
 }

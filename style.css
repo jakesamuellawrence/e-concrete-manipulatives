@@ -49,6 +49,19 @@ canvas {
   font-size: 150%;
 }
 
+.buttonGroup {
+  position: absolute;
+  width: 12.5vw;
+  /* background-color: #F3DC87; */
+  padding: 1vw;
+  /* border-style: solid; */
+  /* border-color: #F52E2C; */
+  border-radius: 1vw;
+  font-family: ComicNeue;
+  text-align: center;
+  font-size: 150%;
+}
+
 .bottomLeft{
   bottom: 3vw;
   left: 3vw;
@@ -57,6 +70,12 @@ canvas {
 .bottomRight{
   bottom: 3vw;
   right: 3vw;
+}
+
+.bottomCenter{
+  bottom: 3vw;
+  left: 50vw;
+  transform: translate(-50%);
 }
 
 .infoBox h4, h1{
@@ -75,6 +94,25 @@ canvas {
   text-align: center;
   font-size: 150%;
   width: 3vw;
+  cursor: pointer;
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.buttonBox{
+  /* position: absolute; */
+  background-color: #F3DC87;
+  padding: 0;
+  margin: 10px;
+  border-style: solid;
+  border-color: #F52E2C;
+  border-radius: 0.5vw;
+  font-family: ComicNeue;
+  text-align: center;
+  font-size: 150%;
+  /* width: 3vw; */
   cursor: pointer;
   -webkit-user-select: none; /* Safari */        
   -moz-user-select: none; /* Firefox */

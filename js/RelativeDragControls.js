@@ -1,4 +1,5 @@
 import { Camera, InstancedInterleavedBuffer, Object3D, Plane, Raycaster, RectAreaLight, Vector2, Vector3 } from "three";
+import {getLargestGroup} from "./utils";
 
 export class RelativeDragControls {
 
@@ -9,6 +10,8 @@ export class RelativeDragControls {
     #hoveredObject = null;
     #heldObject = null;
     #holdOffset = new Vector3();
+    #mouseIsDown = false;
+    #holdTime = 250;
 
     #boundMouseEvents = {
         move: null,
@@ -97,13 +100,16 @@ export class RelativeDragControls {
             this.onDragUpdate(this.#heldObject);
         } else {
             const intersections = raycaster.intersectObjects(this.#draggables);
-            if (intersections[0] && intersections[0].object != this.#hoveredObject) {
+            let intersectedObject = null;
+            if (intersections.length != 0) intersectedObject = getLargestGroup(intersections[0].object)
+
+            if (intersectedObject && intersectedObject != this.#hoveredObject) {
                 if (this.#hoveredObject != null) {
                     this.onUnhover(this.#hoveredObject);
                 }
-                this.#hoveredObject = intersections[0].object;
+                this.#hoveredObject = intersectedObject;
                 this.onHover(this.#hoveredObject);
-            } else if (this.#hoveredObject && intersections.length == 0) {
+            } else if (this.#hoveredObject && intersectedObject == null) {
                 this.onUnhover(this.#hoveredObject);
                 this.#hoveredObject = null;
             }
@@ -111,7 +117,10 @@ export class RelativeDragControls {
     }
 
     /**
-     * If an object is currently hoevered, hold it.
+     * Start a timer and once that timer has finished check if the
+     * mouse is still held. If so:
+     * 
+     * If an object is currently hovered, hold it.
      * Calcualte the vector between the centre of the object and 
      * the mouse position on the object so that this offset can be 
      * maintained when dragging. 
@@ -119,25 +128,33 @@ export class RelativeDragControls {
      * Called whenver any pointer device is pressed
      */
     #onMouseDown(event){
+        this.#mouseIsDown = true;
         if (this.#hoveredObject) {
-            const mousePos = this.#getRelativeMousePosition(event);
-            const raycaster = new Raycaster();
-            raycaster.setFromCamera(mousePos, this.#camera);
-            const intersection = new Vector3();
-            raycaster.ray.intersectPlane(this.#movementPlane, intersection);
-            this.#holdOffset = this.#hoveredObject.position.clone().sub(intersection);
-
-            this.#heldObject = this.#hoveredObject;
-            this.onDragStart(this.#heldObject);
+            setTimeout(function() {
+                if (this.#hoveredObject && this.#mouseIsDown) {
+                    const mousePos = this.#getRelativeMousePosition(event);
+                    const raycaster = new Raycaster();
+                    raycaster.setFromCamera(mousePos, this.#camera);
+                    const intersection = new Vector3();
+                    raycaster.ray.intersectPlane(this.#movementPlane, intersection);
+                    this.#holdOffset = this.#hoveredObject.position.clone().sub(intersection);
+                    this.#heldObject = this.#hoveredObject;
+                    this.onDragStart(this.#heldObject);
+                }
+            }.bind(this),
+            this.#holdTime);
         }
     }
 
     /**
+     * Record that the mouse was unpressed
+     * 
      * If an object is currently being held, stop holding it.
      * 
      * Called whenever any pointer device is released
      */
     #onMouseUp(event){
+        this.#mouseIsDown = false;
         if (this.#heldObject) {
             this.onDragEnd(this.#heldObject);
             this.#heldObject = null;
