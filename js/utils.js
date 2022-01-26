@@ -61,20 +61,3 @@ export function setup(scene, camera, renderer){
     scene.add(bushSprite2);
 
 }
-
-//Functions below this line are for dev/debug, and should not be required in production
-
-export function changeDimension(dimension, amount, camera, console){
-    if (dimension == "x"){
-        camera.position.setX(camera.position.x + amount);
-        console.log('x: %d',camera.position.x);
-    }else if (dimension == "y"){
-        camera.position.setY(camera.position.y + amount);
-        console.log('y: %d',camera.position.y);
-    }else if (dimension == "z"){
-        camera.position.setZ(camera.position.z + amount);
-        console.log('z: %d',camera.position.z);
-    }
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
-    camera.updateProjectionMatrix();
-}

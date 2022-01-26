@@ -1,7 +1,7 @@
 import './style.css';
 import * as THREE from 'three';
 import {StickSpawner} from './js/StickSpawner';
-import {constructLink, changeDimension, setup} from './js/utils';
+import {constructLink, setup} from './js/utils';
 import { Plane, PlaneBufferGeometry, Vector3 } from 'three';
 import { RelativeDragControls } from './js/RelativeDragControls';
 import * as converter from 'number-to-words';
@@ -70,12 +70,6 @@ document.getElementById("addStick").onclick = spawnStick;
 document.getElementById("add10Sticks").onclick = spawn10Sticks;
 document.getElementById("moreSticksInABundle").onclick = moreSticksInABundle;
 document.getElementById("fewerSticksInABundle").onclick = fewerSticksInABundle;
-document.getElementById("addxDimension").onclick = function(){changeDimension("x", 1, camera, console);}
-document.getElementById("minusxDimension").onclick = function(){changeDimension("x", -1, camera, console);}
-document.getElementById("addyDimension").onclick = function(){changeDimension("y", 1, camera, console);}
-document.getElementById("minusyDimension").onclick = function(){changeDimension("y", -1, camera, console);}
-document.getElementById("addzDimension").onclick = function(){changeDimension("z", 1, camera, console);}
-document.getElementById("minuszDimension").onclick = function(){changeDimension("z", -1, camera, console);}
 
 function moreSticksInABundle() {
   if (sticksInABundle < 12){
