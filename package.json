@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "number-to-words": "^1.2.4",
-    "three": "^0.133.1"
+    "three": "^0.133.1",
+    "three-outlinepass": "^1.2.0"
   }
 }
