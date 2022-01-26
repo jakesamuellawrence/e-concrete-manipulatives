@@ -1,7 +1,7 @@
 import './style.css';
 import * as THREE from 'three';
 import {StickSpawner} from './js/StickSpawner';
-import {constructLink, changeDimension, setup, setEmissiveAllChildren} from './js/utils';
+import {constructLink, changeDimension, setup, setEmissiveAllChildren, removeObjects} from './js/utils';
 import { Plane, PlaneBufferGeometry, Vector3 } from 'three';
 import { RelativeDragControls } from './js/RelativeDragControls';
 import { Object3D, Group } from 'three';
@@ -128,13 +128,15 @@ document.getElementById("bundleButton").onclick = function() {
 document.getElementById("removeButton").onclick = function() {
   if (confirm("This will delete all selected sticks and bundles. Are you sure?")) {
     for (let object of selectControls.currentlySelected){
+      removeObjects(object, scene, draggableList);
       scene.remove(object);
     }
     while (selectControls.currentlySelected.length > 0) {
       selectControls.deselect(selectControls.currentlySelected);
     }
+    updateSticksInTotal(draggableList, document);
+    }
   }
-}
 
 function moreSticksInABundle() {
   if (sticksInABundle < 12){
@@ -163,6 +165,11 @@ function spawnStick() {
     stickSpawner.position.setX(stickSpawner.position.x + 0.2);
   }
   
+  updateSticksInTotal(draggableList, document);
+  return stick;
+}
+
+function updateSticksInTotal(draggableList, document){
   if(draggableList.length == 1){
     document.getElementById("areInTotal").innerText = "There is";
     document.getElementById("sticksInTotal").innerText = "stick in total";
@@ -171,8 +178,6 @@ function spawnStick() {
     document.getElementById("sticksInTotal").innerText = "sticks in total";
   }
   document.getElementById("numberInTotal").innerText = converter.toWords(draggableList.length);
-
-  return stick;
 }
 
 function spawn10Sticks() {

@@ -110,3 +110,13 @@ export function changeDimension(dimension, amount, camera, console){
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     camera.updateProjectionMatrix();
 }
+
+export function removeObjects(object, scene, draggableList){
+    if (object.children.length > 0){
+        for (let child of object.children) {
+          removeObjects(child, scene, draggableList);
+        }
+    }else {
+        draggableList.splice(draggableList.indexOf(object), 1);
+      }
+}

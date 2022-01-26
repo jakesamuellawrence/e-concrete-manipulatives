@@ -23,12 +23,12 @@ export class SelectionControls {
      * 
      * @param {Object3D[]} selectables the list of objects that can be selected and deselected
      * @param {Camera} camera camera used to cast rays in order to detect which object was clicked on
-     * @param {HTMLCanvasElement} domeElement the canvas element of the renderer
+     * @param {HTMLCanvasElement} domElement the canvas element of the renderer
      */
-    constructor(selectables, camera, domeElement) {
+    constructor(selectables, camera, domElement) {
         this.#selectables = selectables;
         this.#camera = camera
-        this.#domElement = domeElement;
+        this.#domElement = domElement;
         this.activate();
     }
 
