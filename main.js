@@ -6,7 +6,7 @@ import { Plane, PlaneBufferGeometry, Vector3 } from 'three';
 import { RelativeDragControls } from './js/RelativeDragControls';
 import { Object3D, Group } from 'three';
 import * as converter from 'number-to-words';
-import { SelectionControls } from './js/selectionControls';
+import { SelectionControls } from './js/SelectionControls';
 import { EffectComposer, OutlinePass, RenderPass } from 'three-outlinepass';
 import { Vector2 } from 'three';
 import { centerLookup, positionLookup, radiusLookup } from './js/BundleLookup';
