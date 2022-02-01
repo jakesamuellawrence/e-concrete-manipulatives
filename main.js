@@ -10,6 +10,8 @@ import { SelectionControls } from './js/SelectionControls';
 import { EffectComposer, OutlinePass, RenderPass } from 'three-outlinepass';
 import { Vector2 } from 'three';
 import { centerLookup, positionLookup, radiusLookup } from './js/BundleLookup';
+import { ShaderPass } from 'three-outlinepass';
+import FXAAShader from 'three-shaders/shaders/FXAAShader';
 
 //setup
 var baseURL = window.location.origin;
@@ -69,6 +71,11 @@ dragControls.onDragEnd = function(object) {
 const composer = new EffectComposer(renderer);
 const renderPass = new RenderPass(scene, camera);
 composer.addPass(renderPass);
+const fxaaShader = new FXAAShader();
+const shaderPass = new ShaderPass(fxaaShader);
+shaderPass.uniforms["resolution"].value.x = 1 / (window.innerWidth * devicePixelRatio);
+shaderPass.uniforms["resolution"].value.y = 1 / (window.innerHeight * devicePixelRatio);
+composer.addPass(shaderPass);
 
 const selectControls = new SelectionControls(draggableList, camera, renderer.domElement);
 selectControls.onSelect = function(object) {
@@ -92,7 +99,6 @@ let stick = spawnStick();
 
 function animate(){
   requestAnimationFrame(animate);
-  renderer.render(scene, camera);
   composer.render(scene, camera);
 }
 
