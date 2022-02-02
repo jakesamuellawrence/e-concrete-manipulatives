@@ -159,7 +159,7 @@ function spawnStick() {
   stick.radius = stickSpawner.stickParameters.radius;
 
   if (stickSpawner.position.x > 2) {
-    stickSpawner.position.setX(0);
+    stickSpawner.position.setX(-1);
     stickSpawner.position.setZ(stickSpawner.position.z - 0.5);
   } else {
     stickSpawner.position.setX(stickSpawner.position.x + 0.2);
@@ -189,8 +189,14 @@ function spawn10Sticks() {
 function bundle() {
   let bundle = new Group();
   bundle.order = selectControls.currentlySelected[0].order + 1;
-  bundle.radius = radiusLookup[sticksInABundle](selectControls.currentlySelected[0].radius);
-  let bundleCenter = centerLookup[sticksInABundle](selectControls.currentlySelected[0].radius,
+  let sticksLookup = sticksInABundle;
+  // if (sticksInABundle == 2 && bundle.order % 2 == 0) {
+  //   sticksLookup = 0;
+  // } else if (sticksInABundle == 2) {
+  //   sticksLookup = 2;
+  // }
+  bundle.radius = radiusLookup[sticksLookup](selectControls.currentlySelected[0].radius);
+  let bundleCenter = centerLookup[sticksLookup](selectControls.currentlySelected[0].radius,
                                                    selectControls.currentlySelected[0].position.x,
                                                    selectControls.currentlySelected[0].position.y);
   bundle.position.set(
@@ -199,7 +205,9 @@ function bundle() {
     selectControls.currentlySelected[0].position.z
   )
 
-  const positions = positionLookup[sticksInABundle](selectControls.currentlySelected[0].radius,
+  console.log(bundleCenter);
+
+  const positions = positionLookup[sticksLookup](selectControls.currentlySelected[0].radius,
                                                     selectControls.currentlySelected[0].position.x,
                                                     selectControls.currentlySelected[0].position.y);
 
