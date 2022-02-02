@@ -1,4 +1,4 @@
-import { CylinderGeometry, Euler, Mesh, MeshBasicMaterial, MeshLambertMaterial, Object3D, Vector3 } from "three";
+import { CylinderGeometry, Euler, Mesh, MeshLambertMaterial, Vector3 } from "three";
 
 export class StickSpawner {
     position;
