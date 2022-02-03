@@ -84,7 +84,7 @@ export function setup(scene, camera, renderer){
  * Sets the highlight colour of all the children of the given object
  */
 export function setEmissiveAllChildren(root, value) {
-    if (root.material != null) {
+    if (root.material != null && root.material.emissive != null) {
         root.material.emissive.set(value);
     }
     if (root.children) {
