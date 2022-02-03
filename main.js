@@ -213,6 +213,10 @@ function bundle() {
 
   console.log(positions);
 
+  const torus = new THREE.Mesh( new THREE.TorusGeometry( bundle.radius, 0.005, 16, 100 ), new THREE.MeshBasicMaterial( { color: 0xffff00 } ) );
+  torus.position.copy(bundle.position)
+  bundle.attach(torus)
+
   for (let i = 1; i < selectControls.currentlySelected.length; i++) {
     selectControls.currentlySelected[i].position.set(
       positions[i-1].x,
@@ -225,8 +229,11 @@ function bundle() {
     bundle.attach(selectControls.currentlySelected[0]);
     selectControls.deselect(selectControls.currentlySelected[0])
   }
+
   scene.add(bundle);
 }
+
+
 
 
 animate();
