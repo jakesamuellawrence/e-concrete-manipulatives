@@ -14,14 +14,21 @@ export function constructLink(objectColour){
 }
 
 export function setup(){
-    const aspectRatio = 16 / 9;
-    const canvasWidth = window.innerWidth;
-    const canvasHeight = canvasWidth / aspectRatio;
+    const aspectRatio = 2560 / 1315;
+    let canvasWidth;
+    let canvasHeight;
+    if (window.innerHeight * aspectRatio < window.innerWidth) {
+        canvasHeight = window.innerHeight;
+        canvasWidth = canvasHeight * aspectRatio;
+    } else {
+        canvasWidth = window.innerWidth;
+        canvasHeight = canvasWidth / aspectRatio;
+    }
     
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera();
     const renderer = new THREE.WebGLRenderer({
-        // canvas: document.querySelector('#cv1'),
+        canvas: document.querySelector('#cv1'),
         antialias: true,
     });
         
@@ -30,8 +37,9 @@ export function setup(){
 
     renderer.setClearColor("#97E4D8", 1);
 
+    console.log(window.innerWidth, window.innerHeight);
     let pixelRatio = window.devicePixelRatio;
-    if (canvasWidth >= 2000) {
+    if (screen.width * window.devicePixelRatio >= 2000 || screen.height * window.devicePixelRatio >= 2000) {
         pixelRatio = pixelRatio * 0.5;
     }
     
@@ -48,8 +56,6 @@ export function setup(){
     shaderPass.uniforms["resolution"].value.x = 1 / (canvasWidth * pixelRatio);
     shaderPass.uniforms["resolution"].value.y = 1 / (canvasHeight * pixelRatio);
     composer.addPass(shaderPass);
-
-    document.body.appendChild(renderer.domElement);
     
     const light = new THREE.DirectionalLight(0xFFFFFF, 0.75);
     light.position.set(20, 10, 10);
