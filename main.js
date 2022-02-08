@@ -189,17 +189,13 @@ function bundle() {
     selectControls.currentlySelected[0].position.z
   )
 
-  console.log(bundleCenter);
-
   const positions = positionLookup[sticksLookup](selectControls.currentlySelected[0].radius,
                                                     selectControls.currentlySelected[0].position.x,
                                                     selectControls.currentlySelected[0].position.y);
 
-  console.log(positions);
-
   const torus = new THREE.Mesh( new THREE.TorusGeometry( bundle.radius, 0.005, 16, 100 ), new THREE.MeshBasicMaterial( { color: 0xffff00 } ) );
-  torus.position.copy(bundle.position)
-  bundle.attach(torus)
+  torus.position.copy(bundle.position);
+  bundle.attach(torus);
 
   for (let i = 1; i < selectControls.currentlySelected.length; i++) {
     selectControls.currentlySelected[i].position.set(

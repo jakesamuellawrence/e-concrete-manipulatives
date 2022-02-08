@@ -49,8 +49,6 @@ export function setup(){
     shaderPass.uniforms["resolution"].value.y = 1 / (canvasHeight * pixelRatio);
     composer.addPass(shaderPass);
 
-    console.log(pixelRatio);
-
     document.body.appendChild(renderer.domElement);
     
     const light = new THREE.DirectionalLight(0xFFFFFF, 0.75);
