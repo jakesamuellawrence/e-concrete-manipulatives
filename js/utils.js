@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { Object3D } from 'three';
+import { EffectComposer, RenderPass, ShaderPass } from 'three-outlinepass';
+import FXAAShader from 'three-shaders/shaders/FXAAShader';
 import darkShrubTexture from "../resources/images/bg_shrub_dark.svg";
 
 /**
@@ -11,14 +13,46 @@ export function constructLink(objectColour){
     alert("Use this URL to keep your settings:\n" + window.location.origin + "?c=" +objectColour.replace("#",''));
 }
 
-export function setup(scene, camera, renderer){
-    renderer.setClearColor("#97E4D8", 1);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
+export function setup(){
+    const aspectRatio = 16 / 9;
+    const canvasWidth = window.innerWidth;
+    const canvasHeight = canvasWidth / aspectRatio;
+    
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera();
+    const renderer = new THREE.WebGLRenderer({
+        // canvas: document.querySelector('#cv1'),
+        antialias: true,
+    });
+        
     camera.position.set(20, 10, 10);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
+    renderer.setClearColor("#97E4D8", 1);
+
+    let pixelRatio = window.devicePixelRatio;
+    if (canvasWidth >= 2000) {
+        pixelRatio = pixelRatio * 0.5;
+    }
+    
+    renderer.setPixelRatio(pixelRatio);
+    renderer.setSize(canvasWidth, canvasHeight);
+
+    const composer = new EffectComposer(renderer); 
+    composer.setPixelRatio(pixelRatio);
+    composer.setSize(canvasWidth, canvasHeight);
+    const renderPass = new RenderPass(scene, camera);
+    composer.addPass(renderPass);
+    const fxaaShader = new FXAAShader();
+    const shaderPass = new ShaderPass(fxaaShader);
+    shaderPass.uniforms["resolution"].value.x = 1 / (canvasWidth * pixelRatio);
+    shaderPass.uniforms["resolution"].value.y = 1 / (canvasHeight * pixelRatio);
+    composer.addPass(shaderPass);
+
+    console.log(pixelRatio);
+
+    document.body.appendChild(renderer.domElement);
+    
     const light = new THREE.DirectionalLight(0xFFFFFF, 0.75);
     light.position.set(20, 10, 10);
     light.target.position.set(0, 0, 0);
@@ -61,6 +95,7 @@ export function setup(scene, camera, renderer){
     bushSprite2.position.set(-0.6,-0.08,-1.2);
     scene.add(bushSprite2);
 
+    return [scene, camera, renderer, composer]
 }
 
 /**

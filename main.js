@@ -38,15 +38,7 @@ if(/^[0-9A-F]{6}$/i.test(urlParams.getAll('c'))){ //if c parameter valid hex col
 }
 
 //3D setup
-const scene = new THREE.Scene();
-const camera = new THREE.OrthographicCamera();
-const renderer = new THREE.WebGLRenderer({
-  canvas: document.querySelector('#cv1'),
-  antialias: true,
-});
-
-setup(scene, camera, renderer);
-
+const [scene, camera, renderer, composer] = setup();
 
 const stickSpawner = new StickSpawner(scene, new Vector3(0, 0.2, 0.7));
 
@@ -67,15 +59,6 @@ dragControls.onDragStart = function(object){
 dragControls.onDragEnd = function(object) {
   document.body.style.cursor = "pointer";
 }
-
-const composer = new EffectComposer(renderer);
-const renderPass = new RenderPass(scene, camera);
-composer.addPass(renderPass);
-const fxaaShader = new FXAAShader();
-const shaderPass = new ShaderPass(fxaaShader);
-shaderPass.uniforms["resolution"].value.x = 1 / (window.innerWidth * devicePixelRatio);
-shaderPass.uniforms["resolution"].value.y = 1 / (window.innerHeight * devicePixelRatio);
-composer.addPass(shaderPass);
 
 const selectControls = new SelectionControls(draggableList, camera, renderer.domElement);
 selectControls.onSelect = function(object) {
@@ -99,6 +82,7 @@ let stick = spawnStick();
 
 function animate(){
   requestAnimationFrame(animate);
+  // renderer.render(scene, camera);
   composer.render(scene, camera);
 }
 
