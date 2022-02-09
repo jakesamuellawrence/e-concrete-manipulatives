@@ -123,14 +123,26 @@ document.getElementById("removeButton").onclick = function() {
   }
 
 function moreSticksInABundle() {
-  if (sticksInABundle < 12){
+  if(sticksInABundle == 2){
+    sticksInABundle += 1
+    document.getElementById("fewerSticksInABundle").style.display = "block";
+  }else if (sticksInABundle == 11){
+    sticksInABundle += 1
+    document.getElementById("moreSticksInABundle").style.display = "none";
+  }else if (sticksInABundle < 11){
     sticksInABundle += 1
   }
   document.getElementById("sticksInABundle").innerText = converter.toWords(sticksInABundle);
 }
 
 function fewerSticksInABundle() {
-  if (sticksInABundle > 2){
+  if(sticksInABundle == 12){
+    sticksInABundle -= 1
+    document.getElementById("moreSticksInABundle").style.display = "block";
+  }else if (sticksInABundle == 3){
+    sticksInABundle -= 1
+    document.getElementById("fewerSticksInABundle").style.display = "none";
+  }else if (sticksInABundle > 3){
     sticksInABundle -= 1
   }
   document.getElementById("sticksInABundle").innerText = converter.toWords(sticksInABundle);
