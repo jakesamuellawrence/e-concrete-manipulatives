@@ -16,9 +16,10 @@ export class StickSpawner {
      * 
      * @param {Scene} scene The scene to add the newly constructed sticks to
      */
-    constructor(scene, position=new Vector3(0, 0, 0)) {
+    constructor(scene, position=new Vector3(0, 0, 0), color) {
         this.#scene = scene;
         this.position = position;
+        this.stickParameters.color = color;
     }
 
     /**
