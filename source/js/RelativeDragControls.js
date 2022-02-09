@@ -11,7 +11,7 @@ export class RelativeDragControls {
     #heldObject = null;
     #holdOffset = new Vector3();
     #mouseIsDown = false;
-    #holdTime = 250;
+    #holdTime = 100;
 
     #boundMouseEvents = {
         move: null,
