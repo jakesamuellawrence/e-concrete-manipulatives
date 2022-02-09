@@ -1,15 +1,15 @@
-import './style.css';
+import '/source/style.css';
 import * as THREE from 'three';
-import {StickSpawner} from './js/StickSpawner';
-import {constructLink, changeDimension, setup, setEmissiveAllChildren, removeObjects} from './js/utils';
+import {StickSpawner} from '/source/js/StickSpawner';
+import {constructLink, changeDimension, setup, setEmissiveAllChildren, removeObjects} from '/source/js/utils';
 import { Plane, PlaneBufferGeometry, Vector3 } from 'three';
-import { RelativeDragControls } from './js/RelativeDragControls';
+import { RelativeDragControls } from '/source/js/RelativeDragControls';
 import { Object3D, Group } from 'three';
 import * as converter from 'number-to-words';
-import { SelectionControls } from './js/SelectionControls';
+import { SelectionControls } from '/source/js/SelectionControls';
 import { EffectComposer, OutlinePass, RenderPass } from 'three-outlinepass';
 import { Vector2 } from 'three';
-import { centerLookup, positionLookup, radiusLookup } from './js/BundleLookup';
+import { centerLookup, positionLookup, radiusLookup } from '/source/js/BundleLookup';
 import { ShaderPass } from 'three-outlinepass';
 import FXAAShader from 'three-shaders/shaders/FXAAShader';
 

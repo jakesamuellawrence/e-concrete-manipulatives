@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Object3D } from 'three';
-import darkShrubTexture from "../resources/images/bg_shrub_dark.svg";
+import darkShrubTexture from "/resources/images/bg_shrub_dark.svg";
 
 /**
  * Constructs a link to preserve settings
