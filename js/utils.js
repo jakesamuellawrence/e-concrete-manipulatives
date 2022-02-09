@@ -13,49 +13,49 @@ export function constructLink(objectColour){
     alert("Use this URL to keep your settings:\n" + window.location.origin + "?c=" +objectColour.replace("#",''));
 }
 
-export function setup(){
-    const aspectRatio = 2560 / 1315;
-    let canvasWidth;
-    let canvasHeight;
-    if (window.innerHeight * aspectRatio < window.innerWidth) {
-        canvasHeight = window.innerHeight;
-        canvasWidth = canvasHeight * aspectRatio;
-    } else {
-        canvasWidth = window.innerWidth;
-        canvasHeight = canvasWidth / aspectRatio;
-    }
-    
-    const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera();
-    const renderer = new THREE.WebGLRenderer({
-        canvas: document.querySelector('#cv1'),
-        antialias: true,
-    });
-        
-    camera.position.set(20, 10, 10);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-    renderer.setClearColor("#97E4D8", 1);
+function resizeCanvas(camera, renderer, composer, shaderPass) {
+    let canvasWidth = window.innerWidth;
+    let canvasHeight = window.innerHeight;
 
     console.log(window.innerWidth, window.innerHeight);
     let pixelRatio = window.devicePixelRatio;
     if (screen.width * window.devicePixelRatio >= 2000 || screen.height * window.devicePixelRatio >= 2000) {
         pixelRatio = pixelRatio * 0.5;
     }
-    
+
     renderer.setPixelRatio(pixelRatio);
     renderer.setSize(canvasWidth, canvasHeight);
 
-    const composer = new EffectComposer(renderer); 
     composer.setPixelRatio(pixelRatio);
     composer.setSize(canvasWidth, canvasHeight);
+    shaderPass.uniforms["resolution"].value.x = 1 / (canvasWidth * pixelRatio);
+    shaderPass.uniforms["resolution"].value.y = 1 / (canvasHeight * pixelRatio);
+}
+
+export function setup(){
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera();
+    const renderer = new THREE.WebGLRenderer({
+        canvas: document.querySelector('#cv1'),
+        antialias: true,
+    });
+
+    const composer = new EffectComposer(renderer); 
     const renderPass = new RenderPass(scene, camera);
     composer.addPass(renderPass);
     const fxaaShader = new FXAAShader();
     const shaderPass = new ShaderPass(fxaaShader);
-    shaderPass.uniforms["resolution"].value.x = 1 / (canvasWidth * pixelRatio);
-    shaderPass.uniforms["resolution"].value.y = 1 / (canvasHeight * pixelRatio);
     composer.addPass(shaderPass);
+
+    resizeCanvas(camera, renderer, composer, shaderPass);
+    window.onresize = function() {
+        resizeCanvas(camera, renderer, composer, shaderPass);
+    }
+        
+    camera.position.set(20, 10, 10);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+    renderer.setClearColor("#97E4D8", 1);
     
     const light = new THREE.DirectionalLight(0xFFFFFF, 0.75);
     light.position.set(20, 10, 10);
