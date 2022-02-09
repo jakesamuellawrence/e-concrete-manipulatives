@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { Object3D } from 'three';
 import { EffectComposer, RenderPass, ShaderPass } from 'three-outlinepass';
 import FXAAShader from 'three-shaders/shaders/FXAAShader';
-import darkShrubTexture from "../resources/images/bg_shrub_dark.svg";
+import darkShrubTexture from "../../resources/images/bg_shrub_dark.svg";
 
 /**
  * Constructs a link to preserve settings
