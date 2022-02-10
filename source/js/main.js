@@ -40,7 +40,7 @@ if(/^[0-9A-F]{6}$/i.test(urlParams.getAll('c'))){ //if c parameter valid hex col
 //3D setup
 const [scene, camera, renderer, composer] = setup();
 
-const stickSpawner = new StickSpawner(scene, new Vector3(0, 0.2, 0.7));
+const stickSpawner = new StickSpawner(scene, new Vector3(0, 0.2, 0.7),objectColour);
 
 const draggableList = [];
 const movementPlane = new Plane(new Vector3(0, 1, 0), -stickSpawner.stickParameters.radius);
