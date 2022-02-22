@@ -186,6 +186,7 @@ function bundle() {
   let bundle = new Group();
   bundle.order = selectControls.currentlySelected[0].order + 1;
   let sticksLookup = sticksInABundle;
+  var torusColour; 
   // if (sticksInABundle == 2 && bundle.order % 2 == 0) {
   //   sticksLookup = 0;
   // } else if (sticksInABundle == 2) {
@@ -205,7 +206,17 @@ function bundle() {
                                                     selectControls.currentlySelected[0].position.x,
                                                     selectControls.currentlySelected[0].position.y);
 
-  const torus = new THREE.Mesh( new THREE.TorusGeometry( bundle.radius, 0.005, 16, 100 ), new THREE.MeshBasicMaterial( { color: 0xffff00 } ) );
+  // first order has yellow band, second order has orange band and anything beyond that order has red band                                               
+  if (bundle.order == 1) {
+    torusColour = 0xffff00;
+  }
+  else if (bundle.order == 2) {
+    torusColour = 0xff9900;
+  }
+  else {
+    torusColour = 0xff0000;
+  }
+  const torus = new THREE.Mesh( new THREE.TorusGeometry( bundle.radius, 0.005, 16, 100 ), new THREE.MeshBasicMaterial( { color: torusColour } ) );
   torus.position.copy(bundle.position);
   bundle.attach(torus);
 
