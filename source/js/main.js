@@ -1,7 +1,7 @@
 import '/source/style.css';
 import * as THREE from 'three';
 import {StickSpawner} from '/source/js/StickSpawner';
-import {constructLink, changeDimension, setup, setEmissiveAllChildren, removeObjects} from '/source/js/utils';
+import {constructLink, changeDimension, setup, setEmissiveAllChildren, removeObjects, shouldUnbundleButtonShow} from '/source/js/utils';
 import { Plane, PlaneBufferGeometry, Vector3 } from 'three';
 import { RelativeDragControls } from '/source/js/RelativeDragControls';
 import { Object3D, Group } from 'three';
@@ -70,11 +70,16 @@ selectControls.onSelect = function(object) {
     composer.addPass(outlinePass);
     object.outlinePass = outlinePass;
   }
+  console.log(selectControls.currentlySelected);
+  console.log(selectControls.currentlySelected.length);
+
+  shouldUnbundleButtonShow(selectControls.currentlySelected, document.getElementById("unbundleButton"))
 };
 selectControls.onDeselect = function(object) {
   if (object.outlinePass) {
     object.outlinePass.enabled = false;
   }
+  shouldUnbundleButtonShow(selectControls.currentlySelected, document.getElementById("unbundleButton"))
 };
 
 stickSpawner.stickParameters.color = objectColour;
