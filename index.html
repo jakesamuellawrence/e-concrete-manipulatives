@@ -10,24 +10,50 @@
   <body>
     <ul class="nav">
       <li class="nav_item">Stick Colour:<br><input type="color" value="#8f5d46" id="colourPicker"></li>
-      
       <li class="nav_item"><button id="getLink">Get Link</button></li>
-      <li class="nav_item"><button id="newStick">New Stick </button></li>
-      <li class="nav_item"><button id="addxDimension">+</button></li>
-      <li class="nav_item"><button id="minusxDimension">-</button></li>
-      <li class="nav_item"><button id="addyDimension">+</button></li>
-      <li class="nav_item"><button id="minusyDimension">-</button></li>
-      <li class="nav_item"><button id="addzDimension">+</button></li>
-      <li class="nav_item"><button id="minuszDimension">-</button></li>
-      <!--
-      Stick Orientation:
-      <input type="radio" id="horizontal" name="stickOrientation" value="horizontal">
-      <label for="horizontal">Horizontal</label>
-      <input type="radio" id="upright" name="stickOrientation" value="upright">
-      <label for="upright">Upright</label>
-      -->
     </ul>
-      <canvas id="cv1"></canvas>
-      <script type="module" src="/main.js"></script>
+      <div class="bottomLeft infoBox">
+        <h4 id="areInTotal">There are</h4>
+        <h1 id="numberInTotal"></h1>
+        <h4 id="sticksInTotal">sticks in total</h4>
+
+        <div class="left upper miniBox" id="addStick">
+          +
+        </div>
+
+        <div class="left lower miniBox" id="add10Sticks">
+          ++
+        </div>
+      </div>
+
+      <div class="bottomCenter buttonGroup">
+        <div class="buttonBox" id="bundleButton">
+          Bundle
+        </div>
+  
+        <div class="buttonBox" id="removeButton">
+          Remove
+        </div>
+      </div>
+
+      <div class="bottomRight infoBox">
+        <h4>There are</h4>
+        <h1 id="sticksInABundle"></h1>
+        <h4>sticks in a bundle</h4>
+
+        <div class="right upper miniBox" id="moreSticksInABundle">
+          +
+        </div>
+
+        <div class="right lower miniBox" id="fewerSticksInABundle">
+          -
+        </div>
+      </div>
+
+      <div id="canvas_container">
+        <canvas id="cv1"></canvas>
+      </div>
+
+      <script type="module" src="/source/js/main.js"></script>
   </body>
 </html>

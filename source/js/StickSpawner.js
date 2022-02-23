@@ -1,10 +1,10 @@
-import { CylinderGeometry, Euler, Mesh, MeshBasicMaterial, MeshPhongMaterial, Object3D, Vector3 } from "three";
+import { CylinderGeometry, Euler, Mesh, MeshLambertMaterial, Vector3 } from "three";
 
 export class StickSpawner {
     position;
     stickParameters = {
         color: 0xffff00,
-        radius: 0.04,
+        radius: 0.03,
         height: 0.4,
         radialSegments: 64,
         defaultRotation: new Vector3(Math.PI/2, 0, 0),
@@ -16,9 +16,10 @@ export class StickSpawner {
      * 
      * @param {Scene} scene The scene to add the newly constructed sticks to
      */
-    constructor(scene, position=new Vector3(0, 0, 0)) {
+    constructor(scene, position=new Vector3(0, 0, 0), color) {
         this.#scene = scene;
         this.position = position;
+        this.stickParameters.color = color;
     }
 
     /**
@@ -30,7 +31,7 @@ export class StickSpawner {
         let geo = new CylinderGeometry(
             this.stickParameters.radius, this.stickParameters.radius, this.stickParameters.height, this.stickParameters.radialSegments
         );
-        let mat = new MeshPhongMaterial({color: this.stickParameters.color});
+        let mat = new MeshLambertMaterial({color: this.stickParameters.color});
         let stick = new Mesh(geo, mat);
         stick.position.set(this.position.x, this.position.y, this.position.z);
         stick.setRotationFromEuler(new Euler(

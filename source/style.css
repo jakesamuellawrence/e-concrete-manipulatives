@@ -1,0 +1,139 @@
+@font-face {
+  font-family: ComicNeue-Bold;
+  src:url(/resources/fonts/Comic_Neue/ComicNeue-Bold.ttf);
+}
+
+@font-face {
+  font-family: ComicNeue;
+  src:url(/resources/fonts/Comic_Neue/ComicNeue-Regular.ttf);
+}
+
+#canvas_container {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: -9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: darkgreen;
+}
+
+/* nav table */
+.nav{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.nav_item{
+  float: left;
+  display: block;
+  padding: 14px 16px;
+  text-decoration: none;
+  line-height: 150%;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.infoBox{
+  position: absolute;
+  width: 12.5vw;
+  background-color: #F3DC87;
+  padding: 1vw;
+  border-style: solid;
+  border-color: #F52E2C;
+  border-radius: 1vw;
+  font-family: ComicNeue;
+  text-align: center;
+  font-size: 150%;
+}
+
+.buttonGroup {
+  position: absolute;
+  width: 12.5vw;
+  /* background-color: #F3DC87; */
+  padding: 1vw;
+  /* border-style: solid; */
+  /* border-color: #F52E2C; */
+  border-radius: 1vw;
+  font-family: ComicNeue;
+  text-align: center;
+  font-size: 150%;
+}
+
+.bottomLeft{
+  bottom: 3vw;
+  left: 3vw;
+}
+
+.bottomRight{
+  bottom: 3vw;
+  right: 3vw;
+}
+
+.bottomCenter{
+  bottom: 3vw;
+  left: 50vw;
+  transform: translate(-50%);
+}
+
+.infoBox h4, h1{
+  margin: 0;
+}
+
+.miniBox{
+  position: absolute;
+  background-color: #F3DC87;
+  padding: 0;
+  margin: 0;
+  border-style: solid;
+  border-color: #F52E2C;
+  border-radius: 0.5vw;
+  font-family: ComicNeue;
+  text-align: center;
+  font-size: 150%;
+  width: 3vw;
+  cursor: pointer;
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.buttonBox{
+  /* position: absolute; */
+  background-color: #F3DC87;
+  padding: 0;
+  margin: 10px;
+  border-style: solid;
+  border-color: #F52E2C;
+  border-radius: 0.5vw;
+  font-family: ComicNeue;
+  text-align: center;
+  font-size: 150%;
+  /* width: 3vw; */
+  cursor: pointer;
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.right{
+  left: -4.5vw;
+}
+
+.left{
+  right: -4.5vw;
+}
+
+.upper{
+  top: 1vw;
+}
+
+.lower{
+  bottom: 1vw;
+}
