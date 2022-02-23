@@ -17,7 +17,6 @@ function resizeCanvas(camera, renderer, composer, shaderPass) {
     let canvasWidth = window.innerWidth;
     let canvasHeight = window.innerHeight;
 
-    console.log(window.innerWidth, window.innerHeight);
     let pixelRatio = window.devicePixelRatio;
     if (screen.width * window.devicePixelRatio >= 2000 || screen.height * window.devicePixelRatio >= 2000) {
         pixelRatio = pixelRatio * 0.5;
@@ -66,12 +65,7 @@ export function setup(){
 
     const planeSize = 3;
     const textureLoader = new THREE.TextureLoader();
-    //texture.wrapS = THREE.RepeatWrapping;
-    //texture.wrapT = THREE.RepeatWrapping;
-    //const repeats = planeSize / 2;
-    //texture.repeat.set(repeats, repeats);
 
-    //const planeGeo = new THREE.PlaneGeometry(4, 2.5);
     const planeGeo = new THREE.CircleGeometry(2.5, 64); //radius, segments. more segments give a cleaner curve but theoretically worse performance
     const planeMat = new THREE.MeshBasicMaterial({color: 0x26A44C});
     const ground = new THREE.Mesh(planeGeo, planeMat);
@@ -153,9 +147,22 @@ export function changeDimension(dimension, amount, camera, console){
 export function removeObjects(object, scene, draggableList){
     if (object.children.length > 0){
         for (let child of object.children) {
-          removeObjects(child, scene, draggableList);
+            removeObjects(child, scene, draggableList);
         }
     }else {
-        draggableList.splice(draggableList.indexOf(object), 1);
+        let objectIndex = draggableList.indexOf(object);
+        if(objectIndex >= 0){
+            draggableList.splice(objectIndex, 1);
+        }
       }
+}
+
+export function shouldUnbundleButtonShow(currentlySelected, unbundleButton){
+    for (let i=0; i<currentlySelected.length; i++){
+        if (currentlySelected[i].type == "Group"){
+          unbundleButton.style.display = "block";
+          return;
+        }
+      }
+      unbundleButton.style.display = "none";
 }

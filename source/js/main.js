@@ -1,7 +1,7 @@
 import '/source/style.css';
 import * as THREE from 'three';
 import {StickSpawner} from '/source/js/StickSpawner';
-import {constructLink, changeDimension, setup, setEmissiveAllChildren, removeObjects} from '/source/js/utils';
+import {constructLink, changeDimension, setup, setEmissiveAllChildren, removeObjects, shouldUnbundleButtonShow} from '/source/js/utils';
 import { Plane, PlaneBufferGeometry, Vector3 } from 'three';
 import { RelativeDragControls } from '/source/js/RelativeDragControls';
 import { Object3D, Group } from 'three';
@@ -70,11 +70,14 @@ selectControls.onSelect = function(object) {
     composer.addPass(outlinePass);
     object.outlinePass = outlinePass;
   }
+
+  shouldUnbundleButtonShow(selectControls.currentlySelected, document.getElementById("unbundleButton"))
 };
 selectControls.onDeselect = function(object) {
   if (object.outlinePass) {
     object.outlinePass.enabled = false;
   }
+  shouldUnbundleButtonShow(selectControls.currentlySelected, document.getElementById("unbundleButton"))
 };
 
 stickSpawner.stickParameters.color = objectColour;
@@ -116,11 +119,29 @@ document.getElementById("removeButton").onclick = function() {
       scene.remove(object);
     }
     while (selectControls.currentlySelected.length > 0) {
-      selectControls.deselect(selectControls.currentlySelected);
+      selectControls.deselect(selectControls.currentlySelected[0]);
     }
     updateSticksInTotal(draggableList, document);
+  }
+}
+
+document.getElementById("unbundleButton").onclick = function() {
+  let sticksToRespawn = 0;
+  for (let i=0; i<selectControls.currentlySelected.length; i++){
+    if (selectControls.currentlySelected[i].type == "Group"){
+      let sticksBefore = draggableList.length;
+      removeObjects(selectControls.currentlySelected[i], scene, draggableList);
+      scene.remove(selectControls.currentlySelected[i]);
+      sticksToRespawn += (sticksBefore - draggableList.length);
     }
   }
+  for (let j=0; j<sticksToRespawn; j++){
+    spawnStick();
+  }
+  while (selectControls.currentlySelected.length > 0) {
+    selectControls.deselect(selectControls.currentlySelected[0]);
+  }
+}
 
 function moreSticksInABundle() {
   if(sticksInABundle == 2){
