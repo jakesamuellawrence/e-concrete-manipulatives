@@ -13,13 +13,15 @@ import { centerLookup, positionLookup, radiusLookup } from '/source/js/BundleLoo
 import { ShaderPass } from 'three-outlinepass';
 import FXAAShader from 'three-shaders/shaders/FXAAShader';
 
-//setup
+//setup of variables
 var baseURL = window.location.origin;
 let sticksInABundle = 5;
+let objectColour = "#8C5D41";
+
+// screen setup
 document.getElementById("sticksInABundle").innerText = converter.toWords(sticksInABundle);
 
-//setting up colour
-let objectColour = "#8C5D41";
+
 
 function colourUpdate(event){
   objectColour = event.target.value;
@@ -39,11 +41,10 @@ if(/^[0-9A-F]{6}$/i.test(urlParams.getAll('c'))){ //if c parameter valid hex col
 
 //3D setup
 const [scene, camera, renderer, composer] = setup();
-
 const stickSpawner = new StickSpawner(scene, new Vector3(0, 0.2, 0.7),objectColour);
-
 const draggableList = [];
 const movementPlane = new Plane(new Vector3(0, 1, 0), -stickSpawner.stickParameters.radius);
+
 const dragControls = new RelativeDragControls(draggableList, camera, movementPlane, renderer.domElement);
 dragControls.onHover = function(object) {
   setEmissiveAllChildren(object, 0x222222);
@@ -77,8 +78,7 @@ selectControls.onDeselect = function(object) {
   }
 };
 
-stickSpawner.stickParameters.color = objectColour;
-let stick = spawnStick();
+
 
 function animate(){
   requestAnimationFrame(animate);
@@ -159,8 +159,7 @@ function spawnStick() {
     stickSpawner.position.setZ(stickSpawner.position.z - 0.5);
   } else {
     stickSpawner.position.setX(stickSpawner.position.x + 0.2);
-  }
-  
+  }  
   updateSticksInTotal(draggableList, document);
   return stick;
 }
