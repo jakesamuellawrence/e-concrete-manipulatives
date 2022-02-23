@@ -70,8 +70,6 @@ selectControls.onSelect = function(object) {
     composer.addPass(outlinePass);
     object.outlinePass = outlinePass;
   }
-  console.log(selectControls.currentlySelected);
-  console.log(selectControls.currentlySelected.length);
 
   shouldUnbundleButtonShow(selectControls.currentlySelected, document.getElementById("unbundleButton"))
 };
@@ -121,11 +119,29 @@ document.getElementById("removeButton").onclick = function() {
       scene.remove(object);
     }
     while (selectControls.currentlySelected.length > 0) {
-      selectControls.deselect(selectControls.currentlySelected);
+      selectControls.deselect(selectControls.currentlySelected[0]);
     }
     updateSticksInTotal(draggableList, document);
+  }
+}
+
+document.getElementById("unbundleButton").onclick = function() {
+  let sticksToRespawn = 0;
+  for (let i=0; i<selectControls.currentlySelected.length; i++){
+    if (selectControls.currentlySelected[i].type == "Group"){
+      let sticksBefore = draggableList.length;
+      removeObjects(selectControls.currentlySelected[i], scene, draggableList);
+      scene.remove(selectControls.currentlySelected[i]);
+      sticksToRespawn += (sticksBefore - draggableList.length);
     }
   }
+  for (let j=0; j<sticksToRespawn; j++){
+    spawnStick();
+  }
+  while (selectControls.currentlySelected.length > 0) {
+    selectControls.deselect(selectControls.currentlySelected[0]);
+  }
+}
 
 function moreSticksInABundle() {
   if(sticksInABundle == 2){

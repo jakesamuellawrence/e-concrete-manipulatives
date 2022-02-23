@@ -17,7 +17,6 @@ function resizeCanvas(camera, renderer, composer, shaderPass) {
     let canvasWidth = window.innerWidth;
     let canvasHeight = window.innerHeight;
 
-    console.log(window.innerWidth, window.innerHeight);
     let pixelRatio = window.devicePixelRatio;
     if (screen.width * window.devicePixelRatio >= 2000 || screen.height * window.devicePixelRatio >= 2000) {
         pixelRatio = pixelRatio * 0.5;
@@ -148,10 +147,13 @@ export function changeDimension(dimension, amount, camera, console){
 export function removeObjects(object, scene, draggableList){
     if (object.children.length > 0){
         for (let child of object.children) {
-          removeObjects(child, scene, draggableList);
+            removeObjects(child, scene, draggableList);
         }
     }else {
-        draggableList.splice(draggableList.indexOf(object), 1);
+        let objectIndex = draggableList.indexOf(object);
+        if(objectIndex >= 0){
+            draggableList.splice(objectIndex, 1);
+        }
       }
 }
 
