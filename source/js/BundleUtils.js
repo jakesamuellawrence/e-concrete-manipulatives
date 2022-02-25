@@ -35,6 +35,7 @@ export function canBundle(app, toBundle) {
  * Adds a band around the bundle
  * @param {App} app the app context
  * @param {Array<Object3D>} toBundle the sticks to be bundled
+ * @return {Group} the resulting bundle
  */
 export function bundleSticks(app, toBundle) {
     if (toBundle.length == 0) return;
@@ -87,6 +88,8 @@ export function bundleSticks(app, toBundle) {
     }
 
     app.scene.add(bundle);
+
+    return bundle;
 }
 
 /**
@@ -100,7 +103,6 @@ export function removeSticks(app, toRemove) {
         Utils.removeAllChildrenFromList(object, app.sticksInScene);
         app.scene.remove(object);
     }
-    app.updateSticksInTotal();
 }
 
 /**

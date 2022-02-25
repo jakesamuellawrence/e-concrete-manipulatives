@@ -96,8 +96,6 @@ export class App {
         } else {
             this.stickSpawner.position.setX(this.stickSpawner.position.x + 0.2);
         }
-
-        this.updateSticksInTotal();
         return stick;
     }
 
@@ -121,16 +119,7 @@ export class App {
      * updates the sticksInABundle display
      */
     increaseSticksInABundle() {
-        if (this.sticksInABundle == 2) {
-            this.sticksInABundle += 1
-            document.getElementById("fewerSticksInABundle").style.display = "block";
-        } else if (this.sticksInABundle == 11) {
-            this.sticksInABundle += 1;
-            document.getElementById("moreSticksInABundle").style.display = "none";
-        } else if (this.sticksInABundle < 11) {
-            this.sticksInABundle += 1;
-        }
-        document.getElementById("sticksInABundle").innerText = Converter.toWords(this.sticksInABundle);
+        this.sticksInABundle = Math.min(this.sticksInABundle+1, 12);
     }
 
     /**
@@ -138,16 +127,27 @@ export class App {
      * and updates the sticks in a bundle display
      */
     decreaseSticksInABundle() {
-        if (this.sticksInABundle == 12) {
-            this.sticksInABundle -= 1
-            document.getElementById("moreSticksInABundle").style.display = "block";
-        } else if (this.sticksInABundle == 3) {
-            this.sticksInABundle -= 1;
-            document.getElementById("fewerSticksInABundle").style.display = "none";
-        } else if (this.sticksInABundle > 3) {
-            this.sticksInABundle -= 1;
-        }
+        this.sticksInABundle = Math.max(this.sticksInABundle-1, 2);
+    }
+
+    /**
+     * Updates the UI display of how many sticks are in a bundle
+     * hides / displays the plus or minus button
+     */
+    updateSticksInBundleDisplay() {
         document.getElementById("sticksInABundle").innerText = Converter.toWords(this.sticksInABundle);
+        
+        if (this.sticksInABundle ==  12) {
+            document.getElementById("moreSticksInABundle").style.display = "none";
+        } else {
+            document.getElementById("moreSticksInABundle").style.display = "block";
+        }
+
+        if (this.sticksInABundle == 2) {
+            document.getElementById("fewerSticksInABundle").style.display = "none";
+        } else {
+            document.getElementById("fewerSticksInABundle").style.display = "block";
+        }
     }
 
     /**

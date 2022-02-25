@@ -5,9 +5,16 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "serve": "vite --host"
+    "serve": "vite --host",
+    "test": "mocha"
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/register": "^7.10.5",
+    "chai": "^4.3.4",
+    "mocha": "^9.1.4",
     "surge": "^0.23.0",
     "vite": "^2.6.4"
   },

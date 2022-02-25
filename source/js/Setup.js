@@ -30,6 +30,7 @@ export function initializeApp(app) {
     setupEventCallbacks(app);
     app.setStickColour(Utils.getColourFromURL());
     app.spawnSticks(1);
+    app.updateSticksInTotal();
 }
 
 /**
@@ -167,10 +168,22 @@ export function setupEventCallbacks(app) {
     document.getElementById("getLink").addEventListener("click", function() {
         window.alert("Use this URL to keep your settings:\n"+ Utils.constructLink(app.stickColour));
     });
-    document.getElementById("addStick").onclick = function() {app.spawnStick();};
-    document.getElementById("add10Sticks").onclick = function() {app.spawnSticks(10);};
-    document.getElementById("moreSticksInABundle").onclick = function() {app.increaseSticksInABundle();};
-    document.getElementById("fewerSticksInABundle").onclick = function() {app.decreaseSticksInABundle();};
+    document.getElementById("addStick").onclick = function() {
+        app.spawnStick();
+        app.updateSticksInTotal();
+    };
+    document.getElementById("add10Sticks").onclick = function() {
+        app.spawnSticks(10);
+        app.updateSticksInTotal();
+    };
+    document.getElementById("moreSticksInABundle").onclick = function() {
+        app.increaseSticksInABundle();
+        app.updateSticksInBundleDisplay();
+    };
+    document.getElementById("fewerSticksInABundle").onclick = function() {
+        app.decreaseSticksInABundle();
+        app.updateSticksInBundleDisplay();
+    };
     document.getElementById("bundleButton").onclick = function() {
         let err = BundleUtils.canBundle(app, app.selectControls.currentlySelected);
         if (err == null) {
