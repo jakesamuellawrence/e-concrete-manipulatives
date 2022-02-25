@@ -166,8 +166,8 @@ export function setupEventCallbacks(app) {
     });
     document.getElementById("addStick").onclick = function() {app.spawnStick();};
     document.getElementById("add10Sticks").onclick = function() {app.spawnSticks(10);};
-    document.getElementById("moreSticksInABundle").onclick = function() {app.moreSticksInABundle();};
-    document.getElementById("fewerSticksInABundle").onclick = function() {app.fewerSticksInABundle();};
+    document.getElementById("moreSticksInABundle").onclick = function() {app.increaseSticksInABundle();};
+    document.getElementById("fewerSticksInABundle").onclick = function() {app.decreaseSticksInABundle();};
     document.getElementById("bundleButton").onclick = function() {
         let err = BundleUtils.canBundle(app, app.selectControls.currentlySelected);
         console.log(err);

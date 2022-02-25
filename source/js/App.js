@@ -90,7 +90,7 @@ export class App {
         return sticks;
     }
 
-    moreSticksInABundle() {
+    increaseSticksInABundle() {
         if (this.sticksInABundle == 2) {
             this.sticksInABundle += 1
             document.getElementById("fewerSticksInABundle").style.display = "block";
@@ -103,7 +103,7 @@ export class App {
         document.getElementById("sticksInABundle").innerText = Converter.toWords(this.sticksInABundle);
     }
 
-    fewerSticksInABundle() {
+    decreaseSticksInABundle() {
         if (this.sticksInABundle == 12) {
             this.sticksInABundle -= 1
             document.getElementById("moreSticksInABundle").style.display = "block";
