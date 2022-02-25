@@ -171,9 +171,7 @@ export function setupEventCallbacks(app) {
     document.getElementById("fewerSticksInABundle").onclick = function() {app.decreaseSticksInABundle();};
     document.getElementById("bundleButton").onclick = function() {
         let err = BundleUtils.canBundle(app, app.selectControls.currentlySelected);
-        console.log(err);
         if (err == null) {
-            console.log("attempting to bundle");
             BundleUtils.bundleSticks(app, app.selectControls.currentlySelected)
             app.selectControls.deselectAll();
         } else {

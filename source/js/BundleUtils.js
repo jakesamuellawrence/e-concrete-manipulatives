@@ -71,8 +71,6 @@ export function bundleSticks(app, toBundle) {
     torus.position.copy(bundle.position);
     bundle.attach(torus);
 
-    console.log(positions);
-
     // Move sticks into position
     for (let i = 1; i < toBundle.length; i++) {
         toBundle[i].position.set(
