@@ -1,4 +1,3 @@
-import '/source/style.css';
 import * as Setup from "./Setup";
 import { App } from './App';
 
