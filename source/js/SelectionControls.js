@@ -121,6 +121,15 @@ export class SelectionControls {
     }
 
     /**
+     * Deselects all currently selected sticks
+     */
+    deselectAll() {
+        while (this.currentlySelected.length > 0) {
+            this.deselect(this.currentlySelected[0]);
+        }
+    }
+
+    /**
      * Called when an unselected object is selected
      * 
      * @param {Object3D} object the object that's been selected

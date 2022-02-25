@@ -174,17 +174,20 @@ export function setupEventCallbacks(app) {
         if (err == null) {
             console.log("attempting to bundle");
             BundleUtils.bundleSticks(app, app.selectControls.currentlySelected)
+            app.selectControls.deselectAll();
         } else {
             window.alert(err.err_message);
         }
     }
     document.getElementById("removeButton").onclick = function() {
         if (confirm("This will delete all selected sticks and bundles. Are you sure?")) {
-            BundleUtils.removeSticks(app, app.selectControls.currentlySelected)
+            BundleUtils.removeSticks(app, app.selectControls.currentlySelected);
+            app.selectControls.deselectAll();
         }
     }
     document.getElementById("unbundleButton").onclick = function() {
         BundleUtils.unbundleSticks(app, app.selectControls.currentlySelected);
+        app.selectControls.deselectAll();
     }
 }
 

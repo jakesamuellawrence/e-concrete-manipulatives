@@ -87,11 +87,6 @@ export function bundleSticks(app, toBundle) {
         bundle.attach(stick);
     }
 
-    // Deselect sticks
-    while (app.selectControls.currentlySelected.length > 0) {
-        app.selectControls.deselect(app.selectControls.currentlySelected[0]);
-    }
-
     app.scene.add(bundle);
 }
 
@@ -104,9 +99,6 @@ export function removeSticks(app, toRemove) {
     for (let object of toRemove) {
         Utils.removeAllChildrenFromList(object, app.sticksInScene);
         app.scene.remove(object);
-    }
-    while (app.selectControls.currentlySelected.length > 0) {
-        app.selectControls.deselect(toRemove[0]);
     }
     app.updateSticksInTotal();
 }
@@ -128,8 +120,4 @@ export function unbundleSticks(app, toUnbundle) {
         }
     }
     app.spawnSticks(sticksToRespawn);
-    while (app.selectControls.currentlySelected.length > 0) {
-        console.log("deselecting");
-        app.selectControls.deselect(toUnbundle[0]);
-    }
 }
