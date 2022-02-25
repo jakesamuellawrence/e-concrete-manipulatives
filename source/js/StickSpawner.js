@@ -3,7 +3,7 @@ import { CylinderGeometry, Euler, Mesh, MeshLambertMaterial, Vector3 } from "thr
 export class StickSpawner {
     position;
     stickParameters = {
-        color: 0xffff00,
+        colour: 0xffff00,
         radius: 0.03,
         height: 0.4,
         radialSegments: 64,
@@ -19,7 +19,7 @@ export class StickSpawner {
     constructor(scene, position=new Vector3(0, 0, 0), color) {
         this.#scene = scene;
         this.position = position;
-        this.stickParameters.color = color;
+        this.stickParameters.colour = color;
     }
 
     /**
@@ -31,7 +31,7 @@ export class StickSpawner {
         let geo = new CylinderGeometry(
             this.stickParameters.radius, this.stickParameters.radius, this.stickParameters.height, this.stickParameters.radialSegments
         );
-        let mat = new MeshLambertMaterial({color: this.stickParameters.color});
+        let mat = new MeshLambertMaterial({color: this.stickParameters.colour});
         let stick = new Mesh(geo, mat);
         stick.position.set(this.position.x, this.position.y, this.position.z);
         stick.setRotationFromEuler(new Euler(

@@ -2,7 +2,7 @@ import { Raycaster } from "three";
 import { Camera } from "three";
 import { Object3D } from "three";
 import { Vector3 } from "three";
-import { getLargestGroup } from "./utils";
+import { getLargestGroup } from "./Utils";
 
 export class SelectionControls {
 

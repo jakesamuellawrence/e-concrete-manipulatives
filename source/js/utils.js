@@ -4,97 +4,108 @@ import { EffectComposer, RenderPass, ShaderPass } from 'three-outlinepass';
 import FXAAShader from 'three-shaders/shaders/FXAAShader';
 import darkShrubTexture from "../../resources/images/bg_shrub_dark.svg";
 
+export function getColourFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if(/^[0-9A-F]{6}$/i.test(urlParams.getAll('c'))){ //if c parameter valid hex colour
+        let objectColour = "#" + urlParams.getAll('c');
+        
+    } else {
+        return "#8C5D41";
+    }
+    document.getElementById("colourPicker").value = objectColour;
+    return objectColour;
+}
+
 /**
  * Constructs a link to preserve settings
  * 
  * @param {string} objectColour The hex string representing the set colour
  */
 export function constructLink(objectColour){
-    alert("Use this URL to keep your settings:\n" + window.location.origin + "?c=" +objectColour.replace("#",''));
+    return window.location.origin + "?c=" + objectColour.replace("#",'');
 }
 
-function resizeCanvas(camera, renderer, composer, shaderPass) {
-    let canvasWidth = window.innerWidth;
-    let canvasHeight = window.innerHeight;
+// function resizeCanvas(camera, renderer, composer, shaderPass) {
+//     let canvasWidth = window.innerWidth;
+//     let canvasHeight = window.innerHeight;
 
-    let pixelRatio = window.devicePixelRatio;
-    if (screen.width * window.devicePixelRatio >= 2000 || screen.height * window.devicePixelRatio >= 2000) {
-        pixelRatio = pixelRatio * 0.5;
-    }
+//     let pixelRatio = window.devicePixelRatio;
+//     if (screen.width * window.devicePixelRatio >= 2000 || screen.height * window.devicePixelRatio >= 2000) {
+//         pixelRatio = pixelRatio * 0.5;
+//     }
 
-    renderer.setPixelRatio(pixelRatio);
-    renderer.setSize(canvasWidth, canvasHeight);
+//     renderer.setPixelRatio(pixelRatio);
+//     renderer.setSize(canvasWidth, canvasHeight);
 
-    composer.setPixelRatio(pixelRatio);
-    composer.setSize(canvasWidth, canvasHeight);
-    shaderPass.uniforms["resolution"].value.x = 1 / (canvasWidth * pixelRatio);
-    shaderPass.uniforms["resolution"].value.y = 1 / (canvasHeight * pixelRatio);
-}
+//     composer.setPixelRatio(pixelRatio);
+//     composer.setSize(canvasWidth, canvasHeight);
+//     shaderPass.uniforms["resolution"].value.x = 1 / (canvasWidth * pixelRatio);
+//     shaderPass.uniforms["resolution"].value.y = 1 / (canvasHeight * pixelRatio);
+// }
 
-export function setup(){
-    const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera();
-    const renderer = new THREE.WebGLRenderer({
-        canvas: document.querySelector('#cv1'),
-        antialias: true,
-    });
+// export function setup(){
+//     // const scene = new THREE.Scene();
+//     // const camera = new THREE.OrthographicCamera();
+//     // const renderer = new THREE.WebGLRenderer({
+//     //     canvas: document.querySelector('#cv1'),
+//     //     antialias: true,
+//     // });
 
-    const composer = new EffectComposer(renderer); 
-    const renderPass = new RenderPass(scene, camera);
-    composer.addPass(renderPass);
-    const fxaaShader = new FXAAShader();
-    const shaderPass = new ShaderPass(fxaaShader);
-    composer.addPass(shaderPass);
+//     // const composer = new EffectComposer(renderer); 
+//     // const renderPass = new RenderPass(scene, camera);
+//     // composer.addPass(renderPass);
+//     // const fxaaShader = new FXAAShader();
+//     // const shaderPass = new ShaderPass(fxaaShader);
+//     // composer.addPass(shaderPass);
 
-    resizeCanvas(camera, renderer, composer, shaderPass);
-    window.onresize = function() {
-        resizeCanvas(camera, renderer, composer, shaderPass);
-    }
+//     // resizeCanvas(camera, renderer, composer, shaderPass);
+//     // window.onresize = function() {
+//     //     resizeCanvas(camera, renderer, composer, shaderPass);
+//     // }
         
-    camera.position.set(20, 10, 10);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
+//     // camera.position.set(20, 10, 10);
+//     // camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-    renderer.setClearColor("#97E4D8", 1);
+//     // renderer.setClearColor("#97E4D8", 1);
     
-    const light = new THREE.DirectionalLight(0xFFFFFF, 0.75);
-    light.position.set(20, 10, 10);
-    light.target.position.set(0, 0, 0);
-    light.lookAt(light.target.position);
-    scene.add(light);
-    scene.add(light.target);
+//     // const light = new THREE.DirectionalLight(0xFFFFFF, 0.75);
+//     // light.position.set(20, 10, 10);
+//     // light.target.position.set(0, 0, 0);
+//     // light.lookAt(light.target.position);
+//     // scene.add(light);
+//     // scene.add(light.target);
 
-    const planeSize = 3;
-    const textureLoader = new THREE.TextureLoader();
+//     // const textureLoader = new THREE.TextureLoader();
 
-    const planeGeo = new THREE.CircleGeometry(2.5, 64); //radius, segments. more segments give a cleaner curve but theoretically worse performance
-    const planeMat = new THREE.MeshBasicMaterial({color: 0x26A44C});
-    const ground = new THREE.Mesh(planeGeo, planeMat);
-    ground.rotation.x = -Math.PI / 2;
-    ground.rotation.z = -Math.PI * 1.14;
-    ground.position.x = 1.25;
-    ground.position.z = ground.position.x/2; //This is because camera position is also a 2:1 ratio
-    ground.userData.draggable = false;
-    ground.userData.tableTop = true;
-    scene.add(ground);
+//     // const planeGeo = new THREE.CircleGeometry(2.5, 64); //radius, segments. more segments give a cleaner curve but theoretically worse performance
+//     // const planeMat = new THREE.MeshBasicMaterial({color: 0x26A44C});
+//     // const ground = new THREE.Mesh(planeGeo, planeMat);
+//     // ground.rotation.x = -Math.PI / 2;
+//     // ground.rotation.z = -Math.PI * 1.14;
+//     // ground.position.x = 1.25;
+//     // ground.position.z = ground.position.x/2; //This is because camera position is also a 2:1 ratio
+//     // ground.userData.draggable = false;
+//     // ground.userData.tableTop = true;
+//     // scene.add(ground);
     
 
-    const darkBushMap = textureLoader.load(darkShrubTexture);
-    const darkShrubMaterial = new THREE.SpriteMaterial( { map: darkBushMap } );
+//     // const darkBushMap = textureLoader.load(darkShrubTexture);
+//     // const darkShrubMaterial = new THREE.SpriteMaterial( { map: darkBushMap } );
 
-    const bushSprite1 = new THREE.Sprite(darkShrubMaterial);
-    bushSprite1.center.set(0.5,0)
-    bushSprite1.scale.set(0.6,0.5,0.6);
-    bushSprite1.position.set(-1.6,-0.25,0);
-    scene.add(bushSprite1);
+//     // const bushSprite1 = new THREE.Sprite(darkShrubMaterial);
+//     // bushSprite1.center.set(0.5,0)
+//     // bushSprite1.scale.set(0.6,0.5,0.6);
+//     // bushSprite1.position.set(-1.6,-0.25,0);
+//     // scene.add(bushSprite1);
 
-    const bushSprite2 = new THREE.Sprite(darkShrubMaterial);
-    bushSprite2.center.set(0.5,0)
-    bushSprite2.scale.set(0.6,0.5,0.6);
-    bushSprite2.position.set(-0.6,-0.08,-1.2);
-    scene.add(bushSprite2);
+//     // const bushSprite2 = new THREE.Sprite(darkShrubMaterial);
+//     // bushSprite2.center.set(0.5,0)
+//     // bushSprite2.scale.set(0.6,0.5,0.6);
+//     // bushSprite2.position.set(-0.6,-0.08,-1.2);
+//     // scene.add(bushSprite2);
 
-    return [scene, camera, renderer, composer]
-}
+//     return [scene, camera, renderer, composer]
+// }
 
 /**
  * Follows the trail of parents until it finds the largest non-scene
@@ -144,25 +155,29 @@ export function changeDimension(dimension, amount, camera, console){
     camera.updateProjectionMatrix();
 }
 
-export function removeObjects(object, scene, draggableList){
+export function removeFromList(element, list) {
+    let index = list.indexOf(element);
+    if (index >= 0) {
+        list.splice(index, 1);
+    }
+}
+
+export function removeAllChildrenFromList(object, list){
     if (object.children.length > 0){
         for (let child of object.children) {
-            removeObjects(child, scene, draggableList);
+            removeAllChildrenFromList(child, list);
         }
-    }else {
-        let objectIndex = draggableList.indexOf(object);
-        if(objectIndex >= 0){
-            draggableList.splice(objectIndex, 1);
-        }
-      }
+    } else {
+        removeFromList(object, list);
+    }
 }
 
 export function shouldUnbundleButtonShow(currentlySelected, unbundleButton){
     for (let i=0; i<currentlySelected.length; i++){
         if (currentlySelected[i].type == "Group"){
-          unbundleButton.style.display = "block";
-          return;
+            unbundleButton.style.display = "block";
+            return;
         }
-      }
-      unbundleButton.style.display = "none";
+    }
+    unbundleButton.style.display = "none";
 }

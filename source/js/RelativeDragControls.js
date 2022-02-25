@@ -1,5 +1,5 @@
 import { Camera, InstancedInterleavedBuffer, Object3D, Plane, Raycaster, RectAreaLight, Vector2, Vector3 } from "three";
-import {getLargestGroup} from "./utils";
+import {getLargestGroup} from "./Utils";
 
 export class RelativeDragControls {
 
