@@ -109,15 +109,11 @@ export function removeSticks(app, toRemove) {
  * @param {Array<Object3D>} toUnbundle 
  */
 export function unbundleSticks(app, toUnbundle) {
-    let sticksToRespawn = 0;
-    for (let i = 0; i < toUnbundle.length; i++) {
-        console.log(i);
-        if (toUnbundle[i].type == "Group") {
-            let sticksBefore = app.sticksInScene.length;
-            Utils.removeAllChildrenFromList(toUnbundle[i], app.sticksInScene);
-            app.scene.remove(toUnbundle[i])
-            sticksToRespawn += (sticksBefore - app.sticksInScene.length);
+    for (let object of toUnbundle) {
+        if (object.type == "Group") {
+            let flattened = Utils.flattenBundle(object);
+            removeSticks(app, [object]);
+            app.spawnSticks(flattened.length);
         }
     }
-    app.spawnSticks(sticksToRespawn);
 }

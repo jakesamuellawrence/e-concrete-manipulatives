@@ -172,6 +172,26 @@ export function removeAllChildrenFromList(object, list){
     }
 }
 
+/**
+ * 
+ * @param {Object3D} object 
+ */
+export function flattenBundle(object) {
+    if (object.children.length > 0) {
+        let listOfSticks = []
+        for (let child of object.children) {
+            listOfSticks = listOfSticks.concat(flattenBundle(child));
+        }
+        return listOfSticks
+    } else {
+        if (object.geometry.type == "CylinderGeometry") { // only count sticks
+            return [object]
+        } else {
+            return []
+        }
+    }
+}
+
 export function shouldUnbundleButtonShow(currentlySelected, unbundleButton){
     for (let i=0; i<currentlySelected.length; i++){
         if (currentlySelected[i].type == "Group"){
