@@ -137,15 +137,16 @@ export function setupControls(app) {
             app.effectComposer.addPass(outlinePass);
             object.outlinePass = outlinePass;
         }
-        
-        Utils.shouldUnbundleButtonShow(app.selectControls.currentlySelected, document.getElementById("unbundleButton"))
+        app.showOrHideButtons();
         };
     app.selectControls.onDeselect = function(object) {
         if (object.outlinePass) {
             object.outlinePass.enabled = false;
         }
-        Utils.shouldUnbundleButtonShow(app.selectControls.currentlySelected, document.getElementById("unbundleButton"))
+        app.showOrHideButtons();
     };
+
+    app.showOrHideButtons();
 }
 
 /**

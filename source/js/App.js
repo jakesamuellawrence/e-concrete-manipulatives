@@ -126,4 +126,20 @@ export class App {
         }
         document.getElementById("numberInTotal").innerText = Converter.toWords(this.sticksInScene.length);
     }
+
+    showOrHideButtons() {
+        if (this.selectControls.currentlySelected.length == 0) {
+            document.getElementById("removeButton").style.display = "none";
+            document.getElementById("bundleButton").style.display = "none";
+        } else {
+            document.getElementById("bundleButton").style.display = "block";
+            document.getElementById("removeButton").style.display = "block";
+        }
+
+        if (this.selectControls.currentlySelected.some((element) => element.type == "Group")) {
+            document.getElementById("unbundleButton").style.display = "block";
+        } else {
+            document.getElementById("unbundleButton").style.display = "none";
+        }
+    }
 }

@@ -192,12 +192,12 @@ export function flattenBundle(object) {
     }
 }
 
-export function shouldUnbundleButtonShow(currentlySelected, unbundleButton){
-    for (let i=0; i<currentlySelected.length; i++){
-        if (currentlySelected[i].type == "Group"){
-            unbundleButton.style.display = "block";
-            return;
-        }
-    }
-    unbundleButton.style.display = "none";
-}
+// export function shouldUnbundleButtonShow(currentlySelected, unbundleButton){
+//     for (let i=0; i<currentlySelected.length; i++){
+//         if (currentlySelected[i].type == "Group"){
+//             unbundleButton.style.display = "block";
+//             return;
+//         }
+//     }
+//     unbundleButton.style.display = "none";
+// }
