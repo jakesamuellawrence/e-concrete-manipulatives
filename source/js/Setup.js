@@ -1,4 +1,4 @@
-import { ConeBufferGeometry, TextureLoader, Vector3 } from "three";
+import { TextureLoader, Vector3 } from "three";
 import { Vector2 } from "three";
 import { OrthographicCamera, Scene, WebGLRenderer } from "three";
 import { EffectComposer, OutlinePass, RenderPass, ShaderPass } from "three-outlinepass";
@@ -13,14 +13,13 @@ import { Plane } from "three";
 import { RelativeDragControls } from "./RelativeDragControls";
 import { SelectionControls } from "./SelectionControls";
 import * as BundleUtils from "./BundleUtils";
-import { BundleErrType } from "./BundleErrType";
 import { DirectionalLight } from "three";
 import { CircleGeometry } from "three";
 import { MeshBasicMaterial } from "three";
 import { Mesh } from "three";
 
 /**
- * 
+ * Performs all required steps to setup up the program in a browser context
  * @param {App} app the app to be initialised
  */
 export function initializeApp(app) {
@@ -34,8 +33,10 @@ export function initializeApp(app) {
 }
 
 /**
- * 
- * @param {App} app 
+ * Sets up the renderer and effectcomposer.
+ * Sets the sky colour.
+ * Sets the sizes of the renderer and effectcomposer. See {@link App.resizeCanvas}
+ * @param {App} app the app context
  */
  export function setupRenderer(app) {
     app.renderer = new WebGLRenderer({
@@ -55,7 +56,8 @@ export function initializeApp(app) {
 }
 
 /**
- * 
+ * Sets up the Scene and Camera, then places all the objects that are supposed to be in the scene.
+ * creates the app's sticksSpawner
  * @param {App} app 
  */
 export function setupScene(app) {
@@ -106,8 +108,8 @@ export function setupScene(app) {
 }
 
 /**
- * 
- * @param {App} app 
+ * Creates the DragControls and SelectControls and sets appropritate callbacks for them
+ * @param {App} app the app context
  */
 export function setupControls(app) {
     const movementPlane = new Plane(new Vector3(0, 1, 0), -app.stickSpawner.stickParameters.radius);
@@ -150,7 +152,7 @@ export function setupControls(app) {
 }
 
 /**
- * 
+ * Sets callbacks for UI elements and window resizing
  * @param {App} app the app context
  */
 export function setupEventCallbacks(app) {
@@ -163,7 +165,7 @@ export function setupEventCallbacks(app) {
     window.onresize = function() {app.resizeCanvas()};
 
     document.getElementById("getLink").addEventListener("click", function() {
-        window.alert("Use this URL to keep your settings:\n"+ Utils.constructLink());
+        window.alert("Use this URL to keep your settings:\n"+ Utils.constructLink(app.stickColour));
     });
     document.getElementById("addStick").onclick = function() {app.spawnStick();};
     document.getElementById("add10Sticks").onclick = function() {app.spawnSticks(10);};
@@ -189,5 +191,3 @@ export function setupEventCallbacks(app) {
         app.selectControls.deselectAll();
     }
 }
-
-// function getColour

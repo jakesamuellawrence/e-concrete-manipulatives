@@ -1,5 +1,8 @@
 import { CylinderGeometry, Euler, Mesh, MeshLambertMaterial, Vector3 } from "three";
 
+/**
+ * Spawner that has a position in the world and can spawn a stick at it's current position
+ */
 export class StickSpawner {
     position;
     stickParameters = {

@@ -4,6 +4,9 @@ import { Object3D } from "three";
 import { Vector3 } from "three";
 import { getLargestGroup } from "./Utils";
 
+/**
+ * Allows the given list of objects to be clicked on to be selected
+ */
 export class SelectionControls {
 
     currentlySelected = [];

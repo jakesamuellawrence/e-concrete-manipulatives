@@ -1,11 +1,11 @@
 /**
+ * dictionary for looking up the positions sticks should take when put into a bundle
+ * of a given size
+ * 
  * Usage: LookupTable[bundle_size](radius, x_0, y_0)
  * to get a list of all stick positions
  */
  export let positionLookup = {
-//     0: (r, x_0, y_0) => {return [ // alternate orientation for 2, not actually for 0
-//         {x: x_0, y: y_0 + 2*r}
-//     ]},
     2: (r, x_0, y_0) => {return [
         {x: x_0 + 2*r, y: y_0}
     ]},
@@ -106,8 +106,10 @@
     ]}
 };
 
+/**
+ * dictionary for looking up the radius of a bundle given the number of sticks inside it
+ */
 export let radiusLookup = {
-    // 0: (r) => {return 2*r},
     2: (r) => {return 2*r},
     3: (r) => {return Math.sqrt(Math.pow(2*r, 2) - Math.pow(r, 2)) + r - Math.sqrt(Math.pow(2*r, 2) - Math.pow(r, 2))/3},
     4: (r) => {return r/Math.cos(toRad(45)) + r},
@@ -121,8 +123,10 @@ export let radiusLookup = {
     12: (r) => {return 4.029*r}
 }
 
+/**
+ * dictionary for looking up where the centre of a bundle would be given how many sticks are in it
+ */
 export let centerLookup = {
-    // 0: (r, x_0, y_0) => {return {x: x_0, y: y_0 + r}},
     2: (r, x_0, y_0) => {return {x: x_0 + r, y: y_0}},
     3: (r, x_0, y_0) => {return {x: x_0 + r, y: y_0 + Math.sqrt(3)*r/3}},
     4: (r, x_0, y_0) => {return {x: x_0 + r, y: y_0 + r}},
@@ -136,6 +140,11 @@ export let centerLookup = {
     12: (r, x_0, y_0) => {return {x: x_0 + 2*r*Math.sin(toRad(33.644)) - 2*r*Math.cos(toRad(60)) + r, y: y_0 + 2*r*Math.cos(toRad(33.644)) + 2*r*Math.sin(toRad(60))- r*Math.tan(toRad(30))}}
 }
 
+/**
+ * Converts an angle in degrees to radians
+ * @param {number} degrees the angle in degrees
+ * @returns the angle in radians
+ */
 function toRad(degrees) {
     return degrees * (Math.PI / 180)
 }

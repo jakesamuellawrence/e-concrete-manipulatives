@@ -5,13 +5,13 @@ import { BundleErrType } from "./BundleErrType";
 import * as Utils from "./Utils";
 import * as LookupTable from "./BundleLookup";
 import { Mesh } from "three";
-import { Vector3 } from "three";
 import { MeshBasicMaterial } from "three";
 
 /**
- * @param {App} app
- * @param {Array<Object3D>} toBundle 
- * @returns 
+ * Checks whether a given list of sticks would be able to be bundled
+ * @param {App} app the app context
+ * @param {Array<Object3D>} toBundle the list to check 
+ * @returns {BundleErrType} the reason the list cannot be bundled
  */
 export function canBundle(app, toBundle) {
     if (toBundle.length == 0) {
@@ -31,9 +31,10 @@ export function canBundle(app, toBundle) {
 }
 
 /**
- * 
- * @param {App} app 
- * @param {Array<Object3D>} toBundle 
+ * Bundles the given list of sticks together into a Group object
+ * Adds a band around the bundle
+ * @param {App} app the app context
+ * @param {Array<Object3D>} toBundle the sticks to be bundled
  */
 export function bundleSticks(app, toBundle) {
     if (toBundle.length == 0) return;
@@ -89,9 +90,10 @@ export function bundleSticks(app, toBundle) {
 }
 
 /**
- * 
- * @param {App} app 
- * @param {Array<Object3D>} toRemove 
+ * Removes the given list of sticks and bundles from the scene, including
+ * any children of any bundles
+ * @param {App} app the app context
+ * @param {Array<Object3D>} toRemove the list of objects to remove
  */
 export function removeSticks(app, toRemove) {
     for (let object of toRemove) {
@@ -102,9 +104,10 @@ export function removeSticks(app, toRemove) {
 }
 
 /**
- * 
- * @param {App} app 
- * @param {Array<Object3D>} toUnbundle 
+ * Unbundles any bundles in the provided list.
+ * Does this by removing the bundle and spawning however many sticks where in it
+ * @param {App} app the app context
+ * @param {Array<Object3D>} toUnbundle the list of objects to try to unbundle
  */
 export function unbundleSticks(app, toUnbundle) {
     for (let object of toUnbundle) {

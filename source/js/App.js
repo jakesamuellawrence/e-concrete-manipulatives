@@ -6,7 +6,9 @@ import { SelectionControls } from "./SelectionControls";
 import { StickSpawner } from "./StickSpawner";
 
 /**
- * Made into class instead of simple JS object so that it plays nice with auto-complete
+ * Class that represents the app context.
+ * Holds global state variables needed by most logic of the program
+ * Has simple helper functions for updating displays and spawning sticks
  */
 export class App {
     /** @type {Scene} */
@@ -32,6 +34,10 @@ export class App {
     /** @type {Color} */
     stickColour;
 
+    /**
+     * updates the value of SticksInABundle and updates the relevant display if a browser context exists
+     * @param {number} value 
+     */
     setSticksInABundle(value) {
         this.sticksInABundle = value;
         if (document) {
@@ -39,6 +45,11 @@ export class App {
         }
     }
 
+    /**
+     * sets the stickColour parameter and updates the stickSpawner's colour parameter
+     * Also updates the stick colour display if a browser context exists
+     * @param {Color} colour 
+     */
     setStickColour(colour) {
         this.stickColour = colour;
         this.stickSpawner.stickParameters.colour = colour;
@@ -47,6 +58,10 @@ export class App {
         }
     }
 
+    /**
+     * Resizes render and postprocessing contexts to match the current window size
+     * Also reduces the pixel ratio if the screen is high-resolution to prevent slowdown
+     */
     resizeCanvas() {
         let canvasWidth = window.innerWidth;
         let canvasHeight = window.innerHeight;
@@ -65,6 +80,10 @@ export class App {
         this.shaderPass.uniforms["resolution"].value.y = 1 / (canvasHeight * pixelRatio);
     }
 
+    /**
+     * creates a stick and then moves the stickSpawner to it's next position
+     * @returns {Object3D} the created stick
+     */
     spawnStick() {
         const stick = this.stickSpawner.spawn();
         this.sticksInScene.push(stick);
@@ -82,6 +101,13 @@ export class App {
         return stick;
     }
 
+    /**
+     * Spawns n sticks
+     * Calls {@link spawnStick} n times
+     * 
+     * @param {number} n 
+     * @returns {Array<Object3D>} a list of all the sticks that have been created
+     */
     spawnSticks(n) {
         let sticks = []
         for (let i = 0; i < n; i++) {
@@ -90,6 +116,10 @@ export class App {
         return sticks;
     }
 
+    /**
+     * Increments sticksInABundle by 1, clamping it within the range 2-12 and
+     * updates the sticksInABundle display
+     */
     increaseSticksInABundle() {
         if (this.sticksInABundle == 2) {
             this.sticksInABundle += 1
@@ -103,6 +133,10 @@ export class App {
         document.getElementById("sticksInABundle").innerText = Converter.toWords(this.sticksInABundle);
     }
 
+    /**
+     * Decrements sticksInABundle by 1, clamping it within the range 2-12,
+     * and updates the sticks in a bundle display
+     */
     decreaseSticksInABundle() {
         if (this.sticksInABundle == 12) {
             this.sticksInABundle -= 1
@@ -116,6 +150,9 @@ export class App {
         document.getElementById("sticksInABundle").innerText = Converter.toWords(this.sticksInABundle);
     }
 
+    /**
+     * Updates the display of the sticks in the scene to match how many sticks currently exist
+     */
     updateSticksInTotal() {
         if(this.sticksInScene.length == 1){
             document.getElementById("areInTotal").innerText = "There is";
@@ -127,6 +164,10 @@ export class App {
         document.getElementById("numberInTotal").innerText = Converter.toWords(this.sticksInScene.length);
     }
 
+    /**
+     * Shows or hides the remove, bundle, and unbundle buttons depending
+     * on what's currently selected
+     */
     showOrHideButtons() {
         if (this.selectControls.currentlySelected.length == 0) {
             document.getElementById("removeButton").style.display = "none";
