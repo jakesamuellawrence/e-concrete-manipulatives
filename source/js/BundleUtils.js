@@ -113,8 +113,15 @@ export function unbundleSticks(app, toUnbundle) {
     for (let object of toUnbundle) {
         if (object.type == "Group") {
             let flattened = Utils.flattenBundle(object);
+            let newSticks = app.spawnSticks(flattened.length);
+
+            // put the new sticks where the old ones were and set them to move towards where they spawned
+            for (let i = 0; i < flattened.length; i++) {
+                newSticks[i].desiredPosition = newSticks[i].position.clone();
+                newSticks[i].position.copy(object.position.add(flattened[i].position));
+            }
+
             removeSticks(app, [object]);
-            app.spawnSticks(flattened.length);
         }
     }
 }

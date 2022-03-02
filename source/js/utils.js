@@ -88,6 +88,7 @@ export function removeAllChildrenFromList(object, list){
  * Recursively creates a list of all children of a given group, if they are sticks.
  * Note this will only ever return a list of the leaf nodes of the tree of the children of object
  * @param {Object3D} object the group that should be flattened
+ * @return {Array<Object3D>} the list of leaf children
  */
 export function flattenBundle(object) {
     if (object.children.length > 0) {
@@ -109,6 +110,7 @@ export function flattenBundle(object) {
  * Recursively flattens the whole hierarchy of object children and returns it as a list, 
  * including the parent and any intermediary parents
  * @param {Object3D} object the object to flatten
+ * @return {Array<Object3D>} the list of all children
  */
 export function flattenObject(object) {
     let listOfObjects = [object]
