@@ -76,11 +76,8 @@ export function bundleSticks(app, toBundle) {
 
     // Move sticks into position
     for (let i = 0; i < toBundle.length; i++) {
-        toBundle[i].position.set(
-            positions[i].x,
-            positions[i].y,
-            toBundle[0].position.z
-        );
+        // subtract bundle centre because desiredPosition must be relative to parent
+        toBundle[i].desiredPosition = new Vector3(positions[i].x, positions[i].y, bundle.position.z).sub(bundle.position);
     }
 
     // attach sticks to bundle

@@ -1,8 +1,4 @@
-import * as THREE from 'three';
-import { Object3D } from 'three';
-import { EffectComposer, RenderPass, ShaderPass } from 'three-outlinepass';
-import FXAAShader from 'three-shaders/shaders/FXAAShader';
-import darkShrubTexture from "../../resources/images/bg_shrub_dark.svg";
+import { Object3D, Vector3 } from 'three';
 
 /**
  * extracts the stick colour from the url, if present
@@ -89,7 +85,8 @@ export function removeAllChildrenFromList(object, list){
 }
 
 /**
- * Recursively creates a list of all children of a given group, if they are sticks
+ * Recursively creates a list of all children of a given group, if they are sticks.
+ * Note this will only ever return a list of the leaf nodes of the tree of the children of object
  * @param {Object3D} object the group that should be flattened
  */
 export function flattenBundle(object) {
@@ -106,4 +103,28 @@ export function flattenBundle(object) {
             return []
         }
     }
+}
+
+/**
+ * Recursively flattens the whole hierarchy of object children and returns it as a list, 
+ * including the parent and any intermediary parents
+ * @param {Object3D} object the object to flatten
+ */
+export function flattenObject(object) {
+    let listOfObjects = [object]
+    for (let child of object.children) {
+        listOfObjects = listOfObjects.concat(flattenObject(child));
+    }
+    return listOfObjects
+}
+
+/**
+ * Checks if two vectors are nearly equal, i.e. is the distance between them < epsilon
+ * @param {Vector3} v1 the left of the comparison
+ * @param {Vector3} v2 the right of the comparison
+ * @param {Number} epsilon the number the difference must be less than
+ */
+export function vecsNearlyEqual(v1, v2, epsilon=0.0001) {
+    let distance = v1.clone().sub(v2).length();
+    return distance < epsilon;
 }
