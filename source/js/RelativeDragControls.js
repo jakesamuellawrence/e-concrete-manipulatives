@@ -1,6 +1,9 @@
 import { Camera, InstancedInterleavedBuffer, Object3D, Plane, Raycaster, RectAreaLight, Vector2, Vector3 } from "three";
-import {getLargestGroup} from "./utils";
+import {getLargestGroup} from "./Utils";
 
+/**
+ * Allows any specified objects to be dragged around relative to a provided plane
+ */
 export class RelativeDragControls {
 
     #draggables;

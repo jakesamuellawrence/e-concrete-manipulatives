@@ -2,8 +2,11 @@ import { Raycaster } from "three";
 import { Camera } from "three";
 import { Object3D } from "three";
 import { Vector3 } from "three";
-import { getLargestGroup } from "./utils";
+import { getLargestGroup } from "./Utils";
 
+/**
+ * Allows the given list of objects to be clicked on to be selected
+ */
 export class SelectionControls {
 
     currentlySelected = [];
@@ -118,6 +121,15 @@ export class SelectionControls {
     deselect(object) {
         this.currentlySelected.splice(this.currentlySelected.indexOf(object), 1);
         this.onDeselect(object)
+    }
+
+    /**
+     * Deselects all currently selected sticks
+     */
+    deselectAll() {
+        while (this.currentlySelected.length > 0) {
+            this.deselect(this.currentlySelected[0]);
+        }
     }
 
     /**

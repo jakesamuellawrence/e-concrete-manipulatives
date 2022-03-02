@@ -5,95 +5,26 @@ import FXAAShader from 'three-shaders/shaders/FXAAShader';
 import darkShrubTexture from "../../resources/images/bg_shrub_dark.svg";
 
 /**
+ * extracts the stick colour from the url, if present
+ * @returns the extracted colour
+ */
+export function getColourFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if(/^[0-9A-F]{6}$/i.test(urlParams.getAll('c'))){ //if c parameter valid hex colour
+        return "#" + urlParams.getAll('c');
+        
+    } else {
+        return "#8C5D41";
+    }
+}
+
+/**
  * Constructs a link to preserve settings
  * 
- * @param {string} objectColour The hex string representing the set colour
+ * @param {string} stickColour The hex string representing the set colour
  */
-export function constructLink(objectColour){
-    alert("Use this URL to keep your settings:\n" + window.location.origin + "?c=" +objectColour.replace("#",''));
-}
-
-function resizeCanvas(camera, renderer, composer, shaderPass) {
-    let canvasWidth = window.innerWidth;
-    let canvasHeight = window.innerHeight;
-
-    let pixelRatio = window.devicePixelRatio;
-    if (screen.width * window.devicePixelRatio >= 2000 || screen.height * window.devicePixelRatio >= 2000) {
-        pixelRatio = pixelRatio * 0.5;
-    }
-
-    renderer.setPixelRatio(pixelRatio);
-    renderer.setSize(canvasWidth, canvasHeight);
-
-    composer.setPixelRatio(pixelRatio);
-    composer.setSize(canvasWidth, canvasHeight);
-    shaderPass.uniforms["resolution"].value.x = 1 / (canvasWidth * pixelRatio);
-    shaderPass.uniforms["resolution"].value.y = 1 / (canvasHeight * pixelRatio);
-}
-
-export function setup(){
-    const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera();
-    const renderer = new THREE.WebGLRenderer({
-        canvas: document.querySelector('#cv1'),
-        antialias: true,
-    });
-
-    const composer = new EffectComposer(renderer); 
-    const renderPass = new RenderPass(scene, camera);
-    composer.addPass(renderPass);
-    const fxaaShader = new FXAAShader();
-    const shaderPass = new ShaderPass(fxaaShader);
-    composer.addPass(shaderPass);
-
-    resizeCanvas(camera, renderer, composer, shaderPass);
-    window.onresize = function() {
-        resizeCanvas(camera, renderer, composer, shaderPass);
-    }
-        
-    camera.position.set(20, 10, 10);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-    renderer.setClearColor("#97E4D8", 1);
-    
-    const light = new THREE.DirectionalLight(0xFFFFFF, 0.75);
-    light.position.set(20, 10, 10);
-    light.target.position.set(0, 0, 0);
-    light.lookAt(light.target.position);
-    scene.add(light);
-    scene.add(light.target);
-
-    const planeSize = 3;
-    const textureLoader = new THREE.TextureLoader();
-
-    const planeGeo = new THREE.CircleGeometry(2.5, 64); //radius, segments. more segments give a cleaner curve but theoretically worse performance
-    const planeMat = new THREE.MeshBasicMaterial({color: 0x26A44C});
-    const ground = new THREE.Mesh(planeGeo, planeMat);
-    ground.rotation.x = -Math.PI / 2;
-    ground.rotation.z = -Math.PI * 1.14;
-    ground.position.x = 1.25;
-    ground.position.z = ground.position.x/2; //This is because camera position is also a 2:1 ratio
-    ground.userData.draggable = false;
-    ground.userData.tableTop = true;
-    scene.add(ground);
-    
-
-    const darkBushMap = textureLoader.load(darkShrubTexture);
-    const darkShrubMaterial = new THREE.SpriteMaterial( { map: darkBushMap } );
-
-    const bushSprite1 = new THREE.Sprite(darkShrubMaterial);
-    bushSprite1.center.set(0.5,0)
-    bushSprite1.scale.set(0.6,0.5,0.6);
-    bushSprite1.position.set(-1.6,-0.25,0);
-    scene.add(bushSprite1);
-
-    const bushSprite2 = new THREE.Sprite(darkShrubMaterial);
-    bushSprite2.center.set(0.5,0)
-    bushSprite2.scale.set(0.6,0.5,0.6);
-    bushSprite2.position.set(-0.6,-0.08,-1.2);
-    scene.add(bushSprite2);
-
-    return [scene, camera, renderer, composer]
+export function constructLink(stickColour){
+    return window.location.origin + "?c=" + stickColour.replace("#",'');
 }
 
 /**
@@ -115,6 +46,9 @@ export function setup(){
 
 /**
  * Sets the highlight colour of all the children of the given object
+ * 
+ * @param {Object3D} root the root object to set the emmissive of
+ * @param {Color} value the color to set the emmissive to
  */
 export function setEmissiveAllChildren(root, value) {
     if (root.material != null && root.material.emissive != null) {
@@ -127,42 +61,49 @@ export function setEmissiveAllChildren(root, value) {
     }
 }
 
-//Functions below this line are for dev/debug, and should not be required in production
-
-export function changeDimension(dimension, amount, camera, console){
-    if (dimension == "x"){
-        camera.position.setX(camera.position.x + amount);
-        console.log('x: %d',camera.position.x);
-    }else if (dimension == "y"){
-        camera.position.setY(camera.position.y + amount);
-        console.log('y: %d',camera.position.y);
-    }else if (dimension == "z"){
-        camera.position.setZ(camera.position.z + amount);
-        console.log('z: %d',camera.position.z);
+/**
+ * Removes the given element from the given list, if it is present in it
+ * @param {any} element the element to be removed
+ * @param {Array<any>} list the list to remove the element from
+ */
+export function removeFromList(element, list) {
+    let index = list.indexOf(element);
+    if (index >= 0) {
+        list.splice(index, 1);
     }
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
-    camera.updateProjectionMatrix();
 }
 
-export function removeObjects(object, scene, draggableList){
+/**
+ * Removes all children of the given object from the given list
+ * @param {Object3D} object the object to remove the children of
+ * @param {Array<Object3D>} list the list that the children should be removed from
+ */
+export function removeAllChildrenFromList(object, list){
     if (object.children.length > 0){
         for (let child of object.children) {
-            removeObjects(child, scene, draggableList);
+            removeAllChildrenFromList(child, list);
         }
-    }else {
-        let objectIndex = draggableList.indexOf(object);
-        if(objectIndex >= 0){
-            draggableList.splice(objectIndex, 1);
-        }
-      }
+    } else {
+        removeFromList(object, list);
+    }
 }
 
-export function shouldUnbundleButtonShow(currentlySelected, unbundleButton){
-    for (let i=0; i<currentlySelected.length; i++){
-        if (currentlySelected[i].type == "Group"){
-          unbundleButton.style.display = "block";
-          return;
+/**
+ * Recursively creates a list of all children of a given group, if they are sticks
+ * @param {Object3D} object the group that should be flattened
+ */
+export function flattenBundle(object) {
+    if (object.children.length > 0) {
+        let listOfSticks = []
+        for (let child of object.children) {
+            listOfSticks = listOfSticks.concat(flattenBundle(child));
         }
-      }
-      unbundleButton.style.display = "none";
+        return listOfSticks
+    } else {
+        if (object.geometry.type == "CylinderGeometry") { // only count sticks
+            return [object]
+        } else {
+            return []
+        }
+    }
 }
