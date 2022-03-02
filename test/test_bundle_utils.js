@@ -83,4 +83,45 @@ describe("BundleUtils", function() {
             expect(err).is.null;
         });
     });
+
+    describe("bundleSticks()", function() {
+        it("should not return null when given a list of sticks", function() {
+            app.sticksInABundle = 5;
+            let sticks = app.spawnSticks(5);
+            let group = BundleUtils.bundleSticks(app, sticks);
+
+            expect(group).to.not.be.null;
+        });
+
+        it("should return null when given an empty list", function() {
+            let group = BundleUtils.bundleSticks(app, []);
+            expect(group).to.be.null;
+        });
+
+        it ("should return null when not given a toBundle parameter", function() {
+            let group = BundleUtils.bundleSticks(app);
+            expect(group).to.be.null;
+        });
+
+        it("should not change the number of sticks in the scene", function() {
+            app.spawnSticks(10);
+            let sticksToBundle = app.spawnSticks(5);
+            app.sticksInABundle = 5;
+            
+            let sticksBefore = app.sticksInScene;
+            BundleUtils.bundleSticks(app, sticksToBundle);
+            let sticksAfter = app.sticksInScene;
+
+            expect(sticksBefore).to.equal(sticksAfter);
+        });
+
+        it("should return an object with type == 'Group' when given a list of sticks", function() {
+            app.sticksInABundle = 10;
+            let sticksToBundle = app.spawnSticks(10);
+            
+            let bundle = BundleUtils.bundleSticks(app, sticksToBundle);
+
+            expect(bundle.type).to.equal("Group");
+        });
+    })
 });

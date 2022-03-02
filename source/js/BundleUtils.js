@@ -39,7 +39,8 @@ export function canBundle(app, toBundle) {
  * @return {Group} the resulting bundle
  */
 export function bundleSticks(app, toBundle) {
-    if (toBundle.length == 0) return;
+    if (!toBundle) return null;
+    if (toBundle.length == 0) return null;
 
     // Setup bundle object
     let bundle = new Group();
