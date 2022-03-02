@@ -2,7 +2,7 @@ import { Object3D, Vector3 } from 'three';
 
 /**
  * extracts the stick colour from the url, if present
- * @returns the extracted colour
+ * @returns {string} the extracted colour
  */
 export function getColourFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -124,7 +124,8 @@ export function flattenObject(object) {
  * Checks if two vectors are nearly equal, i.e. is the distance between them < epsilon
  * @param {Vector3} v1 the left of the comparison
  * @param {Vector3} v2 the right of the comparison
- * @param {Number} epsilon the number the difference must be less than
+ * @param {number} epsilon the number the difference must be less than
+ * @return {boolean} whether or not v1 and v2 are approximately equal
  */
 export function vecsNearlyEqual(v1, v2, epsilon=0.0001) {
     let distance = v1.clone().sub(v2).length();
