@@ -7,24 +7,29 @@
  */
  export let positionLookup = {
     2: (r, x_0, y_0) => {return [
+        {x: x_0, y: y_0},
         {x: x_0 + 2*r, y: y_0}
     ]},
     3: (r, x_0, y_0) => {return [
+        {x: x_0, y: y_0},
         {x: x_0 + 2*r, y: y_0},
         {x: x_0 + r, y: y_0 + Math.sqrt(3) * r}
     ]},
     4: (r, x_0, y_0) => {return [
+        {x: x_0, y: y_0},
         {x: x_0 + 2*r, y: y_0},
         {x: x_0, y: y_0 + 2*r}, 
         {x: x_0 + 2*r, y: y_0 + 2*r}
     ]},
     5: (r, x_0, y_0) => {return [
+        {x: x_0, y: y_0},
         {x: x_0 + 2*r, y: y_0},
         {x: x_0 - 2*r*Math.cos(toRad(72)), y: y_0 + 2*r*Math.sin(toRad(72))},
         {x: x_0 + 2*r + 2*r*Math.cos(toRad(72)), y: y_0 + 2*r*Math.sin(toRad(72))},
         {x: x_0 + r, y: y_0 + r*Math.tan(toRad(72))}
     ]},
     6: (r, x_0, y_0) => {return [
+        {x: x_0, y: y_0},
         {x: x_0 + 4*r*Math.sin(toRad(36)), y: y_0},
         {x: x_0 + 2*r*Math.sin(toRad(36)), y: y_0 + 2*r*Math.cos(toRad(36))},
         {x: x_0 + 2*r*Math.sin(toRad(36)), y: y_0 + 2*r*Math.cos(toRad(36)) + 2*r},
@@ -32,6 +37,7 @@
         {x: x_0 - 2.3511*r*Math.cos(toRad(72)), y: y_0 + 2.3511*r*Math.sin(toRad(72))},
     ]},
     7: (r, x_0, y_0) => {return [
+        {x: x_0, y: y_0},
         {x: x_0, y: y_0 + 2*r}, 
         {x: x_0, y: y_0 - 2*r}, 
         {x: x_0 - Math.sqrt(3)*r, y: y_0 + r}, 
@@ -40,6 +46,7 @@
         {x: x_0 + Math.sqrt(3)*r, y: y_0 + r}
     ]},
     8: (r, x_0, y_0) => {return [
+        {x: x_0, y: y_0},
         {x: x_0 + 2*r, y: y_0}, 
         {x: x_0 - 2*r*Math.cos(toRad(360/7)), y: y_0 + 2*r*Math.sin(toRad(360/7))},
         {x: x_0 + 2*r + 2*r*Math.cos(toRad(360/7)), y: y_0 + 2*r*Math.sin(toRad(360/7))},
@@ -49,6 +56,7 @@
         {x: x_0 + r + 2*r*Math.cos(toRad(180/7)), y: y_0 + r/Math.tan(toRad(360/28)) - 2*r*Math.sin(toRad(180/7))}
     ]},
     9: (r, x_0, y_0) => {return [
+        {x: x_0, y: y_0},
         {x: x_0, y: y_0 + 2*r}, 
         {x: x_0, y: y_0 + 4*r}, 
         {x: x_0 + 2*r, y: y_0}, 
@@ -59,6 +67,7 @@
         {x: x_0 + 4*r, y: y_0 + 4*r}
     ]},
     10: (r, x_0, y_0) => {return [
+        {x: x_0, y: y_0},
         {x: x_0 + 2*r, y: y_0},
         {x: x_0 + r, y: y_0 + Math.sqrt(3)*r},
         {x: x_0 + r, y: y_0 + Math.sqrt(3)*r + 2*r},
@@ -72,6 +81,7 @@
         {x: x_0 + 2*r + 2*r*Math.cos(toRad(41.647)) + 2*r*Math.cos(toRad(83.294)) - 2*r*Math.cos(toRad(55.059)), y: y_0 + 2*r*Math.sin(toRad(41.647)) + 2*r*Math.sin(toRad(83.294)) + 2*r*Math.sin(toRad(55.059))},                   
     ]},
     11: (r, x_0, y_0) => {return [
+        {x: x_0, y: y_0},
         {x: x_0 + 4*r*Math.cos(toRad(20)), y: y_0},
         {x: x_0 + 2*r*Math.cos(toRad(20)), y: y_0 - 2*r*Math.sin(toRad(20)) + (r*Math.tan(toRad(70)) - 2*r*Math.sin(toRad(80))/Math.sin(toRad(50)) + r/Math.cos(toRad(70)) - Math.sqrt(3)*r)},
                     
@@ -88,6 +98,7 @@
         {x: x_0 + 2*r*Math.cos(toRad(20)) + r , y: y_0 - 2*r*Math.sin(toRad(20)) + (r*Math.tan(toRad(70)) - 2*r*Math.sin(toRad(80))/Math.sin(toRad(50)) + r/Math.cos(toRad(70))) + 2*r*Math.sin(toRad(80))/Math.sin(toRad(50))}
     ]},
     12: (r, x_0, y_0) => {return [
+        {x: x_0, y: y_0},
         {x: x_0 + 4*r*Math.sin(toRad(33.644)), y: y_0},
         {x: x_0 + 2*r*Math.sin(toRad(33.644)), y: y_0 + 2*r*Math.cos(toRad(33.644))},
         {x: x_0 + 2*r*Math.sin(toRad(33.644)) - 2*r*Math.cos(toRad(60)), y: y_0 + 2*r*Math.cos(toRad(33.644)) + 2*r*Math.sin(toRad(60))},

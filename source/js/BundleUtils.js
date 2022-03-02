@@ -6,6 +6,7 @@ import * as Utils from "./Utils";
 import * as LookupTable from "./BundleLookup";
 import { Mesh } from "three";
 import { MeshBasicMaterial } from "three";
+import { Vector3 } from "three";
 
 /**
  * Checks whether a given list of sticks would be able to be bundled
@@ -74,10 +75,10 @@ export function bundleSticks(app, toBundle) {
     bundle.attach(torus);
 
     // Move sticks into position
-    for (let i = 1; i < toBundle.length; i++) {
+    for (let i = 0; i < toBundle.length; i++) {
         toBundle[i].position.set(
-            positions[i-1].x,
-            positions[i-1].y,
+            positions[i].x,
+            positions[i].y,
             toBundle[0].position.z
         );
     }

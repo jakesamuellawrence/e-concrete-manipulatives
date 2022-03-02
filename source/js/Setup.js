@@ -23,7 +23,7 @@ import { Mesh } from "three";
  * @param {App} app the app to be initialised
  */
 export function initializeApp(app) {
-    app.setSticksInABundle(5);
+    app.setSticksInABundle(3);
     setupScene(app);
     setupRenderer(app);
     setupControls(app);
