@@ -197,6 +197,7 @@ export function setupEventCallbacks(app) {
         if (confirm("This will delete all selected sticks and bundles. Are you sure?")) {
             BundleUtils.removeSticks(app, app.selectControls.currentlySelected);
             app.selectControls.deselectAll();
+            app.updateSticksInTotal();
         }
     }
     document.getElementById("unbundleButton").onclick = function() {
