@@ -1,4 +1,5 @@
 import * as Converter from "number-to-words"
+import { Vector3 } from "three";
 import { Camera, Color, Object3D, Scene, WebGLRenderer } from "three";
 import { EffectComposer } from "three-outlinepass";
 import { RelativeDragControls } from "./RelativeDragControls";
@@ -33,6 +34,11 @@ export class App {
     sticksInABundle;
     /** @type {Color} */
     stickColour;
+    /** @type {Array<Vector3>} */
+    stickPositions = this.possibleStickPositions(45);
+    /** @type {Array<Number>} */
+    positionsTaken = this.defaultSticks(this.stickPositions.length);
+
 
     /**
      * updates the value of SticksInABundle and updates the relevant display if a browser context exists
@@ -90,13 +96,60 @@ export class App {
         stick.order = 0;
         stick.radius = this.stickSpawner.stickParameters.radius;
 
-        if (this.stickSpawner.position.x > 2) {
-            this.stickSpawner.position.setX(-1);
-            this.stickSpawner.position.setZ(this.stickSpawner.position.z - 0.5);
-        } else {
-            this.stickSpawner.position.setX(this.stickSpawner.position.x + 0.2);
+        for (let i=0; i < this.positionsTaken.length; i++){
+            if (this.positionsTaken[i] == 0) {
+                this.stickSpawner.position.setX(this.stickPositions[i].x);
+                this.stickSpawner.position.setY(this.stickPositions[i].y);
+                this.stickSpawner.position.setZ(this.stickPositions[i].z);
+                this.positionsTaken[i] = 1;
+                break;
+            }
         }
         return stick;
+    }
+
+    /** 
+     * 
+     * @param {number} n 
+     * @returns {Array<Object3D>}
+    */
+    possibleStickPositions(n) {
+        let arrayOfPositions = [];
+        let currentPos = new Vector3(-0.4, 0.3, 0.7);
+        let rows = 0;
+
+        for (let i = 0; i < n; i++) {
+            if (currentPos.x > 2.4) {
+                currentPos.setX(currentPos.x - 2.8 + (rows*4)/100);
+                currentPos.setZ(currentPos.z - 1.04 + (rows*8)/100);
+                rows = rows + 1;
+            }
+            else if(rows == 2 && currentPos.x > 1.4 && currentPos.z > 0.1) {
+                currentPos.setX(currentPos.x - 2.8 + (rows*10)/10);
+                currentPos.setZ(currentPos.z - 1.04 + (rows*20)/100);
+                rows = rows + 1;
+            }
+            else {
+                currentPos.setX(currentPos.x + 0.2);
+                currentPos.setZ(currentPos.z + 0.04);
+            }
+            arrayOfPositions.push(new Vector3(currentPos.x, currentPos.y, currentPos.z));
+            console.log(rows);
+            console.log(arrayOfPositions[i]);
+        }
+        return arrayOfPositions;
+    }
+
+    /**
+     * 
+     * @param {number} n 
+     */
+    defaultSticks(n) {
+        console.log(n);
+        let posTaken = [];
+        posTaken.length = n;
+        posTaken.fill(0);
+        return posTaken;
     }
 
     /**

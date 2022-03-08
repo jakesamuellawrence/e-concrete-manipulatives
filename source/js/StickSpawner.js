@@ -42,6 +42,7 @@ export class StickSpawner {
             this.stickParameters.defaultRotation.y, 
             this.stickParameters.defaultRotation.z
         ));
+        //console.log(stick.position);
         stick.userData.draggable = true;
         this.#scene.add(stick);
         return stick;

@@ -105,7 +105,7 @@ export function setupScene(app) {
     app.scene.add(bushSprite2);
 
     // Spawner
-    app.stickSpawner = new StickSpawner(app.scene, new Vector3(0, 0.2, 0.7), app.stickColour);
+    app.stickSpawner = new StickSpawner(app.scene, new Vector3(-0.4, 0.3, 0.7), app.stickColour);
 }
 
 /**
