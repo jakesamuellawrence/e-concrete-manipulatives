@@ -37,7 +37,7 @@ export class App {
     /** @type {Array<Vector3>} */
     stickPositions = this.possibleStickPositions(45);
     /** @type {Array<Number>} */
-    positionsTaken = this.defaultSticks(this.stickPositions.length);
+    positionsTaken = this.initialiseArrOfPosOccupied(this.stickPositions.length);
 
 
     /**
@@ -95,6 +95,7 @@ export class App {
         this.sticksInScene.push(stick);
         stick.order = 0;
         stick.radius = this.stickSpawner.stickParameters.radius;
+        let foundPos = false;
 
         for (let i=0; i < this.positionsTaken.length; i++){
             if (this.positionsTaken[i] == 0) {
@@ -102,9 +103,16 @@ export class App {
                 this.stickSpawner.position.setY(this.stickPositions[i].y);
                 this.stickSpawner.position.setZ(this.stickPositions[i].z);
                 this.positionsTaken[i] = 1;
+                foundPos = true;
                 break;
             }
         }
+
+        //If the whole screen has been populated with sticks then have to start positioning sticks in a random place on the screen
+        //if (! foundPos) {
+        //
+        //}
+
         return stick;
     }
 
@@ -114,38 +122,39 @@ export class App {
      * @returns {Array<Object3D>}
     */
     possibleStickPositions(n) {
-        let arrayOfPositions = [];
         let currentPos = new Vector3(-0.4, 0.3, 0.7);
-        let rows = 0;
+        let arrayOfPositions = [];
+        let rowCount = 1;
 
-        for (let i = 0; i < n; i++) {
-            if (currentPos.x > 2.4) {
-                currentPos.setX(currentPos.x - 2.8 + (rows*4)/100);
-                currentPos.setZ(currentPos.z - 1.04 + (rows*8)/100);
-                rows = rows + 1;
+        for (let i = 0; i <= n; i++) {
+            if (rowCount < 3 && currentPos.x > 2.4) {
+                currentPos.setX(currentPos.x - 3 + (rowCount) * 0.2);
+                currentPos.setZ(currentPos.z - 1.08 + (rowCount) * 0.04);
+                rowCount = rowCount + 1;
             }
-            else if(rows == 2 && currentPos.x > 1.4 && currentPos.z > 0.1) {
-                currentPos.setX(currentPos.x - 2.8 + (rows*10)/10);
-                currentPos.setZ(currentPos.z - 1.04 + (rows*20)/100);
-                rows = rows + 1;
+            else if (rowCount == 3 && currentPos.x > 1.4 && currentPos.z > 0.1) {
+                currentPos.setX(0.2);
+                currentPos.setZ(-0.62);
             }
             else {
+                //this is the spacing b/w consecutive sticks
                 currentPos.setX(currentPos.x + 0.2);
+                //this is the slope
                 currentPos.setZ(currentPos.z + 0.04);
             }
-            arrayOfPositions.push(new Vector3(currentPos.x, currentPos.y, currentPos.z));
-            console.log(rows);
-            console.log(arrayOfPositions[i]);
+            arrayOfPositions[i] = new Vector3(currentPos.x, currentPos.y, currentPos.z);
+            currentPos = arrayOfPositions[i].clone();
         }
+        console.log(arrayOfPositions);
         return arrayOfPositions;
     }
 
     /**
+     * This is just returning an array filled with n 0s
      * 
      * @param {number} n 
      */
-    defaultSticks(n) {
-        console.log(n);
+    initialiseArrOfPosOccupied(n) {
         let posTaken = [];
         posTaken.length = n;
         posTaken.fill(0);

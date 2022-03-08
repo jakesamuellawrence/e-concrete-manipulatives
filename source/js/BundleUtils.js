@@ -99,9 +99,23 @@ export function bundleSticks(app, toBundle) {
  */
 export function removeSticks(app, toRemove) {
     for (let object of toRemove) {
+        //have to add code here so that if the stick(s) removed were in the initial setup position 
+        //then those setup positions have to be made available again
+        // for (const stickSelected of toRemove) {
+        //     console.log(stickSelected);
+        //     console.log("AAAA");
+        //     for (let j=0; j < app.stickPositions.length; j++) {
+        //         if (stickSelected.distanceTo(app.stickPositions[j]) == 0) {
+        //             app.positionsTaken[j] = 0;
+        //             console.log("YES");
+        //         }
+        //     }
+        // }
+        // console.log(app.positionsTaken);
         Utils.removeAllChildrenFromList(object, app.sticksInScene);
         app.scene.remove(object);
     }
+
 }
 
 /**
