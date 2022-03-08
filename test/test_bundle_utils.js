@@ -123,5 +123,71 @@ describe("BundleUtils", function() {
 
             expect(bundle.type).to.equal("Group");
         });
-    })
+    });
+
+    describe("removeSticks()", function() {
+        it("should decrease the number of sticks in the scene by the size of the list given when given just sticks", function() {
+            app.spawnSticks(10);
+            let sticksToRemove = app.spawnSticks(5);
+
+            let sticksBefore = app.sticksInScene.length;
+            BundleUtils.removeSticks(app, sticksToRemove);
+            let sticksAfter = app.sticksInScene.length;
+
+            expect(sticksAfter).to.equal(sticksBefore - 5);
+        });
+
+        it("should decrease the number of sticks in the scene by the size of the bundle when given a bundle", function() {
+            app.spawnSticks(13);
+            let sticksToBundle = app.spawnSticks(12);
+            app.sticksInABundle = 12;
+            let bundle = BundleUtils.bundleSticks(app, sticksToBundle);
+
+            let sticksBefore = app.sticksInScene.length;
+            BundleUtils.removeSticks(app, [bundle]);
+            let sticksAfter = app.sticksInScene.length;
+
+            expect(sticksAfter).to.equal(sticksBefore - 12);
+        })
+    });
+
+    describe("unbundleSticks", function() {
+        it("should not change the number of sticks in the scene when given loose sticks", function() {
+            app.spawnSticks(2);
+            let looseSticks = app.spawnSticks(8);
+
+            let sticksBefore = app.sticksInScene.length;
+            BundleUtils.unbundleSticks(app, looseSticks);
+            let sticksAfter = app.sticksInScene.length;
+
+            expect(sticksBefore).to.equal(sticksAfter);
+        });
+
+        it("should not change the number of sticks in the scene when given a bundle", function() {
+            app.spawnSticks(2);
+            let sticksToBundle = app.spawnSticks(8);
+            app.sticksInABundle = 8;
+            let bundle = BundleUtils.bundleSticks(app, sticksToBundle);
+
+            let sticksBefore = app.sticksInScene.length;
+            BundleUtils.unbundleSticks(app, [bundle]);
+            let sticksAfter = app.sticksInScene.length;
+
+            expect(sticksBefore).to.equal(sticksAfter);
+        });
+
+        it("should not change the number of sticks in the scene when given a bundle and loose sticks", function() {
+            app.spawnSticks(2);
+            let sticksToBundle = app.spawnSticks(8);
+            app.sticksInABundle = 8;
+            let bundle = BundleUtils.bundleSticks(app, sticksToBundle);
+            let extraSticks = app.spawnSticks(10);
+
+            let sticksBefore = app.sticksInScene.length;
+            BundleUtils.unbundleSticks(app, [bundle].concat(extraSticks));
+            let sticksAfter = app.sticksInScene.length;
+
+            expect(sticksBefore).to.equal(sticksAfter);
+        });
+    });
 });
