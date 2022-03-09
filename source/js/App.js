@@ -1,4 +1,6 @@
 import * as Converter from "number-to-words"
+import * as Utils from "./utils";
+import * as BundleUtils from "./BundleUtils";
 import { Camera, Color, Object3D, Scene, WebGLRenderer } from "three";
 import { EffectComposer } from "three-outlinepass";
 import { RelativeDragControls } from "./RelativeDragControls";
@@ -119,6 +121,11 @@ export class App {
      * updates the sticksInABundle display
      */
     increaseSticksInABundle() {
+        if (this.#areThereBundles()){
+            if (confirm("This will unbundle the existing bundles. Are you sure?")) {
+                this.#unbundleExistingBundles();
+            }
+        }
         this.sticksInABundle = Math.min(this.sticksInABundle+1, 12);
     }
 
@@ -127,7 +134,33 @@ export class App {
      * and updates the sticks in a bundle display
      */
     decreaseSticksInABundle() {
+        if (this.#areThereBundles()){
+            if (confirm("This will unbundle the existing bundles. Are you sure?")) {
+                this.#unbundleExistingBundles();
+            }
+        }
         this.sticksInABundle = Math.max(this.sticksInABundle-1, 2);
+    }
+
+    #unbundleExistingBundles() {
+        let toUnbundle = [];
+        for (let stick of this.sticksInScene) {
+            let biggestGroup = Utils.getLargestGroup(stick);
+            if (biggestGroup != stick && !toUnbundle.includes(biggestGroup)) {
+                toUnbundle.push(biggestGroup);
+            }
+        }
+        console.log(toUnbundle);
+        BundleUtils.unbundleSticks(this, toUnbundle);
+    }
+
+    #areThereBundles() {
+        for(let stick of this.sticksInScene) {
+            if (Utils.getLargestGroup(stick).type == "Group") {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
