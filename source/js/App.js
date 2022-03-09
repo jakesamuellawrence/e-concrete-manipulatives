@@ -121,11 +121,6 @@ export class App {
      * updates the sticksInABundle display
      */
     increaseSticksInABundle() {
-        if (this.#areThereBundles()){
-            if (confirm("This will unbundle the existing bundles. Are you sure?")) {
-                this.#unbundleExistingBundles();
-            }
-        }
         this.sticksInABundle = Math.min(this.sticksInABundle+1, 12);
     }
 
@@ -134,15 +129,10 @@ export class App {
      * and updates the sticks in a bundle display
      */
     decreaseSticksInABundle() {
-        if (this.#areThereBundles()){
-            if (confirm("This will unbundle the existing bundles. Are you sure?")) {
-                this.#unbundleExistingBundles();
-            }
-        }
         this.sticksInABundle = Math.max(this.sticksInABundle-1, 2);
     }
 
-    #unbundleExistingBundles() {
+    unbundleExistingBundles() {
         let toUnbundle = [];
         for (let stick of this.sticksInScene) {
             let biggestGroup = Utils.getLargestGroup(stick);
@@ -154,7 +144,7 @@ export class App {
         BundleUtils.unbundleSticks(this, toUnbundle);
     }
 
-    #areThereBundles() {
+    areThereBundles() {
         for(let stick of this.sticksInScene) {
             if (Utils.getLargestGroup(stick).type == "Group") {
                 return true;

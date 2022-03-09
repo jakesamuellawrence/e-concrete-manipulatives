@@ -177,11 +177,25 @@ export function setupEventCallbacks(app) {
         app.updateSticksInTotal();
     };
     document.getElementById("moreSticksInABundle").onclick = function() {
-        app.increaseSticksInABundle();
+        if (app.areThereBundles()) {
+            if (confirm("This will unbundle the existing bundles. Are you sure?")) {
+                app.unbundleExistingBundles();
+                app.increaseSticksInABundle();
+            }
+        } else {
+            app.increaseSticksInABundle();
+        }
         app.updateSticksInBundleDisplay();
     };
     document.getElementById("fewerSticksInABundle").onclick = function() {
-        app.decreaseSticksInABundle();
+        if (app.areThereBundles()) {
+            if (confirm("This will unbundle the existing bundles. Are you sure?")) {
+                app.unbundleExistingBundles();
+                app.increaseSticksInABundle();
+            }
+        } else {
+            app.decreaseSticksInABundle();
+        }
         app.updateSticksInBundleDisplay();
     };
     document.getElementById("bundleButton").onclick = function() {
