@@ -87,7 +87,10 @@ export class App {
     }
 
     /**
-     * creates a stick and then moves the stickSpawner to it's next position
+     * Spawns a stick into the scene and returns it
+     * 
+     * Checks all the stick spawn locations in possibleStickPositions to see if there's space spawn it.
+     * If there isn't space at any location, spawns the stick at a random one
      * @returns {Object3D} the created stick
      */
     spawnStick() {
@@ -126,9 +129,10 @@ export class App {
     }
 
     /** 
+     * Sets up the list of potential stick spawn locations and returns it
      * 
-     * @param {number} n 
-     * @returns {Array<Object3D>}
+     * @param {number} n the number of locations to generate
+     * @returns {Array<Object3D>} the generated list
     */
     calculatePossibleStickPositions(n) {
         let currentPos = new Vector3(-0.4, 0.3, 0.7);
