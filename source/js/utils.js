@@ -131,3 +131,24 @@ export function vecsNearlyEqual(v1, v2, epsilon=0.0001) {
     let distance = v1.clone().sub(v2).length();
     return distance < epsilon;
 }
+
+/**
+ * returns a random element from the given array
+ * @param {Array<T>} array list from which to pick a random element
+ * @returns {T} the randomly chosen element
+ */
+export function randomElementFromArray(array) {
+    return array[Math.floor(Math.random() * array.length)]
+}
+
+/**
+ * Generates a vector pointing in a random direction with length randomly chosen between the given range
+ * @param {number} minLength the minimum length the vector should be
+ * @param {number} maxLength the maxmimum length the vector should be
+ * @returns {Vector3} the generated vector
+ */
+export function randomVector(minLength, maxLength) {
+    let vec = new Vector3(Math.random()-0.5, Math.random-0.5, Math.random()-0.5).normalize();
+    let randLength = Math.random() * (maxLength - minLength) + minLength;
+    return vec.multiplyScalar(randLength);
+}

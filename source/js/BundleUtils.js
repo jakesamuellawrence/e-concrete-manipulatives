@@ -102,6 +102,7 @@ export function removeSticks(app, toRemove) {
         Utils.removeAllChildrenFromList(object, app.sticksInScene);
         app.scene.remove(object);
     }
+
 }
 
 /**
