@@ -1,10 +1,12 @@
 import * as Converter from "number-to-words"
+import * as Utils from "./Utils";
 import { Vector3 } from "three";
 import { Camera, Color, Object3D, Scene, WebGLRenderer } from "three";
 import { EffectComposer } from "three-outlinepass";
 import { RelativeDragControls } from "./RelativeDragControls";
 import { SelectionControls } from "./SelectionControls";
 import { StickSpawner } from "./StickSpawner";
+import { Box3 } from "three";
 
 /**
  * Class that represents the app context.
@@ -35,9 +37,7 @@ export class App {
     /** @type {Color} */
     stickColour;
     /** @type {Array<Vector3>} */
-    stickPositions = this.possibleStickPositions(45);
-    /** @type {Array<Number>} */
-    positionsTaken = this.initialiseArrOfPosOccupied(this.stickPositions.length);
+    possibleStickPositions = this.calculatePossibleStickPositions(45);
 
 
     /**
@@ -91,27 +91,36 @@ export class App {
      * @returns {Object3D} the created stick
      */
     spawnStick() {
+        // Create stick
         const stick = this.stickSpawner.spawn();
         this.sticksInScene.push(stick);
         stick.order = 0;
         stick.radius = this.stickSpawner.stickParameters.radius;
-        let foundPos = false;
+        
+        // Check positions to see if there's space for it
+        let foundPos = true; 
+        for (let positionToCheck of this.possibleStickPositions) {
+            foundPos = true; // assume the stick is in the right place unless proven otherwise
+            stick.position.copy(positionToCheck);
+            let toSpawnBounds = new Box3().setFromObject(stick);
 
-        for (let i=0; i < this.positionsTaken.length; i++){
-            if (this.positionsTaken[i] == 0) {
-                this.stickSpawner.position.setX(this.stickPositions[i].x);
-                this.stickSpawner.position.setY(this.stickPositions[i].y);
-                this.stickSpawner.position.setZ(this.stickPositions[i].z);
-                this.positionsTaken[i] = 1;
-                foundPos = true;
-                break;
+            for (let otherStick of this.sticksInScene) {
+                let otherBounds = new Box3().setFromObject(otherStick);
+                if (otherStick != stick && toSpawnBounds.intersectsBox(otherBounds)) {
+                    foundPos = false;
+                    break;
+                }
             }
+
+            if (foundPos) break;
         }
 
-        //If the whole screen has been populated with sticks then have to start positioning sticks in a random place on the screen
-        //if (! foundPos) {
-        //
-        //}
+        // If no spawn position had space, pick a random one and add a small random offset
+        if (!foundPos) {
+            let position = Utils.randomElementFromArray(this.possibleStickPositions).clone();
+            let offset = Utils.randomVector(0, 0.5).setY(0);
+            stick.position.copy(position.add(offset));
+        }
 
         return stick;
     }
@@ -121,7 +130,7 @@ export class App {
      * @param {number} n 
      * @returns {Array<Object3D>}
     */
-    possibleStickPositions(n) {
+    calculatePossibleStickPositions(n) {
         let currentPos = new Vector3(-0.4, 0.3, 0.7);
         let arrayOfPositions = [];
         let rowCount = 1;
@@ -145,20 +154,7 @@ export class App {
             arrayOfPositions[i] = new Vector3(currentPos.x, currentPos.y, currentPos.z);
             currentPos = arrayOfPositions[i].clone();
         }
-        console.log(arrayOfPositions);
         return arrayOfPositions;
-    }
-
-    /**
-     * This is just returning an array filled with n 0s
-     * 
-     * @param {number} n 
-     */
-    initialiseArrOfPosOccupied(n) {
-        let posTaken = [];
-        posTaken.length = n;
-        posTaken.fill(0);
-        return posTaken;
     }
 
     /**
