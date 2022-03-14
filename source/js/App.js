@@ -193,6 +193,10 @@ export class App {
         this.sticksInABundle = Math.max(this.sticksInABundle-1, 2);
     }
 
+    /**
+     * Goes through the sticks in the scene and finds if any are part of a bundle.
+     * If they are, unbundles them.
+     */
     unbundleExistingBundles() {
         let toUnbundle = [];
         for (let stick of this.sticksInScene) {
@@ -201,10 +205,13 @@ export class App {
                 toUnbundle.push(biggestGroup);
             }
         }
-        console.log(toUnbundle);
         BundleUtils.unbundleSticks(this, toUnbundle);
     }
 
+    /**
+     * Checks whether any of the sticks in the scene are currently part of a bundle
+     * @returns true if there are bundles in the scene, or false otherwise
+     */
     areThereBundles() {
         for(let stick of this.sticksInScene) {
             if (Utils.getLargestGroup(stick).type == "Group") {
