@@ -47,9 +47,6 @@ export class App {
      */
     setSticksInABundle(value) {
         this.sticksInABundle = value;
-        if (document) {
-            document.getElementById("sticksInABundle").innerText = Converter.toWords(this.sticksInABundle);
-        }
     }
 
     /**
@@ -60,9 +57,6 @@ export class App {
     setStickColour(colour) {
         this.stickColour = colour;
         this.stickSpawner.stickParameters.colour = colour;
-        if (document) {
-            document.getElementById("colourPicker").value = this.stickColour;
-        }
     }
 
     /**

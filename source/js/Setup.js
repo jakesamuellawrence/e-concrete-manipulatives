@@ -31,6 +31,7 @@ export function initializeApp(app) {
     app.setStickColour(Utils.getColourFromURL());
     app.spawnSticks(1);
     app.updateSticksInTotal();
+    app.updateSticksInBundleDisplay();
 }
 
 /**
@@ -159,7 +160,10 @@ export function setupControls(app) {
 export function setupEventCallbacks(app) {
     document.getElementById("colourPicker").addEventListener(
         "input", 
-        function(event) {app.setStickColour(event.target.value);}, 
+        function(event) {
+            app.setStickColour(event.target.value);
+            document.getElementById("colourPicker").value = app.stickColour;
+        }, 
         false
     );
 
