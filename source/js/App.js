@@ -134,7 +134,7 @@ export class App {
         let arrayOfPositions = [];
         let rowCount = 1;
 
-        for (let i = 0; i <= n; i++) {
+        for (let i = 0; i < n; i++) {
             if (rowCount < 3 && currentPos.x > 2.4) {
                 currentPos.setX(currentPos.x - 3 + (rowCount) * 0.2);
                 currentPos.setZ(currentPos.z - 1.08 + (rowCount) * 0.04);
