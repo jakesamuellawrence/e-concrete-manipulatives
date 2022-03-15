@@ -19,7 +19,7 @@ build-job: # build and deploy with surge
         - docker
     stage: deploy
     rules:
-        - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "deployment" || CI_COMMIT_BRANCH == "deployment"'
+        - if: '$CI_COMMIT_BRANCH == "deployment"'
     before_script:
         - npm install # instal any necessary dependencies
     script:
