@@ -1,0 +1,28 @@
+image: node
+
+stages:
+  - test
+  - deploy
+
+test-job:
+    tags:
+        - docker
+    stage: test
+    before_script:
+        - npm install
+    script:
+        - npm run test
+
+
+build-job: # build and deploy with surge
+    tags: 
+        - docker
+    stage: deploy
+    rules:
+        - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "deployment"'
+    before_script:
+        - npm install # instal any necessary dependencies
+    script:
+        - npm run build # build dist folder
+        - node_modules/.bin/surge dist e-concrete-manipulatives.surge.sh # host with surge
+    
