@@ -12,9 +12,13 @@ https://nodejs.org/en/download/
 ### Installing
 Clone repository and cd into directory. \
 Install the required packages using npm:
-```npm install```
+```
+npm install
+```
 Run the server on local machine:
-```npm run dev```
+```
+npm run dev
+```
 The site will be running at http://localhost:3000/.
 
 ### Live Site
@@ -27,7 +31,9 @@ The app is bundled using Vite and Vite's development server is used for local te
 
 ## Running Tests
 Unit tests can be run with the command
-```npm run test```
+```
+npm run test
+```
 
 ## Deployment
 Deployment is done using Surge, and is integrated into the CI/CD pipeline.
