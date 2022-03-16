@@ -1,8 +1,8 @@
 # E-Concrete Manipulatives
 > A customisable tool/website for teaching children about number bases.
 
-one to two paragraph statement about the product and what it does. what it is, how does it work, who uses it, what’s its goal, how can you benefit from using it.
-SCREENSHOT
+E-Concrete Manipulatives is a web-based interactive environment in which sticks can be moved around and bundled together. These bundles can then also be moved around and bundled with other bundles. The intention of this environment is for it to be used in classrooms to help teach people about place value in numbers. Students would be using the app in the classroom, following along with a lesson plan lead by a teacher, and answering questions as they go.
+![](screenshot.png)
 
 ## Getting Started
 ### Prerequisties 
@@ -12,23 +12,26 @@ https://nodejs.org/en/download/
 ### Installing
 Clone repository and cd into directory. \
 Install the required packages using npm:
-```
-npm install
-```
+```npm install```
 Run the server on local machine:
-```
-npm run dev
-```
+```npm run dev```
 The site will be running at http://localhost:3000/.
 
+### Live Site
+Alternatively, if you just want to use the application, it is live at
+http://e-concrete-manipulatives.surge.sh/
+
 # How it works
-Need to have NodeJS installed as it uses its package manager npm. It uses Vite so every time you save a change the currently running local server will automatically update. 
+NodeJS is used to run NPM to manage dependencies.
+The app is bundled using Vite and Vite's development server is used for local testing with hot-loading whenever a change is made
 
 ## Running Tests
-Explaining how to run the automated tests, split up for different types of test etc. 
+Unit tests can be run with the command
+```npm run test```
 
 ## Deployment
-However Jake got surge to work.
+Deployment is done using Surge, and is integrated into the CI/CD pipeline.
+Whenever changes are merged / pushed to branch deployment, surge is used to update the live site.
 
 ## Usage
 For examples and usage please refer to the Wiki.
