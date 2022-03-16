@@ -2,22 +2,22 @@ import { Object3D, Vector3 } from 'three';
 
 /**
  * extracts the stick colour from the url, if present
+ * if not, uses default colour
  * @returns {string} the extracted colour
  */
 export function getColourFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
     if(/^[0-9A-F]{6}$/i.test(urlParams.getAll('c'))){ //if c parameter valid hex colour
-        return "#" + urlParams.getAll('c');
-        
+        return "#" + urlParams.getAll('c');        
     } else {
-        return "#8C5D41";
+        return "#8C5D41"; //default colour
     }
 }
 
 /**
  * Constructs a link to preserve settings
- * 
  * @param {string} stickColour The hex string representing the set colour
+ * @returns {string} The link containing the given colour
  */
 export function constructLink(stickColour){
     return window.location.origin + "?c=" + stickColour.replace("#",'');
@@ -41,7 +41,8 @@ export function constructLink(stickColour){
 };
 
 /**
- * Sets the highlight colour of all the children of the given object
+ * Sets the highlight colour of given object and all it's children
+ * to given colour, if they have a highlight colour
  * 
  * @param {Object3D} root the root object to set the emmissive of
  * @param {Color} value the color to set the emmissive to
@@ -70,7 +71,7 @@ export function removeFromList(element, list) {
 }
 
 /**
- * Removes all children of the given object from the given list
+ * Recursively removes all leaf children of the given object from the given list
  * @param {Object3D} object the object to remove the children of
  * @param {Array<Object3D>} list the list that the children should be removed from
  */
@@ -110,7 +111,7 @@ export function flattenBundle(object) {
  * Recursively flattens the whole hierarchy of object children and returns it as a list, 
  * including the parent and any intermediary parents
  * @param {Object3D} object the object to flatten
- * @return {Array<Object3D>} the list of all children
+ * @return {Array<Object3D>} the list of the object and all children
  */
 export function flattenObject(object) {
     let listOfObjects = [object]
