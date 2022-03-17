@@ -1,7 +1,7 @@
 # E-Concrete Manipulatives
-> A customisable tool/website for teaching children about number bases.
+> A customisable and interactive tool for teaching children about number bases.
 
-E-Concrete Manipulatives is a web-based interactive environment in which sticks can be moved around and bundled together. These bundles can then also be moved around and bundled with other bundles. The intention of this environment is for it to be used in classrooms to help teach people about place value in numbers. Students would be using the app in the classroom, following along with a lesson plan lead by a teacher, and answering questions as they go.
+Designed to be easy and engaging for children to use, E-Concrete-Manipulatives is a browser based program where users can create, move, select, and bundle sticks into groups of a set amount. Its aim is to teach children about the concept of number bases and deepen their understanding of them. Can be used as an individual activity in the classroom, or as a tool for trainee teachers in their preparation. Built to be useful to a range of children, the number of sticks in a bundle can be increased or decreased to show different number bases. Can be run locally using a development server, or accessed through the live site http://e-concrete-manipulatives.surge.sh/
 ![](screenshot.png)
 
 ## Getting Started
