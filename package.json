@@ -22,6 +22,7 @@
     "number-to-words": "^1.2.4",
     "three": "^0.133.1",
     "three-outlinepass": "^1.2.0",
+    "three-plain-animator": "^1.0.6",
     "three-shaders": "^1.0.16"
   }
 }

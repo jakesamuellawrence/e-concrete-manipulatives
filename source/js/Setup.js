@@ -6,6 +6,14 @@ import FXAAShader from "three-shaders/shaders/FXAAShader";
 import {App} from "./App"
 import * as Utils from "./Utils";
 import darkShrubTexture from "../../resources/images/bg_shrub_dark.svg";
+import lightShrubTexture from "../../resources/images/bg_shrub_light.svg";
+import largeShrub1Texture from "../../resources/images/lg_shrub1.svg";
+import largeShrub2Texture from "../../resources/images/lg_shrub2.svg";
+import smallSpikeTexture from "../../resources/images/sm_shrub1.svg";
+import smallRoundTexture from "../../resources/images/sm_shrub2.svg";
+import beaverTexture from "../../resources/images/beaver.gif";
+import beaverSpritesheet from "../../resources/images/beaver_spritesheet.png";
+import { PlainAnimator } from "three-plain-animator/lib/plain-animator";
 import { SpriteMaterial } from "three";
 import { Sprite } from "three";
 import { StickSpawner } from "./StickSpawner";
@@ -95,15 +103,86 @@ export function setupScene(app) {
         map: darkBushMap
     });
     const bushSprite1 = new Sprite(darkShrubMaterial);
-    bushSprite1.center.set(0.5, 0);
-    bushSprite1.scale.set(0.6, 0.5, 0.6);
-    bushSprite1.position.set(-1.6, -0.25, 0);
+    bushSprite1.center.set(0.5,0)
+    bushSprite1.scale.set(0.75,0.75,0.6);
+    bushSprite1.position.set(-1.9,-0.61,0);
     app.scene.add(bushSprite1);
+
     const bushSprite2 = new Sprite(darkShrubMaterial);
-    bushSprite2.center.copy(bushSprite1.center);
-    bushSprite2.scale.copy(bushSprite1.scale);
-    bushSprite2.position.set(-0.6, -0.08, -1.2);
+    bushSprite2.center.set(0.5,0)
+    bushSprite2.scale.set(0.75,0.75,0.6);
+    bushSprite2.position.set(-0.6,-0.31,-1.2);
     app.scene.add(bushSprite2);
+
+    const bushSprite3 = new Sprite(darkShrubMaterial);
+    bushSprite3.center.set(1.15,0)
+    bushSprite3.scale.set(0.75,0.75,0.6);
+    bushSprite3.position.set(-1.1,-0.51,-1.2);
+    app.scene.add(bushSprite3);
+
+    const lightBushMap = textureLoader.load(lightShrubTexture);
+    const lightShrubMaterial = new SpriteMaterial( { map: lightBushMap } );
+
+    const bushSprite4 = new Sprite(lightShrubMaterial);
+    bushSprite4.center.set(1.05,0)
+    bushSprite4.scale.set(0.75, 0.75,0.6);
+    bushSprite4.position.set(-0.6,-0.32,-1.2);
+    app.scene.add(bushSprite4);
+
+    const bushSprite5 = new Sprite(lightShrubMaterial);
+    bushSprite5.center.set(1.95,0)
+    bushSprite5.scale.set(0.75, 0.75,0.6);
+    bushSprite5.position.set(-0.6,-0.32,-1.2);
+    app.scene.add(bushSprite5);
+
+    const largeBush1Map = textureLoader.load(largeShrub1Texture);
+    const largeShrub1Material = new SpriteMaterial( { map: largeBush1Map } );
+   
+    const bushSprite6 = new Sprite(largeShrub1Material);
+    bushSprite6.center.set(0.7,0)
+    bushSprite6.scale.set(0.8, 0.7,0.6);
+    bushSprite6.position.set(-0.55,-0.25,-1.13);
+    app.scene.add(bushSprite6);
+
+    const largeBush2Map = textureLoader.load(largeShrub2Texture);
+    const largeShrub2Material = new SpriteMaterial( { map: largeBush2Map } );
+
+    const bushSprite7 = new Sprite(largeShrub2Material);
+    bushSprite7.center.set(2.2,0)
+    bushSprite7.scale.set(0.8, 0.7,0.6);
+    bushSprite7.position.set(-0.55,-0.25,-1.13);
+    app.scene.add(bushSprite7);
+
+    const smallSpikeMap = textureLoader.load(smallSpikeTexture);
+    const smallSpikeMaterial = new SpriteMaterial( { map: smallSpikeMap } );
+
+    const bushSprite8 = new Sprite(smallSpikeMaterial);
+    bushSprite8.center.set(0.9,-0.45)
+    bushSprite8.scale.set(0.47, 0.47,0.9);
+    bushSprite8.position.set(-0.3,-0.32,-1.3);
+    app.scene.add(bushSprite8);
+
+    const smallRoundMap = textureLoader.load(smallRoundTexture);
+    const smallRoundMaterial = new SpriteMaterial( { map: smallRoundMap } );
+
+    const bushSprite9 = new Sprite(smallRoundMaterial);
+    bushSprite9.center.set(4.6,-0.45)
+    bushSprite9.scale.set(0.45, 0.45, 0.9);
+    bushSprite9.position.set(-0.3,-0.25,-1.3);
+    app.scene.add(bushSprite9);
+
+    const beaverSpritesheetTexture = textureLoader.load(beaverSpritesheet);
+    // 4 magic numbers are number of frames horizontally in texture, num frames vertically, total frames, desired framerate
+    const beaverAnimator = new PlainAnimator(beaverSpritesheetTexture, 5, 16, 79, 12);
+    const beaverMap = beaverAnimator.init();
+    const beaverMaterial = new SpriteMaterial({map: beaverMap});
+    const beaverSprite = new Sprite(beaverMaterial);
+    beaverSprite.center.set(0, -0.7);
+    beaverSprite.scale.set(0.4, 0.4, 0.5);
+    beaverSprite.position.set(-0.1, 0, 0.55);
+    app.scene.add(beaverSprite);
+    app.beaverAnimator = beaverAnimator;
+
 
     // Spawner
     app.stickSpawner = new StickSpawner(app.scene, app.stickColour, new Vector3(-0.4, 0.3, 0.7));

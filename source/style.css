@@ -8,6 +8,11 @@
   src:url(/resources/fonts/Comic_Neue/ComicNeue-Regular.ttf);
 }
 
+@font-face {
+  font-family: Comication;
+  src:url(/resources/fonts/Comication.ttf);
+}
+
 #canvas_container {
   position: fixed;
   width: 100vw;
@@ -21,22 +26,12 @@
   background-color: darkgreen;
 }
 
-/* nav table */
-.nav{
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
+.beaver{
+  width: 12vw;
+  padding-top:3.5vw;
+  padding-left:11.3vw;
 }
 
-.nav_item{
-  float: left;
-  display: block;
-  padding: 14px 16px;
-  text-decoration: none;
-  line-height: 150%;
-  font-family: Helvetica, Arial, sans-serif;
-}
 
 .infoBox{
   position: absolute;
@@ -44,8 +39,9 @@
   background-color: #F3DC87;
   padding: 1vw;
   border-style: solid;
-  border-color: #F52E2C;
-  border-radius: 1vw;
+  border-color:#BB3B17;
+  border-width: 0.3vw;
+  border-radius: 1.2vw;
   font-family: ComicNeue;
   text-align: center;
   font-size: 150%;
@@ -62,6 +58,11 @@
   font-family: ComicNeue;
   text-align: center;
   font-size: 150%;
+  pointer-events: none;
+}
+
+.buttonBox {
+  pointer-events: auto;
 }
 
 .bottomLeft{
@@ -88,32 +89,39 @@
   position: absolute;
   background-color: #F3DC87;
   padding: 0;
-  margin: 0;
+  margin:0;
   border-style: solid;
-  border-color: #F52E2C;
+  border-color: #bb2d06;
   border-radius: 0.5vw;
-  font-family: ComicNeue;
-  text-align: center;
+  font-family: ComicNeue-Bold;
   font-size: 150%;
-  width: 3vw;
+  text-align: center;
+  line-height: 1.8vw;;
+  font-size: 220%;
+  width: 2.2vw;
+  height: 2.2vw;
+  box-shadow: #bb2d06 0.2vw 0.2vw 0 0;
   cursor: pointer;
   -webkit-user-select: none; /* Safari */        
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
+
 }
 
 .buttonBox{
   /* position: absolute; */
-  background-color: #F3DC87;
+  background-color: #ffa149;
   padding: 0;
   margin: 10px;
   border-style: solid;
-  border-color: #F52E2C;
-  border-radius: 0.5vw;
-  font-family: ComicNeue;
+  border-color: #bb2d06;
+  border-radius: 1.8vw;
+  font-family: ComicNeue-Bold;
+  box-shadow: #bb2d06 0.2vw 0.2vw 0 0;
   text-align: center;
   font-size: 150%;
+  padding: 0.2vw;
   /* width: 3vw; */
   cursor: pointer;
   -webkit-user-select: none; /* Safari */        
@@ -121,6 +129,82 @@
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
 }
+
+.buttonbox:hover {
+  background-color:#F5DE89;
+}
+
+.buttonbox:active {
+  box-shadow:  #BB3B17 2px 2px 0 0;
+  transform: translate(2px, 2px);
+}
+
+
+/* Settings button */
+.dropbtn {
+  background-color: #BB3B17;
+  color: #F5DE89;
+  padding: 0.5vw;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display:flex;
+}
+
+.dropdown {
+  position: relative;
+  float:right;
+  margin:0.01vw;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  border-radius:7%;
+  background-color:#F5DE89;
+  min-width: 20.3vw;
+  box-shadow: 0px 8px 10px 0px rgba(0,0,0,0.01);
+  z-index: 1;
+}
+
+.dropdown-content p {
+  font-family: ComicNeue-Bold;
+  text-decoration: none;
+  display: block;
+  margin: 0.6vw;
+  font-size: 1.2vw;
+}
+
+.dropdown-content h1{
+  color:#a82400;
+  border-bottom:none; 
+  font-family: Comication;
+  font-size: 3.2vw; 
+  text-decoration: none;
+  display: block;
+  margin: 0.6vw;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.share{
+  background-color:#fd8617;
+  border-radius: 30%;
+  border:none;
+  text-align: center;
+  padding:0.3vw 0.3vw 0.1vw 0.3vw;
+}
+
+.share:hover {
+  background-color: #ffa600;
+}
+
+
+
+
 
 .right{
   left: -4.5vw;
