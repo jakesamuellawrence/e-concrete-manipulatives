@@ -11,6 +11,9 @@ import largeShrub1Texture from "../../resources/images/lg_shrub1.svg";
 import largeShrub2Texture from "../../resources/images/lg_shrub2.svg";
 import smallSpikeTexture from "../../resources/images/sm_shrub1.svg";
 import smallRoundTexture from "../../resources/images/sm_shrub2.svg";
+import beaverTexture from "../../resources/images/beaver.gif";
+import beaverSpritesheet from "../../resources/images/beaver_spritesheet.png";
+import { PlainAnimator } from "three-plain-animator/lib/plain-animator";
 import { SpriteMaterial } from "three";
 import { Sprite } from "three";
 import { StickSpawner } from "./StickSpawner";
@@ -167,6 +170,18 @@ export function setupScene(app) {
     bushSprite9.scale.set(0.45, 0.45, 0.9);
     bushSprite9.position.set(-0.3,-0.25,-1.3);
     app.scene.add(bushSprite9);
+
+    const beaverSpritesheetTexture = textureLoader.load(beaverSpritesheet);
+    // 4 magic numbers are number of frames horizontally in texture, num frames vertically, total frames, desired framerate
+    const beaverAnimator = new PlainAnimator(beaverSpritesheetTexture, 5, 16, 79, 12);
+    const beaverMap = beaverAnimator.init();
+    const beaverMaterial = new SpriteMaterial({map: beaverMap});
+    const beaverSprite = new Sprite(beaverMaterial);
+    beaverSprite.center.set(0, -0.7);
+    beaverSprite.scale.set(0.4, 0.4, 0.5);
+    beaverSprite.position.set(-0.1, 0, 0.55);
+    app.scene.add(beaverSprite);
+    app.beaverAnimator = beaverAnimator;
 
 
     // Spawner

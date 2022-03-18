@@ -21,6 +21,8 @@ function animate(){
     }
   }
 
+  app.beaverAnimator.animate();
+
   requestAnimationFrame(animate);
   app.effectComposer.render(app.scene, app.camera);
 }

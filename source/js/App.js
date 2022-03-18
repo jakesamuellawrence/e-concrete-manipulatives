@@ -8,6 +8,7 @@ import { RelativeDragControls } from "./RelativeDragControls";
 import { SelectionControls } from "./SelectionControls";
 import { StickSpawner } from "./StickSpawner";
 import { Box3 } from "three";
+import { PlainAnimator } from "three-plain-animator/lib/plain-animator";
 
 /**
  * Class that represents the app context.
@@ -39,6 +40,8 @@ export class App {
     stickColour;
     /** @type {Array<Vector3>} */
     possibleStickPositions = this.calculatePossibleStickPositions(45);
+    /** @type {PlainAnimator} */
+    beaverAnimator
 
 
     /**
@@ -70,7 +73,7 @@ export class App {
         let pixelRatio = window.devicePixelRatio;
         if (screen.width * window.devicePixelRatio >= 2000
             || screen.height * window.devicePixelRatio >= 2000) {
-            pixelRatio = pixelRatio * 0.5;
+            pixelRatio = pixelRatio * 0.4;
         }
 
         this.renderer.setPixelRatio(pixelRatio);
