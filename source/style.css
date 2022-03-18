@@ -58,6 +58,11 @@
   font-family: ComicNeue;
   text-align: center;
   font-size: 150%;
+  pointer-events: none;
+}
+
+.buttonBox {
+  pointer-events: auto;
 }
 
 .bottomLeft{
