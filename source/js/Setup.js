@@ -178,7 +178,7 @@ export function setupScene(app) {
     const beaverMaterial = new SpriteMaterial({map: beaverMap});
     const beaverSprite = new Sprite(beaverMaterial);
     beaverSprite.center.set(0, -0.7);
-    beaverSprite.scale.set(0.3, 0.4, 0.5);
+    beaverSprite.scale.set(0.25, 0.4, 0.5);
     beaverSprite.position.set(-0.1, 0, 0.55);
     app.scene.add(beaverSprite);
     app.beaverAnimator = beaverAnimator;
