@@ -3,7 +3,6 @@
 
 Designed to be easy and engaging for children to use, E-Concrete-Manipulatives is a browser based program where users can create, move, select, and bundle sticks into groups of a set amount. Its aim is to teach children about the concept of number bases and deepen their understanding of them. Can be used as an individual activity in the classroom, or as a tool for trainee teachers in their preparation. Built to be useful to a range of children, the number of sticks in a bundle can be increased or decreased to show different number bases. Can be run locally using a development server, or accessed through the live site http://e-concrete-manipulatives.surge.sh/
 ![](screenshot.png)
-![](beaver.mov)
 
 ## Getting Started
 ### Prerequisties 
