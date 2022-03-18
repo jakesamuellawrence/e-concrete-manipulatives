@@ -1,3 +1,4 @@
+import { Scene } from "three";
 import { CylinderGeometry, Euler, Mesh, MeshLambertMaterial, Vector3 } from "three";
 
 /**
@@ -16,10 +17,11 @@ export class StickSpawner {
     
     /**
      * Constructs a new spawner
-     * 
      * @param {Scene} scene The scene to add the newly constructed sticks to
+     * @param {string} color The colour of the sticks
+     * @param {Vector3} position The position of the spawner
      */
-    constructor(scene, position=new Vector3(0, 0, 0), color) {
+    constructor(scene, color, position=new Vector3(0, 0, 0)) {
         this.#scene = scene;
         this.position = position;
         this.stickParameters.colour = color;
@@ -42,6 +44,7 @@ export class StickSpawner {
             this.stickParameters.defaultRotation.y, 
             this.stickParameters.defaultRotation.z
         ));
+        //console.log(stick.position);
         stick.userData.draggable = true;
         this.#scene.add(stick);
         return stick;

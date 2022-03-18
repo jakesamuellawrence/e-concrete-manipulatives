@@ -102,6 +102,7 @@ export function removeSticks(app, toRemove) {
         Utils.removeAllChildrenFromList(object, app.sticksInScene);
         app.scene.remove(object);
     }
+
 }
 
 /**
@@ -113,6 +114,8 @@ export function removeSticks(app, toRemove) {
 export function unbundleSticks(app, toUnbundle) {
     for (let object of toUnbundle) {
         if (object.type == "Group") {
+            removeSticks(app, [object]);
+
             let flattened = Utils.flattenBundle(object);
             let newSticks = app.spawnSticks(flattened.length);
 
@@ -121,8 +124,6 @@ export function unbundleSticks(app, toUnbundle) {
                 newSticks[i].desiredPosition = newSticks[i].position.clone();
                 newSticks[i].position.copy(object.position.add(flattened[i].position));
             }
-
-            removeSticks(app, [object]);
         }
     }
 }

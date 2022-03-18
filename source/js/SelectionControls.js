@@ -111,6 +111,7 @@ export class SelectionControls {
     select(object) {
         this.currentlySelected.push(object);
         this.onSelect(object);
+        //console.log(object.position);
     }
 
     /**

@@ -1,11 +1,13 @@
 import * as Converter from "number-to-words"
-import * as Utils from "./utils";
 import * as BundleUtils from "./BundleUtils";
+import * as Utils from "./Utils";
+import { Vector3 } from "three";
 import { Camera, Color, Object3D, Scene, WebGLRenderer } from "three";
 import { EffectComposer } from "three-outlinepass";
 import { RelativeDragControls } from "./RelativeDragControls";
 import { SelectionControls } from "./SelectionControls";
 import { StickSpawner } from "./StickSpawner";
+import { Box3 } from "three";
 
 /**
  * Class that represents the app context.
@@ -35,6 +37,9 @@ export class App {
     sticksInABundle;
     /** @type {Color} */
     stickColour;
+    /** @type {Array<Vector3>} */
+    possibleStickPositions = this.calculatePossibleStickPositions(45);
+
 
     /**
      * updates the value of SticksInABundle and updates the relevant display if a browser context exists
@@ -42,9 +47,6 @@ export class App {
      */
     setSticksInABundle(value) {
         this.sticksInABundle = value;
-        if (document) {
-            document.getElementById("sticksInABundle").innerText = Converter.toWords(this.sticksInABundle);
-        }
     }
 
     /**
@@ -55,9 +57,6 @@ export class App {
     setStickColour(colour) {
         this.stickColour = colour;
         this.stickSpawner.stickParameters.colour = colour;
-        if (document) {
-            document.getElementById("colourPicker").value = this.stickColour;
-        }
     }
 
     /**
@@ -83,22 +82,78 @@ export class App {
     }
 
     /**
-     * creates a stick and then moves the stickSpawner to it's next position
+     * Spawns a stick into the scene and returns it
+     * 
+     * Checks all the stick spawn locations in possibleStickPositions to see if there's space spawn it.
+     * If there isn't space at any location, spawns the stick at a random one
      * @returns {Object3D} the created stick
      */
     spawnStick() {
+        // Create stick
         const stick = this.stickSpawner.spawn();
         this.sticksInScene.push(stick);
         stick.order = 0;
         stick.radius = this.stickSpawner.stickParameters.radius;
+        
+        // Check positions to see if there's space for it
+        let foundPos = true; 
+        for (let positionToCheck of this.possibleStickPositions) {
+            foundPos = true; // assume the stick is in the right place unless proven otherwise
+            stick.position.copy(positionToCheck);
+            let toSpawnBounds = new Box3().setFromObject(stick);
 
-        if (this.stickSpawner.position.x > 2) {
-            this.stickSpawner.position.setX(-1);
-            this.stickSpawner.position.setZ(this.stickSpawner.position.z - 0.5);
-        } else {
-            this.stickSpawner.position.setX(this.stickSpawner.position.x + 0.2);
+            for (let otherStick of this.sticksInScene) {
+                let otherBounds = new Box3().setFromObject(otherStick);
+                if (otherStick != stick && toSpawnBounds.intersectsBox(otherBounds)) {
+                    foundPos = false;
+                    break;
+                }
+            }
+
+            if (foundPos) break;
         }
+
+        // If no spawn position had space, pick a random one and add a small random offset
+        if (!foundPos) {
+            let position = Utils.randomElementFromArray(this.possibleStickPositions).clone();
+            let offset = Utils.randomVector(0, 0.5).setY(0);
+            stick.position.copy(position.add(offset));
+        }
+
         return stick;
+    }
+
+    /** 
+     * Sets up the list of potential stick spawn locations and returns it
+     * 
+     * @param {number} n the number of locations to generate
+     * @returns {Array<Object3D>} the generated list
+    */
+    calculatePossibleStickPositions(n) {
+        let currentPos = new Vector3(-0.4, 0.3, 0.7);
+        let arrayOfPositions = [];
+        let rowCount = 1;
+
+        for (let i = 0; i < n; i++) {
+            if (rowCount < 3 && currentPos.x > 2.4) {
+                currentPos.setX(currentPos.x - 3 + (rowCount) * 0.2);
+                currentPos.setZ(currentPos.z - 1.08 + (rowCount) * 0.04);
+                rowCount = rowCount + 1;
+            }
+            else if (rowCount == 3 && currentPos.x > 1.4 && currentPos.z > 0.1) {
+                currentPos.setX(0.2);
+                currentPos.setZ(-0.62);
+            }
+            else {
+                //this is the spacing b/w consecutive sticks
+                currentPos.setX(currentPos.x + 0.2);
+                //this is the slope
+                currentPos.setZ(currentPos.z + 0.04);
+            }
+            arrayOfPositions[i] = new Vector3(currentPos.x, currentPos.y, currentPos.z);
+            currentPos = arrayOfPositions[i].clone();
+        }
+        return arrayOfPositions;
     }
 
     /**
@@ -132,6 +187,10 @@ export class App {
         this.sticksInABundle = Math.max(this.sticksInABundle-1, 2);
     }
 
+    /**
+     * Goes through the sticks in the scene and finds if any are part of a bundle.
+     * If they are, unbundles them.
+     */
     unbundleExistingBundles() {
         let toUnbundle = [];
         for (let stick of this.sticksInScene) {
@@ -140,10 +199,13 @@ export class App {
                 toUnbundle.push(biggestGroup);
             }
         }
-        console.log(toUnbundle);
         BundleUtils.unbundleSticks(this, toUnbundle);
     }
 
+    /**
+     * Checks whether any of the sticks in the scene are currently part of a bundle
+     * @returns true if there are bundles in the scene, or false otherwise
+     */
     areThereBundles() {
         for(let stick of this.sticksInScene) {
             if (Utils.getLargestGroup(stick).type == "Group") {

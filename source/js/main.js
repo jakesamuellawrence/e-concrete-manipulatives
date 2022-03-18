@@ -1,6 +1,7 @@
 import * as Setup from "./Setup";
 import * as Utils from "./Utils";
 import { App } from './App';
+import "../style.css";
 
 let app = new App();
 Setup.initializeApp(app);
