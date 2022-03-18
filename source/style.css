@@ -50,10 +50,7 @@
 .buttonGroup {
   position: absolute;
   width: 12.5vw;
-  /* background-color: #F3DC87; */
   padding: 1vw;
-  /* border-style: solid; */
-  /* border-color: #F52E2C; */
   border-radius: 1vw;
   font-family: ComicNeue;
   text-align: center;
@@ -77,6 +74,12 @@
 
 .bottomCenter{
   bottom: 3vw;
+  left: 50vw;
+  transform: translate(-50%);
+}
+
+.topCenter{
+  top: 3vw;
   left: 50vw;
   transform: translate(-50%);
 }
@@ -203,8 +206,18 @@
 }
 
 
-
-
+.alertBox{
+  position: absolute;
+  width: 12.5vw;
+  background-color: #F3DC87;
+  border-style: solid;
+  border-color: #F52E2C;
+  border-radius: 1vw;
+  font-family: ComicNeue;
+  text-align: center;
+  font-size: 150%;
+  margin: 0;
+}
 
 .right{
   left: -4.5vw;

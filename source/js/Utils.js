@@ -153,3 +153,13 @@ export function randomVector(minLength, maxLength) {
     let randLength = Math.random() * (maxLength - minLength) + minLength;
     return vec.multiplyScalar(randLength);
 }
+/*
+ * Displays message box on screen
+ * @param {Document} document the HTML document object
+ * @param {string} message the message to be displayed
+ */
+ export function displayMessage(document, message) {
+    document.getElementById("alertMessage").innerText = message;
+    document.getElementById("alertBox").style.display = "inline-block";
+    let msgTimeout = setTimeout(function(){document.getElementById("alertBox").style.display = "none";},5000)
+}

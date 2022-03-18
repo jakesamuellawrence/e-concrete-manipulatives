@@ -4,7 +4,7 @@ import { OrthographicCamera, Scene, WebGLRenderer } from "three";
 import { EffectComposer, OutlinePass, RenderPass, ShaderPass } from "three-outlinepass";
 import FXAAShader from "three-shaders/shaders/FXAAShader";
 import {App} from "./App"
-import * as Utils from "./Utils";
+import * as Utils from "./utils";
 import darkShrubTexture from "../../resources/images/bg_shrub_dark.svg";
 import lightShrubTexture from "../../resources/images/bg_shrub_light.svg";
 import largeShrub1Texture from "../../resources/images/lg_shrub1.svg";
@@ -287,7 +287,7 @@ export function setupEventCallbacks(app) {
             BundleUtils.bundleSticks(app, app.selectControls.currentlySelected)
             app.selectControls.deselectAll();
         } else {
-            window.alert(err.err_message);
+            Utils.displayMessage(document, err.err_message);
         }
     }
     document.getElementById("removeButton").onclick = function() {
